@@ -27,21 +27,25 @@ Wildcards also work on the command line and are also supported by some graphical
 
 **mkdir - Create Directories**
 **cp - Copy Files and Directories**
-### cp Options and Examples
-**Options**
--a/--archive : copy the files and directories
+**cp Options**
+-a/--archive : copy the files and directories and all their attributes including ownerships and permissions.
+-i/--interactive : Will prompt a user for confirmation if an overwrite of an existing file is being attempted
+-r/--recursive : recursively copy directories and their contents. Required when copying directories/
+-u/--update : When copying files from one directory to another, only copy files that either don't exist or are newest.
+-v/--verbose : Display informative messages as the copy is performed.
 
-## mv - Move and Rename Files
-**Options and Examples**
-## rm - Remove Files and Directories
-**Options and Examples**
-## ln - Create Links
-**Hard Links**
+**mv - Move and Rename Files**
+Has a few of the same options as cp such as -i/-u/-v
+
+**rm - Remove Files and Directories**
+Has a few of the same options as cp such as -i/-r/-v
+-f/--force : Ignore nonexistent files and do not prompt. Overrides the interactive option.
+
+**ln - Create Links**
+## Hard Links
+**2 Important Limitations**
+- Cannot reference a file outside of its own file system
+- Cannot reference a directory
+When a hard link is deleted the link is removed but the contents of file continues to exist until all links to the file are deleted.
 **Symbolic Links**
-## Building a Playground
-**Creating Direcotires**
-**Copying Files**
-**Moving and Renaming Files**
-**Creating Hard Links**
-**Creating Symbolic Links**
-**Removing Files and Directories**
+When you delete a symbolic link only the link is deleted and not the file itself.

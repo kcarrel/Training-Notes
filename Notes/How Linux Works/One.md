@@ -21,7 +21,7 @@ In abstract terms...
  User mode restricts access to small amounts of memory and safe CPU operations. In theory this prevents a user process causing large scale issues to the system. 
 
  ## Hardware: Understanding Main Memory
- Main memory is the most improtant hardware on a computer system. It is the storage for a bunch of 'bits' in the form of 0s and 1s.
+ Main memory is the most important hardware on a computer system. It is the storage for a bunch of 'bits' in the form of 0s and 1s.
  Running Kernel and processes live in main memory. The CPU operates on memory by reading instructions and data from memory then writing data back out to memory.
 
  State - a particular arrangement of bits

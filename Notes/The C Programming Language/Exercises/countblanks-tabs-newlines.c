@@ -14,5 +14,4 @@ main()
     printf("%d\n", nl);
     printf("%d\t", t);
     printf("%d\b", b);
-
 }

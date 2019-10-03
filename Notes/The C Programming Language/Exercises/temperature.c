@@ -3,6 +3,7 @@
 /*print Fahrenheit-Celsius table for fahr = 0, 20, ...., 300 */
 main()
 {
+    printf("A program that prints Fahrenheit and the Celsius equivalent.")
     int fahr, celsius;
     int lower, upper, step;
 

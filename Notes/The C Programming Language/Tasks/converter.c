@@ -1,6 +1,15 @@
 #include <stdio.h>
+#include <math.h>
 
 void bin2dec(int num){
+    printf("%d", num);
+    long int i, x=0,a;
+    for(i=0;num!=0;++i)
+	{
+		a=num%10;
+		x=(a)*(pow(2,i))+x;
+		num=num/10;
+	}
     printf("%d", num);
 
     printf("POC you are converting bin2dec \n");

@@ -1,9 +1,10 @@
 #include <stdio.h>
 #define MAXINPUT 1000
 
+//define variables
 int getinput(char line[], int limit);
 void reverse(char reversedline[]);
-
+//while input has a length > 0 take the line reverse then print it
 int main(void) 
 {
     int length;
@@ -17,6 +18,7 @@ int main(void)
     return 0;
 }
 
+//get the input character, add it into the array, return length
 int getinput(char line[], int limit)
 {
     int i, c;
@@ -30,7 +32,7 @@ int getinput(char line[], int limit)
     line[i] = '\0';
     return i;
 }
-
+//reverse the line by setting temporary variables and switching!
 void reverse(char reversedline[])
 {
     int i,j;

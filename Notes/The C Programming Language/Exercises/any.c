@@ -65,7 +65,7 @@ int any(char string1[], char string2[])
         else 
             k = 0;
     }
-    if(string1[++i]=='\0')
+    if(string1[i]=='\0')
         return -1;
     else 
         return i;

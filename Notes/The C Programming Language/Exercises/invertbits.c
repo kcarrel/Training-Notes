@@ -4,7 +4,7 @@ unsigned invertbits(unsigned x, int p, int n);
 
 int main(void)
 {
-    printf("%u",invertbits((unsigned)8,(int)3,(int)3));
+    printf("%u",(unsigned)invertbits((unsigned)8,(int)3,(int)3));
 }
 
 /*

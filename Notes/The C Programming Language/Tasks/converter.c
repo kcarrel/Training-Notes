@@ -7,7 +7,6 @@
 /*
 
 ToDo:
--dec2hex function
 - edge cases
 - handle unsigned/signed
 - what happens with empty input
@@ -24,25 +23,59 @@ void bin2dec(int *num){
         *num /= 10;
         dec += remainder * pow(2, i);
         ++i;
-    }
+    
     printf("%d",dec);
 }
 
 void dec2bin(int *num) {
-    int i, c, k;
+    int i, temp;
     for (i = 31; i >= 0; i--)
     {
-        k = *num >> i;
-        if (k & 1)
+        temp = *num >> i;
+        if (temp & 1)
             printf("1");
         else
             printf("0");
     }
 }
 
+/* Use case statements to handle the A-F conversion */
 void dec2hex(int *num) {
-   
+   char hex_result[32];
+   int count, i, temp;
+   temp = *num;
+   count = 0;
+   while ( temp > 0)
+   {
+       switch(temp % 16)
+       {
+         case 10:
+                hex_result[count]='A'; 
+                break;
+            case 11:
+                hex_result[count]='B'; 
+                break;
+            case 12:
+                hex_result[count]='C'; 
+                break;
+            case 13:
+                hex_result[count]='D'; 
+                break;
+            case 14:
+                hex_result[count]='E'; 
+                break;
+            case 15:
+                hex_result[count]='F'; 
+                break;
+            default:
+                hex_result[count]=(temp%16)+0x30;  
+       }
+       temp = temp/16;
+       count++;
+   }
 
+   for(i=(count-1); i>=0;i--)
+        printf("%c",hex_result[i]);
     
 }
 

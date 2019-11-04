@@ -1,56 +1,79 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
+#include <string.h>
+#define INPUT_SIZE 100
 
-void bin2dec(int num){
-    printf("%d", num);
-    long int i, x=0,a;
-    for(i=0;num!=0;++i)
-	{
-		a=num%10;
-		x=(a)*(pow(2,i))+x;
-		num=num/10;
-	}
-    printf("%d", num);
+int getinput(char string[], int max);
 
-    printf("POC you are converting bin2dec \n");
+void bin2dec(int *num){
+    int dec = 0, i = 0, remainder;
+    while (*num != 0)
+    {
+        remainder = *num % 10;
+        *num /= 10;
+        dec += remainder * pow(2, i);
+        ++i;
+    }
+    printf("%d",dec);
 }
 
-void dec2bin() {
-    printf("POC you are converting dec2bin \n");
+void dec2bin(int *num) {
+    int i, c, k;
+    for (i = 31; i >= 0; i--)
+    {
+        k = *num >> i;
+        if (k & 1)
+            printf("1");
+        else
+            printf("0");
+    }
 }
 
-void dec2hex() {
+void dec2hex(int *num) {
     printf("POC you are converting dec2hex \n");
 }
 
-void main() 
+int main(void) 
 {
-    char convert[7];
-    char input[24];
-    int command;
+    char string1[INPUT_SIZE], convert[INPUT_SIZE], command[INPUT_SIZE];
+    int input[INPUT_SIZE];
+    int value;
    
-    while (input != NULL) {
-        printf("What would you like to convert?\n");
-        scanf("%s", convert);
-        scanf("%s", input);
-        scanf("%d", &command);
+    printf("What would you like to convert?\n");
+    getinput(string1, INPUT_SIZE);
+    sscanf(string1,"%s %s %d", convert, command, input);
 
-        /* using if/else instead of case for string because "The C preprocessor is too weak to help us built compile-time expression out of strings" */
-        if ( strcmp(input, "bin2dec") == 0) 
+     /* using if/else instead of case for string because "The C preprocessor is too weak to help us built compile-time expression out of strings" */
+     if ( strcmp(command, "bin2dec") == 0) 
         {
-            bin2dec(command);
+            bin2dec(input);
         } 
-        else if ( strcmp(input, "dec2bin") == 0)
+        else if ( strcmp(command, "dec2bin") == 0)
         {
-            dec2bin(command);
+            dec2bin(input);
         }
-        else if ( strcmp(input, "dec2hex") == 0) 
+        else if ( strcmp(command, "dec2hex") == 0) 
         {
-            dec2hex(command);
+            dec2hex(input);
         } 
         else
         { 
             printf("Please enter a command in the format of 'convert [action] number.\n");
         }
-    }
+    
 }
+
+int getinput(char string[], int max)
+{
+    int i, c;
+
+    for (i = 0; i < max - 1 && (c=getchar()) != EOF && c != '\n'; ++i)
+        string[i] = c;
+    
+    if(c == '\n')
+        string[i++] = c;
+    
+    string[i]='\0';
+}
+

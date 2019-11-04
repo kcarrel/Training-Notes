@@ -4,6 +4,16 @@
 #include <string.h>
 #define INPUT_SIZE 100
 
+/*
+
+ToDo:
+-dec2hex function
+- edge cases
+- handle unsigned/signed
+- what happens with empty input
+-very long input
+*/
+
 int getinput(char string[], int max);
 
 void bin2dec(int *num){
@@ -31,7 +41,9 @@ void dec2bin(int *num) {
 }
 
 void dec2hex(int *num) {
-    printf("POC you are converting dec2hex \n");
+   
+
+    
 }
 
 int main(void) 

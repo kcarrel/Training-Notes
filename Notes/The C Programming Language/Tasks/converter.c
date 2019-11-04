@@ -106,7 +106,6 @@ int main(void)
         { 
             printf("Please enter a command in the format of 'convert [action] number.\n");
         }
-    
 }
 
 int getinput(char string[], int max)

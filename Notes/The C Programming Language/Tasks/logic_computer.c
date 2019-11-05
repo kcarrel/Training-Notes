@@ -43,7 +43,8 @@ int getinput(char string[], int max)
 
 int compare_or(char arg1[], char arg2[])
 {
-     if ( strcmp(arg1, "true") == 0);
+   
+     
 }
 
 int compare_and(char arg1[], char arg2[])
@@ -54,15 +55,10 @@ int compare_and(char arg1[], char arg2[])
          {
              printf("true");
          } else {
-         printf("false");
-        }
-     } else if ( strcmp(arg1, "false") == 0) 
+             printf("false");
+         }
+     } else  
      {
-        if ( strcmp(arg2, "false") == 0) 
-        {
-            printf("true");
-        } else {
          printf("false");
-        }
      }
 }

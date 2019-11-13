@@ -1,23 +1,23 @@
 #include <stdio.h>
+#include <string.h>
+
 #define MAXINPUT 1000
 
-//use pointers to reccreate pstrcat in Chp 2
+
 int getinput(char line[], int limit);
-void pstrcat(char *, char *);
+int pstrend(char *, char *);
 
 int main(void) 
 {
-    int length;
     char s[MAXINPUT], t[MAXINPUT];
 
-    printf("What is the first string? :");
+    printf("What is the first string? : ");
     getinput(s,MAXINPUT);
     
-    printf("What is the second string you would like to concatenate to the first?:");
+    printf("What is the second string you would like to check? : ");
     getinput(t,MAXINPUT);
     
-    pstrcat(s,t);
-    printf("%s", s);
+    printf("%d", pstrend(s,t));
     return 0;
 }
 
@@ -36,15 +36,13 @@ int getinput(char line[], int limit)
     return i;
 }
 
-void pstrcat(char *s, char *t)
+int pstrend(char *s, char *t)
 {
-    //move s to 0 character then append
-    while(*s!='\0')
-        s++;
-    s--;             
-    while((*s=*t)!='\0')
-    {   
-        s++;
-        t++;
+    s += strlen(s) - 1;
+    t += strlen(t) - 1;
+    while (*t) {
+        if (*t-- != *s--)
+    return 0;
     }
+    return 1;
 }

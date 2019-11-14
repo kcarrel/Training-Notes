@@ -102,9 +102,9 @@ void readargs(int argc,char *argv[])
 
 /* The source file numcmp.c */
 
-#include<math.h>
-#include<ctype.h>
-#include<string.h>
+#include <math.h>
+#include <ctype.h>
+#include <string.h>
 #define MAXSTR 100
 
 void substr(char *s,char *t,int maxstr);
@@ -268,8 +268,12 @@ void writelines(char *lineptr[],int nlines, int order)
 {
     int i;
     
-    for(i = 0;i <nlines;i++)
-        printf("%s\n",lineptr[i]);
+    if (order)
+        for( i = nlines -1; i >= 0; i--)
+            printf("%s\n",lineptr[i]);
+    else
+        for( i = 0; i < nlines; i++)
+            printf("%s\n",lineptr[i]);
 }
 
 

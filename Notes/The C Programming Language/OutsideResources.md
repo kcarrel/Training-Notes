@@ -59,3 +59,22 @@ free(pvowels[1]);
 
 // Free the top-level pointer
 free(pvowels);
+
+
+## Udemy Notes
+
+**The Problem with gets() and fgets()**
+ gets is not safe
+
+ char line[80];
+ if (0 != gets(line)) { ... }
+
+This is unsafe, because gets has no way to know the size of the buffer, line, so it can keep reading and storing bytes well past the end of the storage available. Please do not use it, even in your classwork.
+
+One replacement is fgets:
+
+ char line[80];
+ if (0 != fgets(line, sizeof line, stdin)) { ... }
+
+The return values possible are the same and have the same meanings, but fgets leaves the newline character in the buffer if it is read, so that you can determine if the entire line was in fact collected. 
+

@@ -18,18 +18,43 @@ int getinput(char string[], int max)
     string[i]='\0';
 }
 
+int bin2dec(int *num){
+    int dec = 0, i = 0, remainder;
+    while (*num != 0)
+    {
+        remainder = *num % 10;
+        *num /= 10;
+        dec += remainder * pow(2, i);
+        ++i;
+    }
+    return dec;
+}
+
+void dec2bin(int num) {
+    int i, temp;
+    for (i = 31; i >= 0; i--)
+    {
+        temp = num >> i;
+        if (temp & 1)
+            printf("1");
+        else
+            printf("0");
+    }
+}
+
 int shift(int *bits, char *direction, int *value)
 {
-    printf("%d \n", *value);
-    printf("%d \n", *bits);
-
-    // if (strcmp(direction, "right") == 0)
-    // {
-    //     return bits >> value;
-    // } else if (strcmp(direction, "left") == 0)
-    // {
-    //     return bits << value;
-    // }
+    int temp = bin2dec(bits);
+    int amount = *value;
+    int bin;
+    if (strcmp(direction, "right") == 0)
+    {
+        bin = temp >> amount;
+    } else if (strcmp(direction, "left") == 0)
+    {
+        bin = temp << amount;
+    }
+    dec2bin(bin);
 }
 
 /* Take in user input

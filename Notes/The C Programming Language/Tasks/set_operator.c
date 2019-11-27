@@ -39,8 +39,24 @@ int getintinput(int arr[], int max)
 
 void product(int *num1, int *num2, int *num3) 
 {   
-    printf("Num0:%c Num1:%c Num2:%c \n", num1[0], num1[1], num1[2]);
-  
+    int i,j,k, count = 0;
+    int m = sizeof(num1)/sizeof(num1[0]), n = sizeof(num2)/sizeof(num2[0]), o = sizeof(num3)/sizeof(num3[0]);
+    m ++, n++, o++;
+    int outcomes = m * n * o, results[outcomes];
+    printf("The product of the three arrays is: \n");
+    while (count < outcomes)
+    {
+        for(i = 1; i < m; i++) {
+            for(j = 1; j < n; j++) {
+                for(k= 1; k < o; k++) {
+                    printf("{%c, %c, %c} \n", num1[i], num2[j], num3[k]);
+                            count++;
+
+                } 
+            }
+        }
+    }
+
 }
 
 /* Todo: Make this code less gross and sad 
@@ -50,15 +66,11 @@ void product(int *num1, int *num2, int *num3)
 void uni(int *num1, int *num2, int *num3) 
 {
     int results[INPUT_SIZE];
-    int i,j, k;
-    int m = sizeof(num1)/sizeof(num1[0]);
-    int n = sizeof(num2)/sizeof(num2[0]);
-    m++;
-    n++;
+    int i,j,k;
+    int m = sizeof(num1)/sizeof(num1[0]), n = sizeof(num2)/sizeof(num2[0]);
+    m++, n++;
     int mSize = m + n;
-    int o = sizeof(num3)/sizeof(num3[0]);
-    o++;
-    int msSize = mSize + o;
+
     for(i = 0; i < m; i++)
     {
         results[i] = num1[i];
@@ -67,6 +79,10 @@ void uni(int *num1, int *num2, int *num3)
     {
         results[j] = num2[i];
     } 
+
+    int o = sizeof(num3)/sizeof(num3[0]);
+    o++;
+    int msSize = mSize + o;
     for(i = 0, k = mSize; k < msSize && i < o; i++, j++, k++)
     {
         results[k] = num3[i];
@@ -149,7 +165,32 @@ void sort(int *nums)
             }
 }
     
+int handle_arrays(char *command)
+{
+    int array1[INPUT_SIZE], array2[INPUT_SIZE], array3[INPUT_SIZE];
 
+    printf("What is the first array? \n");
+    getintinput(array1, INPUT_SIZE);
+    sort(array1);
+
+    printf("What is the second array? \n");
+    getintinput(array2, INPUT_SIZE);
+    sort(array2);
+
+    printf("What is the third array? \n");
+    getintinput(array3, INPUT_SIZE);
+    sort(array3);
+
+    if ( strcmp(command, "product") == 0) {
+        product(array1, array2, array3);
+    } 
+    else if( strcmp(command, "union") == 0) {
+        uni(array1, array2, array3);
+    } 
+    else if ( strcmp(command, "intersection") == 0) {
+        intersection(array1, array2, array3);
+    } 
+}
 
 /*Note:
 Used function name uni instead of union due to reserved word issue
@@ -164,39 +205,12 @@ int main(void)
 {
 
     char string1[INPUT_SIZE], compute[INPUT_SIZE], command[INPUT_SIZE];
-    int array1[INPUT_SIZE], array2[INPUT_SIZE], array3[INPUT_SIZE];
-    int nums1[INPUT_SIZE], nums2[INPUT_SIZE], nums3[INPUT_SIZE];
-    int bits[INPUT_SIZE], num[INPUT_SIZE];
     printf("What would you like to compute? Ex: compute union \n");
     getstringinput(string1, INPUT_SIZE);
     sscanf(string1,"%s %s", compute, command);
-
-    printf("What is the first array? \n");
-    getintinput(array1, INPUT_SIZE);
-    sort(array1);
-
-    printf("What is the second array? \n");
-    getintinput(array2, INPUT_SIZE);
-    sort(array2);
-
-    printf("What is the third array? \n");
-    getintinput(array3, INPUT_SIZE);
-    sort(array3);
-
-
-    if ( strcmp(compute, "compute") == 0) {
-        if ( strcmp(command, "product") == 0) {
-            product(array1, array2, array3);
-        } 
-        else if( strcmp(command, "union") == 0) {
-            uni(array1, array2, array3);
-        } 
-        else if ( strcmp(command, "intersection") == 0) {
-            intersection(array1, array2, array3);
-        } 
-    } 
-    else {
-        printf("Program cannot understand input. Please use correct form.\n");
- 
-    }
+    if ( strcmp(compute, "compute") != 0) {
+        printf("Program cannot understand input. Please use correct form.\n");        
+    } else {
+        handle_arrays(command);
+    }    
 }

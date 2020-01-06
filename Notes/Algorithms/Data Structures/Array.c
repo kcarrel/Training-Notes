@@ -14,7 +14,7 @@ void insert(int *arr, int index, int value) {
         arr[i] = arr[i - 1];
     }
     arr[index - 1] = value;
-    
+
     for (i = 0; i < shifted; i++) {
         printf("%d \n", arr[i]);
     };
@@ -22,7 +22,14 @@ void insert(int *arr, int index, int value) {
 }
 
 void delete(int *arr, int index) {
-
+    int j = index + 1, i;
+    for (i = index; i < MAX_ARRAY; i++) {
+       arr[i] = arr[j];
+       j++;
+    }
+    for (i = 0; i < MAX_ARRAY - 1; i++) {
+        printf("%d \n", arr[i]);
+    };
 }
 
 void search(int *arr, int target) {
@@ -54,6 +61,6 @@ int main(void) {
         ARRAY[i] = val;
         val = val + 10;
     }
-    insert(ARRAY, 2, 77);
+    delete(ARRAY, 2);
     
 }

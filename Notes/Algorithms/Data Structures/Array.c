@@ -46,7 +46,8 @@ int search(int *arr, int target) {
 }
 
 void update(int *arr, int index, int value) {
-
+    arr[index] = value;
+    traverse(arr);
 }
 
 void test_insert() {
@@ -70,6 +71,6 @@ int main(void) {
         ARRAY[i] = val;
         val = val + 10;
     }
-    search(ARRAY, 100);
+    update(ARRAY,2, 100);
     
 }

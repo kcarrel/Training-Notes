@@ -27,13 +27,22 @@ void delete(int *arr, int index) {
        arr[i] = arr[j];
        j++;
     }
+
     for (i = 0; i < MAX_ARRAY - 1; i++) {
         printf("%d \n", arr[i]);
     };
 }
 
-void search(int *arr, int target) {
-
+int search(int *arr, int target) {
+    int i;
+    for (i = 0; i < MAX_ARRAY; i++) {
+        if (arr[i] == target) {
+            printf("You target value %d has been found at index %d", target, i);
+            return 0;
+        }
+    }
+    printf("Target not found.");
+    return 0;
 }
 
 void update(int *arr, int index, int value) {
@@ -61,6 +70,6 @@ int main(void) {
         ARRAY[i] = val;
         val = val + 10;
     }
-    delete(ARRAY, 2);
+    search(ARRAY, 100);
     
 }

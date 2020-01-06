@@ -50,6 +50,8 @@ void update(int *arr, int index, int value) {
     traverse(arr);
 }
 
+// Todo: touch base with Sasha re Go table tests --> C table tests
+
 void test_insert() {
 
 }

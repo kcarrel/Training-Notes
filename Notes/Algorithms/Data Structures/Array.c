@@ -21,16 +21,24 @@ void insert(int *arr, int index, int value) {
     
 }
 
+// To-do: Not sure if there is a way to calculate the changed array size while still deleting "in place" just yet
 void delete(int *arr, int index) {
     int j = index + 1, i;
-    for (i = index; i < MAX_ARRAY; i++) {
-       arr[i] = arr[j];
-       j++;
+    int o = sizeof(arr);
+    if (index <= o) {
+        for (i = index; i < MAX_ARRAY; i++) {
+            arr[i] = arr[j];
+            j++;
+        }
+        int k = sizeof(arr);
+        for (i = 0; i <= k; i++) {
+            printf("Index %d: %d \n", i, arr[i]);
+        };
+    } else {
+        printf("The index you have specified is outside of the provide array's range!");
     }
 
-    for (i = 0; i < MAX_ARRAY - 1; i++) {
-        printf("%d \n", arr[i]);
-    };
+    
 }
 
 int search(int *arr, int target) {
@@ -59,11 +67,11 @@ void test_insert(int *arr) {
 }
 
 void test_delete(int *arr) {
-    printf("round 1");
+    printf("Round 1: \n");
     delete(arr, 1);
-    printf("round 2");
+    printf("Round 2: \n");
     delete(arr, 1);
-    printf("round 3"); 
+    printf("Round 3: \n"); 
     delete(arr, 11);
 }
 
@@ -87,7 +95,7 @@ int main(void) {
         val = val + 10;
     }
     test_delete(ARRAY);
-    test_insert(ARRAY);
-    test_search(ARRAY);
-    test_update(ARRAY);
+    // test_insert(ARRAY);
+    // test_search(ARRAY);
+    // test_update(ARRAY);
 }

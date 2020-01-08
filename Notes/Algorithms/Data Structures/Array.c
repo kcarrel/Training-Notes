@@ -51,19 +51,32 @@ void update(int *arr, int index, int value) {
 }
 
 // Todo: touch base with Sasha re Go table tests --> C table tests
-
-void test_insert() {
-
+// 
+void test_insert(int *arr) {
+    insert(arr, 11, 2);
+    insert(arr, 5, 2000);
+    insert(arr, 5, 1000);
 }
 
-void test_delete() {
-
+void test_delete(int *arr) {
+    printf("round 1");
+    delete(arr, 1);
+    printf("round 2");
+    delete(arr, 1);
+    printf("round 3"); 
+    delete(arr, 11);
 }
 
-void test_search() {
-
+void test_search(int *arr) {
+    search(arr, 100);
+    search(arr, -100);
+    search(arr, 20);
 }
-void test_update() {
+void test_update(int *arr) {
+    update(arr, 9, 100);
+    update(arr, 0, 19);
+    update(arr, 100, 9);
+    update(arr, 9, 200);
 
 }
 
@@ -73,6 +86,8 @@ int main(void) {
         ARRAY[i] = val;
         val = val + 10;
     }
-    update(ARRAY,2, 100);
-    
+    test_delete(ARRAY);
+    test_insert(ARRAY);
+    test_search(ARRAY);
+    test_update(ARRAY);
 }

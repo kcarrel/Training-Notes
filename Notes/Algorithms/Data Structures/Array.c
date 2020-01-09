@@ -71,13 +71,11 @@ int update(int *arr, int index, int value) {
     return ERROR;
 }
 
-// Todo: touch base with Sasha re Go table tests --> C table tests
-//
-
 struct test_insert {
     int index;
     int value;
 };
+
 struct test_insert insert_values[10] = {
     {11, 2},
     {5, 2000},
@@ -90,6 +88,10 @@ struct test_insert insert_values[10] = {
     {-6, 2},
     {10, 290}
 };
+
+//Takes in an array and runs the array with testing insert_values through insert function then uses compare function
+//Returns 0 if arrays match and -1 if arrays do not match expectations
+
 void test_insert(int *arr) {
     int i;
     for (i = 0; i < 10; i++) {
@@ -114,6 +116,9 @@ struct test_delete delete_index[10] = {
     {10}
 };
 
+//Takes in an array and runs the array with testing delete_index through delete function then uses compare function
+//Returns 0 if arrays match and -1 if arrays do not match expectations
+
 void test_delete(int *arr) {
     int i;
     for (i = 0; i < 10; i++) {
@@ -137,6 +142,9 @@ struct test_search search_value[10] = {
     {-6},
     {10}
 };
+
+//Takes in an array and runs the array with testing search_values through search function then uses compare function
+//Returns 0 if arrays match and -1 if arrays do not match expectations
 
 void test_search(int *arr) {
     int i;
@@ -163,6 +171,8 @@ struct test_update update_value[10] = {
     {10, 290}
 };
 
+//Takes in an array and runs the array with testing update_values through update function then uses compare function
+//Returns 0 if arrays match and -1 if arrays do not match expectations
 void test_update(int *arr) {
     int i;
     for (i = 0; i < 10; i++) {

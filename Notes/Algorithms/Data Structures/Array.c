@@ -100,6 +100,7 @@ void test_insert(int *arr) {
 struct test_delete {
     int index;
 };
+
 struct test_delete delete_index[10] = {
     {11},
     {5},
@@ -112,6 +113,7 @@ struct test_delete delete_index[10] = {
     {-6},
     {10}
 };
+
 void test_delete(int *arr) {
     int i;
     for (i = 0; i < 10; i++) {
@@ -119,10 +121,28 @@ void test_delete(int *arr) {
     }
 }
 
+struct test_search {
+    int value;
+};
+
+struct test_search search_value[10] = {
+    {10},
+    {100},
+    {5},
+    {29},
+    {11},
+    {-2},
+    {0},
+    {1},
+    {-6},
+    {10}
+};
+
 void test_search(int *arr) {
-    search(arr, 100);
-    search(arr, -100);
-    search(arr, 20);
+    int i;
+    for (i = 0; i < 10; i++) {
+        search(arr, search_value[i].value);
+    }
 }
 void test_update(int *arr) {
     update(arr, 9, 100);

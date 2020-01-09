@@ -180,14 +180,17 @@ void test_update(int *arr) {
     }
 }
 
+//Takes in the array that has been tested and an array of expected values
+//If the two arrays do not match print the difference
+//If two arrays match return a SUCCESS value
 int compare(int *arr1, int *arr2) {
     int i;
     for (i = 1; i <= MAX_ARRAY; i++) {
         if (arr1[i] != arr2[i]) { 
-            return SUCCESS;
+            printf("Array 1: %d does not match Array 2: %d at index: %d \n", arr1[i], arr2[i], i);
         }
      }
-    return ERROR;
+    return SUCCESS;
 }
 
 //To-Do: Main creates a dynamic array, loops 10 times to add in element values increasing in 10 each loop

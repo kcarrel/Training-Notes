@@ -144,11 +144,30 @@ void test_search(int *arr) {
         search(arr, search_value[i].value);
     }
 }
-void test_update(int *arr) {
-    update(arr, 9, 100);
-    update(arr, 0, 19);
-    update(arr, 200, 9);
 
+struct test_update {
+    int index;
+    int value;
+};
+
+struct test_update update_value[10] = {
+    {11, 2},
+    {5, 2000},
+    {5, 1000},
+    {29, 50000},
+    {11, 28},
+    {-2, 82},
+    {0, 87},
+    {1, 222},
+    {-6, 2},
+    {10, 290}
+};
+
+void test_update(int *arr) {
+    int i;
+    for (i = 0; i < 10; i++) {
+        update(arr, update_value[i].index, update_value[i].value);
+    }
 }
 
 int compare(int *arr1, int *arr2) {

@@ -97,10 +97,26 @@ void test_insert(int *arr) {
     }
 }
 
+struct test_delete {
+    int index;
+};
+struct test_delete delete_index[10] = {
+    {11},
+    {5},
+    {5},
+    {29},
+    {11},
+    {-2},
+    {0},
+    {1},
+    {-6},
+    {10}
+};
 void test_delete(int *arr) {
-    delete(arr, 1);
-    delete(arr, 1);
-    delete(arr, 11);
+    int i;
+    for (i = 0; i < 10; i++) {
+        delete(arr, delete_index[i].index);
+    }
 }
 
 void test_search(int *arr) {

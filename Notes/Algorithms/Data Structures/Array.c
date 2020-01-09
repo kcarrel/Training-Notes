@@ -25,11 +25,16 @@ void traverse(int *arr) {
 // Returns a 0 if successful, -1 if an error occurs and -2 if overflow occurs
 int insert(int *arr, int index, int value) {
     int shifted, i;
+    int o = sizeof(arr);
     shifted = MAX_ARRAY + 1;
-    for (i = shifted; i >= index; i--) {
-        arr[i] = arr[i - 1];
-    }
-    arr[index - 1] = value;
+    if (index <= o && index >= 0) {
+        for (i = shifted; i >= index; i--) {
+            arr[i] = arr[i - 1];
+        }
+        arr[index - 1] = value;
+        return SUCCESS;
+    } 
+    return ERROR;
 }
 
 //Delete: Deletes in-place the value at the provided index in the given array
@@ -37,7 +42,7 @@ int insert(int *arr, int index, int value) {
 int delete(int *arr, int index) {
     int j = index + 1, i;
     int o = sizeof(arr);
-    if (index <= o) {
+    if (index <= o && index >= 0) {
         for (i = index; i < MAX_ARRAY; i++) {
             arr[i] = arr[j];
             j++;
@@ -64,7 +69,7 @@ int search(int *arr, int target) {
 //Returns a 0 if update is successful or -1 if an error occurs
 int update(int *arr, int index, int value) {
     int o = sizeof(arr);
-    if (index <= o) {
+    if (index <= o |&& index >= 0) {
         arr[index] = value;
         return SUCCESS;
     } 
@@ -93,9 +98,16 @@ struct test_insert insert_values[10] = {
 //Returns 0 if arrays match and -1 if arrays do not match expectations
 
 void test_insert(int *arr) {
-    int i;
+    int i, result;
     for (i = 0; i < 10; i++) {
-        insert(arr, insert_values[i].index, insert_values[i].value);
+        result = insert(arr, insert_values[i].index, insert_values[i].value);
+        if (result == 0) {
+            printf("Round %d: \n", i);
+            traverse(arr);
+        } else {
+            printf("Error has occurred");
+            traverse(arr);
+        }
     }
 }
 
@@ -201,4 +213,5 @@ int main(void) {
         ARRAY[i] = val;
         val = val + 10;
     }
+    test_insert(ARRAY);
 }

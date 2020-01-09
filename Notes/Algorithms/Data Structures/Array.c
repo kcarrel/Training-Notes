@@ -41,6 +41,19 @@ int * create() {
     
 }
 
+// struct expected {
+//     int 1;
+//     int 2;
+//     int 3;
+//     int 4;
+//     int 5;
+//     int 6;
+//     int 7;
+//     int 8;
+//     int 9;
+//     int 10;
+// };
+
 //Insert: Inserts a value at the provided index in the given array
 // Returns a 0 if successful, -1 if an error occurs and -2 if overflow occurs
 int insert(int *arr, int index, int value) {
@@ -181,11 +194,12 @@ int * update(int *arr, int index, int value) {
     int o = sizeof(arr);
     if (index <= o && index >= 0) {
         arr[index] = value;
-        return arr;
+        return 0;
     } 
 }
 
 struct test_update {
+    //struct expected values;
     int index;
     int value;
 };
@@ -200,18 +214,22 @@ struct test_update update_value[10] = {
     {0, 87},
     {1, 222},
     {-6, 2},
-    {10, 290}
+    {9, 290}
 };
 
 //Takes in an array and runs the array with testing update_values through update function then uses compare function
+//Calls compare to verify if the resulting array from update matches the expectation
 //Returns 0 if arrays match and -1 if arrays do not match expectations
+
+//To-Do: Either used nested structs to get the expected arrays to send to compare or just use.... arrays?
 void test_update() {
 
-    int i;
+    int i,count;
     int *p;
-    p = create();
     for (i = 0; i < 10; i++) {
+        p = create();
         update(p, update_value[i].index, update_value[i].value);
+        //compare(p, second-array);
     }
 }
 

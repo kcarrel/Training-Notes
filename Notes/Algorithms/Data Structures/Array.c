@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include<string.h> 
 #define MAX_ARRAY 10
 #define SUCCESS 0
 #define ERROR -1
@@ -198,39 +199,83 @@ int * update(int *arr, int index, int value) {
     } 
 }
 
-struct test_update {
-    //struct expected values;
+
+struct testUpdate {
     int index;
     int value;
+    int *expected;
+};
+struct testUpdate *createTest(struct testUpdate *t, int indexTest, int testValue, int expect[]) {
+    t = malloc(sizeof(*t) + sizeof(int));
+    t->index = indexTest;
+    t->value = testValue;
+    t->expected = expect;  
+    return t; 
 };
 
-struct test_update update_value[10] = {
-    {11, 2},
-    {5, 2000},
-    {5, 1000},
-    {29, 50000},
-    {11, 28},
-    {-2, 82},
-    {0, 87},
-    {1, 222},
-    {-6, 2},
-    {9, 290}
-};
-
+void printTest(struct testUpdate *t) 
+{ 
+    printf("Index : %d\n"
+           "Value : %d\n", 
+           t->index, t->value); 
+  
+    // Value of Allocated_Struct_size is in bytes here 
+} 
 //Takes in an array and runs the array with testing update_values through update function then uses compare function
 //Calls compare to verify if the resulting array from update matches the expectation
 //Returns 0 if arrays match and -1 if arrays do not match expectations
 
-//To-Do: Either used nested structs to get the expected arrays to send to compare or just use.... arrays?
+//Current Blocker:
+//What works: We can use the struct testUpdate *create but need to seperately declare the struct 
+//ex: int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+//struct testUpdate *t1 = createTest(t1,11, 2, a); 
+//But that affects the update(p, update_value[i].index, update_value[i].value); loop which relies on the hardcoded values. 
+
 void test_update() {
 
-    int i,count;
+    int i;
     int *p;
     for (i = 0; i < 10; i++) {
         p = create();
-        update(p, update_value[i].index, update_value[i].value);
-        //compare(p, second-array);
+        update(p, update_value[i].index, update_value[i].value);       
     }
+    //Currently: Feels like there still needs to be a cumbersome case statement for each loop which is immensely frustrating that I can't just string interpolate because that would fix my issue
+    //ex: within the loop
+    // case 1:
+    //      p = create();
+    //      update(p, t1.index, t1.value);
+    //      int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    //      struct testUpdate *t1 = createTest(t1,11, 2, a); 
+    // Times 10 which seems needlessly ugly and terrible. 
+    
+
+    // int b[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    // struct testUpdate *t1 = createTest(t1,11, 2, a); 
+
+    // int c[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    // struct testUpdate *t1 = createTest(t1,11, 2, a); 
+
+    // int d[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    // struct testUpdate *t1 = createTest(t1,11, 2, a); 
+
+    // int e[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    // struct testUpdate *t1 = createTest(t1,11, 2, a); 
+
+    // int f[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    // struct testUpdate *t1 = createTest(t1,11, 2, a); 
+
+    // int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    // struct testUpdate *t1 = createTest(t1,11, 2, a); 
+
+    // int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    // struct testUpdate *t1 = createTest(t1,11, 2, a); 
+
+    // int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    // struct testUpdate *t1 = createTest(t1,11, 2, a); 
+    
+    // int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    // struct testUpdate *t1 = createTest(t1,11, 2, a); 
+    
 }
 
 //Takes in the array that has been tested and an array of expected values
@@ -241,6 +286,7 @@ int compare(int *arr1, int *arr2) {
     for (i = 1; i <= MAX_ARRAY; i++) {
         if (arr1[i] != arr2[i]) { 
             printf("Array 1: %d does not match Array 2: %d at index: %d \n", arr1[i], arr2[i], i);
+            return ERROR;
         }
      }
     return SUCCESS;

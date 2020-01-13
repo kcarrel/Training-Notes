@@ -12,16 +12,6 @@ void traverse(int *arr) {
     for (i = 0; i < MAX_ARRAY; i++) {
         printf("%d \n", arr[i]);
     }
-    //insert traverse
-    // for (i = 0; i < shifted; i++) {
-    //     printf("%d \n", arr[i]);
-    // };
-
-    //delete traverse
-    // int k = sizeof(arr);
-    //     for (i = 0; i <= k; i++) {
-    //         printf("Index %d: %d \n", i, arr[i]);
-    //     };
 }
 
 //Create uses malloc to dynamically allocate memory for a specific size
@@ -39,7 +29,7 @@ int * create() {
     
 }
 
-//Takes in the array that has been tested and an array of expected values
+//Compare: Takes in the array that has been tested and an array of expected values
 //If the two arrays do not match print the difference
 //If two arrays match return a SUCCESS value
 int compare(int *arr1, int *arr2) {
@@ -89,7 +79,7 @@ struct test_insert insert_values[10] = {
     {10, 290}
 };
 
-//Takes in an array and runs the array with testing insert_values through insert function then uses compare function
+//Test-Insert: Takes in an array and runs the array with testing insert_values through insert function then uses compare function
 //Returns 0 if arrays match and -1 if arrays do not match expectations
 
 void test_insert(int *arr) {
@@ -214,98 +204,56 @@ struct testUpdate *createTest(struct testUpdate *t, int indexTest, int testValue
 };
 
 
-//Takes in an array and runs the array with testing update_values through update function then uses compare function
+
+//Update_mod: takes in an expected array, index and value 
+//Creates a testUpdate structure using the  provided expected array, index and values
+//Calls update with the provided index and values 
 //Calls compare to verify if the resulting array from update matches the expectation
 //Returns 0 if arrays match and -1 if arrays do not match expectations
-
-//Current Blocker:
-//What works: We can use the struct testUpdate *create but need to seperately declare the struct 
-//ex: int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-//struct testUpdate *t1 = createTest(t1,11, 2, a); 
-//But that affects the update(p, update_value[i].index, update_value[i].value); loop which relies on the hardcoded values. 
-//Currently: Feels like there still needs to be a cumbersome case statement for each loop which is immensely frustrating that I can't just string interpolate because that would fix my issue
-// Times 10 which seems needlessly ugly and terrible. 
-void test_update() {
-    int i;
+void test_update(int *arr, int index, int value) {
     int *p;
-    for (i = 0; i < 10; i++) {   
-    switch (i) {
-        case 0:
-            p = create();
-            int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-            struct testUpdate *t1 = createTest(t1,11, 2, a); 
-            update(p, t1->index, t1->value);
-            compare(p, t1->expected);  
-            continue;
-        case 1:  
-            p = create();
-            int b[10] = {0, 2, 20, 30, 40, 50, 60, 70, 80, 90};
-            struct testUpdate *t2 = createTest(t2,1, 2, b); 
-            update(p, t2->index, t2->value);
-            compare(p, t2->expected);  
-            continue; 
-        case 2:  
-            p = create();
-            int c[10] = {0, 10, 9, 30, 40, 50, 60, 70, 80, 90};
-            struct testUpdate *t3 = createTest(t1,2, 9, c); 
-            update(p, t3->index, t3->value);
-            compare(p, t3->expected);  
-            continue; 
-        case 3:  
-            p = create();
-            int d[10] = {0, 10, 20, 30, 40, 50, 60, 70, 2000, 90};
-            struct testUpdate *t4 = createTest(t4,8, 2000, d); 
-            update(p, t4->index, t4->value);
-            compare(p, t4->expected);  
-            continue; 
-        case 4:  
-            p = create();
-            int e[10] = {0, 10, 2000, 30, 40, 50, 60, 70, 80, 90};
-            struct testUpdate *t5 = createTest(t5,2, 2000, e); 
-            update(p, t5->index, t5->value);
-            compare(p, t5->expected);  
-            continue; 
-        case 5:  
-            p = create();
-            int f[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-            struct testUpdate *t6 = createTest(t6,-2, 2, f); 
-            update(p, t6->index, t6->value);
-            compare(p, t6->expected);  
-            continue; 
-        case 6:  
-            p = create();
-            int g[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-            struct testUpdate *t7 = createTest(t7,-20, 2, g); 
-            update(p, t7->index, t7->value);
-            compare(p, t7->expected);  
-            continue; 
-        case 7:  
-            p = create();
-            int h[10] = {0, 10, 20, 30, 40, 50, 60, 70, 28, 90};
-            struct testUpdate *t8 = createTest(t8,8, 28, h); 
-            update(p, t8->index, t8->value);
-            compare(p, t8->expected);  
-            continue; 
-        case 8:  
-            p = create();
-            int i[10] = {0, 10, 20, 30, 40, 28, 60, 70, 80, 90};
-            struct testUpdate *t9 = createTest(t9,5, 28, i); 
-            update(p, t9->index, t9->value);
-            compare(p, t9->expected);  
-            continue;
-         case 9:  
-            p = create();
-            int j[10] = {0, 10, 20, 30, 40, 50, 60, 70, 29, 90};
-            struct testUpdate *t10 = createTest(t10,8, 29, j); 
-            update(p, t10->index, t10->value);
-            compare(p, t10->expected);  
-            continue;  
-        }
-    }  
+    p = create();
+    struct testUpdate *test = createTest(test, index, value, arr); 
+    update(p, test->index, test->value);
+    compare(p, test->expected);
+}
+
+//Test_Update: Calls the test_update helper function 10 times to provide the expected array
+void create_update_tests() {
+    int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    test_update(a, 11, 2);
+            
+    int b[10] = {0, 2, 20, 30, 40, 50, 60, 70, 80, 90};
+    test_update(b, 1, 2);
+    
+    int c[10] = {0, 10, 9, 30, 40, 50, 60, 70, 80, 90};
+    test_update(c, 2, 9);
+   
+    int d[10] = {0, 10, 20, 30, 40, 50, 60, 70, 2000, 90};
+    test_update(d, 8, 2000);
+              
+    int e[10] = {0, 10, 2000, 30, 40, 50, 60, 70, 80, 90};
+    test_update(e, 2, 2000);
+                
+    int f[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    test_update(f, -2, 2);
+                
+    int g[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    test_update(g, -20, 2);
+                
+    int h[10] = {0, 10, 20, 30, 40, 50, 60, 70, 28, 90};
+    test_update(h, 8, 28);
+                
+    int i[10] = {0, 10, 20, 30, 40, 28, 60, 70, 80, 90};
+    test_update(i, 5, 28);
+                
+    int j[10] = {0, 10, 20, 30, 40, 50, 60, 70, 29, 90};
+    test_update(j, 8, 29);
+               
 }
 
 
 //Main calls table testing functions 
 int main(void) {
-    test_update();
+    create_update_tests();
 }

@@ -152,30 +152,35 @@ int search(int *arr, int target) {
     return ERROR;
 }
 
-struct test_search {
+struct testSearch{
     int value;
+    int expected;
 };
 
-struct test_search search_value[10] = {
-    {10},
-    {100},
-    {5},
-    {29},
-    {11},
-    {-2},
-    {0},
-    {1},
-    {-6},
-    {10}
+struct testSearch search_struct[10] = {
+    {10, 0},
+    {5, -1},
+    {50, 0},
+    {29, -1},
+    {11, -1},
+    {-2, -1},
+    {0, 0},
+    {1, -1},
+    {20, 0},
+    {10, 0}
 };
 
-//Takes in an array and runs the array with testing search_values through search function then uses compare function
-//Returns 0 if arrays match and -1 if arrays do not match expectations
-
-void test_search(int *arr) {
-    int i;
+int test_search() {
+    int i, result;
+    int *p;
+    p = create();
     for (i = 0; i < 10; i++) {
-        search(arr, search_value[i].value);
+        result = search(p, search_struct[i].value);
+        if (result == search_struct[i].expected && result == 0) {
+            printf("Value %i has been found! \n", search_struct[i].value);
+        } else {
+            printf("Value %i has not been found! \n", search_struct[i].value);
+        }
     }
 }
 
@@ -189,7 +194,6 @@ int * update(int *arr, int index, int value) {
     } 
 }
 
-
 struct testUpdate {
     int index;
     int value;
@@ -202,8 +206,6 @@ struct testUpdate *createTest(struct testUpdate *t, int indexTest, int testValue
     t->expected = expect;  
     return t; 
 };
-
-
 
 //Update_mod: takes in an expected array, index and value 
 //Creates a testUpdate structure using the  provided expected array, index and values
@@ -248,12 +250,12 @@ void create_update_tests() {
     test_update(i, 5, 28);
                 
     int j[10] = {0, 10, 20, 30, 40, 50, 60, 70, 29, 90};
-    test_update(j, 8, 29);
-               
+    test_update(j, 8, 29);           
 }
 
 
 //Main calls table testing functions 
 int main(void) {
     create_update_tests();
+    test_search();
 }

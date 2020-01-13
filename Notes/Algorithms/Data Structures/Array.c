@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include<string.h> 
+#include <string.h> 
 #define MAX_ARRAY 10
 #define SUCCESS 0
 #define ERROR -1
@@ -43,13 +43,11 @@ int * create() {
 //If the two arrays do not match print the difference
 //If two arrays match return a SUCCESS value
 int compare(int *arr1, int *arr2) {
-    traverse(arr1);
+    // traverse(arr1);
     int i;
-    for (i = 0; i <= MAX_ARRAY; i++) {
+    for (i = 0; i < MAX_ARRAY; i++) {
         if (arr1[i] != arr2[i]) { 
             printf("Array 1: %i does not match Array 2: %i at index: %i \n", arr1[i], arr2[i], i);
-                traverse(arr2);
-
             return ERROR;
         }
      }
@@ -232,81 +230,79 @@ void test_update() {
     int *p;
     for (i = 0; i < 10; i++) {   
     switch (i) {
-        case 1:
+        case 0:
             p = create();
             int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
             struct testUpdate *t1 = createTest(t1,11, 2, a); 
             update(p, t1->index, t1->value);
             compare(p, t1->expected);  
             continue;
-        case 2:  
+        case 1:  
             p = create();
             int b[10] = {0, 2, 20, 30, 40, 50, 60, 70, 80, 90};
             struct testUpdate *t2 = createTest(t2,1, 2, b); 
             update(p, t2->index, t2->value);
             compare(p, t2->expected);  
             continue; 
-        case 3:  
+        case 2:  
             p = create();
-            int c[10] = {0, 9, 20, 30, 40, 50, 60, 70, 80, 90};
+            int c[10] = {0, 10, 9, 30, 40, 50, 60, 70, 80, 90};
             struct testUpdate *t3 = createTest(t1,2, 9, c); 
             update(p, t3->index, t3->value);
             compare(p, t3->expected);  
             continue; 
-        case 4:  
+        case 3:  
             p = create();
-            int d[10] = {0, 10, 20, 30, 40, 50, 60, 70, 90, 90};
-            struct testUpdate *t4 = createTest(t4,9, 2000, d); 
+            int d[10] = {0, 10, 20, 30, 40, 50, 60, 70, 2000, 90};
+            struct testUpdate *t4 = createTest(t4,8, 2000, d); 
             update(p, t4->index, t4->value);
             compare(p, t4->expected);  
             continue; 
-        case 5:  
+        case 4:  
             p = create();
-            int e[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 2000};
-            struct testUpdate *t5 = createTest(t5,10, 2000, e); 
+            int e[10] = {0, 10, 2000, 30, 40, 50, 60, 70, 80, 90};
+            struct testUpdate *t5 = createTest(t5,2, 2000, e); 
             update(p, t5->index, t5->value);
             compare(p, t5->expected);  
             continue; 
-        case 6:  
+        case 5:  
             p = create();
             int f[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
             struct testUpdate *t6 = createTest(t6,-2, 2, f); 
             update(p, t6->index, t6->value);
             compare(p, t6->expected);  
             continue; 
-        case 7:  
+        case 6:  
             p = create();
             int g[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
             struct testUpdate *t7 = createTest(t7,-20, 2, g); 
             update(p, t7->index, t7->value);
             compare(p, t7->expected);  
             continue; 
-        case 8:  
+        case 7:  
             p = create();
-            int h[10] = {0, 10, 20, 30, 40, 50, 60, 28, 80, 90};
+            int h[10] = {0, 10, 20, 30, 40, 50, 60, 70, 28, 90};
             struct testUpdate *t8 = createTest(t8,8, 28, h); 
             update(p, t8->index, t8->value);
             compare(p, t8->expected);  
             continue; 
-        case 9:  
+        case 8:  
             p = create();
-            int i[10] = {0, 10, 20, 30, 2, 50, 60, 70, 80, 90};
-            struct testUpdate *t9 = createTest(t9,5, 2, i); 
+            int i[10] = {0, 10, 20, 30, 40, 28, 60, 70, 80, 90};
+            struct testUpdate *t9 = createTest(t9,5, 28, i); 
             update(p, t9->index, t9->value);
             compare(p, t9->expected);  
             continue;
-         case 10:  
+         case 9:  
             p = create();
             int j[10] = {0, 10, 20, 30, 40, 50, 60, 70, 29, 90};
-            struct testUpdate *t10 = createTest(t10,9, 29, j); 
+            struct testUpdate *t10 = createTest(t10,8, 29, j); 
             update(p, t10->index, t10->value);
             compare(p, t10->expected);  
             continue;  
         }
     }  
 }
-
-
 
 
 //Main calls table testing functions 

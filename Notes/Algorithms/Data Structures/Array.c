@@ -112,33 +112,60 @@ int delete(int *arr, int index) {
     }    
 }
 
-struct test_delete {
+struct testDelete {
     int index;
+    int *expected;
 };
 
-struct test_delete delete_index[10] = {
-    {11},
-    {5},
-    {5},
-    {29},
-    {11},
-    {-2},
-    {0},
-    {1},
-    {-6},
-    {10}
+struct testDelete *createDeleteTest(struct testDelete *t, int indexTest, int expect[]) {
+    t = malloc(sizeof(*t) + sizeof(int));
+    t->index = indexTest;
+    t->expected = expect;  
+    return t; 
 };
 
 //Takes in an array and runs the array with testing delete_index through delete function then uses compare function
 //Returns 0 if arrays match and -1 if arrays do not match expectations
-
-void test_delete(int *arr) {
-    int i;
-    for (i = 0; i < 10; i++) {
-        delete(arr, delete_index[i].index);
-    }
+void test_delete(int *arr, int index) {
+    int *p;
+    p = create();
+    struct testDelete *test = createDeleteTest(test, index, arr); 
+    delete(p, test->index);
+    compare(p, test->expected);
 }
 
+//Test_Update: Calls the test_update helper function 10 times to provide the expected array
+void create_delete_tests() {
+    int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    test_delete(a, 11);
+            
+    int b[10] = {0, 20, 30, 40, 50, 60, 70, 80, 90};
+    test_delete(b, 1);
+    
+    int c[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80};
+    test_delete(c, 9);
+   
+    int d[10] = {0, 10, 20, 30, 40, 50, 60, 70, 90};
+    test_delete(d, 8);
+              
+    int e[10] = {0, 10, 30, 40, 50, 60, 70, 80, 90};
+    test_delete(e, 2);
+                
+    int f[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    test_delete(f, -2);
+                
+    int g[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    test_delete(g, -20);
+                
+    int h[10] = {0, 10, 20, 30, 40, 50, 60, 70, 90};
+    test_delete(h, 8);
+                
+    int i[10] = {0, 10, 20, 30, 40, 60, 70, 80, 90};
+    test_delete(i, 5);
+                
+    int j[10] = {0, 10, 20, 30, 40, 50, 60, 70, 90};
+    test_delete(j, 8);           
+}
 
 //Search: Traverses a given array and checks if the target value is present
 //Returns a 0 if target is found, -1 if the search is unsuccessful 

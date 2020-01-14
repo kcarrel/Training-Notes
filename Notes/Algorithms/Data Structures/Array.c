@@ -61,39 +61,65 @@ int insert(int *arr, int index, int value) {
     return ERROR;
 }
 
-struct test_insert {
+struct testInsert {
     int index;
     int value;
+    int *expected;
 };
 
-struct test_insert insert_values[10] = {
-    {11, 2},
-    {5, 2000},
-    {5, 1000},
-    {29, 50000},
-    {11, 28},
-    {-2, 82},
-    {0, 87},
-    {1, 222},
-    {-6, 2},
-    {10, 290}
+struct testInsert *createInsertTest(struct testInsert *t, int indexTest, int valueTest, int expect[]) {
+    t->index = indexTest;
+    t->value = valueTest;
+    t->expected = expect;  
+    return t; 
 };
 
 //Test-Insert: Takes in an array and runs the array with testing insert_values through insert function then uses compare function
 //Returns 0 if arrays match and -1 if arrays do not match expectations
-
-void test_insert(int *arr) {
-    int i, result;
-    for (i = 0; i < 10; i++) {
-        result = insert(arr, insert_values[i].index, insert_values[i].value);
-        if (result == 0) {
-            printf("Round %d: \n", i);
-            traverse(arr);
-        } else {
-            printf("Error has occurred");
-            traverse(arr);
-        }
+void test_insert(int *arr, int index, int value) {
+    int *p, result;
+    p = create();
+    struct testInsert *test = createInsertTest(test, index, value, arr); 
+    insert(p, test->index, test->value);
+    result = compare(p, test->expected);
+    if (result == ERROR) {
+        printf("Insert was unsuccessful. \n");
+    } else {
+        printf("The insert of value %i at index %i was completed successfully. \n", test->value, test->index);
     }
+}
+
+//Test_Update: Calls the test_update helper function 10 times to provide the expected array
+void create_insert_tests() {
+    int a[11] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 20};
+    test_insert(a, 11, 20);
+            
+    int b[11] = {2, 0, 20, 30, 40, 50, 60, 70, 80, 90};
+    test_insert(b, 1, 2);
+    
+    int c[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80};
+    test_insert(c, -6, 2);
+   
+    int d[11] = {0, 10, 20, 30, 40, 50, 60, 27, 70, 90};
+    test_insert(d, 8, 27);
+              
+    int e[11] = {0, 10, 99, 30, 40, 50, 60, 70, 80, 90};
+    test_insert(e, 2, 99);
+                
+    int f[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    test_insert(f, -2, 100);
+                
+    int g[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    test_insert(g, -20, 100);
+                
+    int h[11] = {0, 10, 10, 20, 30, 40, 50, 60, 70, 90};
+    test_insert(h, 1, 10);
+                
+    int i[11] = {0, 10, 20, 30, 40, 1000, 60, 70, 80, 90};
+    test_insert(i, 5, 1000);
+                
+    int j[10] = {0, 10, 20, 30, 40, 50, 60, 70, 90};
+    test_insert(j, 800, 8);           
 }
 
 //Delete: Deletes in-place the value at the provided index in the given array
@@ -127,11 +153,16 @@ struct testDelete *createDeleteTest(struct testDelete *t, int indexTest, int exp
 //Takes in an array and runs the array with testing delete_index through delete function then uses compare function
 //Returns 0 if arrays match and -1 if arrays do not match expectations
 void test_delete(int *arr, int index) {
-    int *p;
+    int *p, result;
     p = create();
     struct testDelete *test = createDeleteTest(test, index, arr); 
     delete(p, test->index);
-    compare(p, test->expected);
+    result = compare(p, test->expected);
+    if (result == ERROR) {
+        printf("Delete was unsuccessful. \n");
+    } else {
+        printf("The value at index %i was completed successfully. \n", test->index);
+    }
 }
 
 //Test_Update: Calls the test_update helper function 10 times to provide the expected array
@@ -282,7 +313,10 @@ void create_update_tests() {
 
 
 //Main calls table testing functions 
+
 int main(void) {
     create_update_tests();
     test_search();
+    create_delete_tests();
+    create_insert_tests();
 }

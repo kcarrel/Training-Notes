@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h> 
 #define MAX_ARRAY 10
+#define ARRAY_BOUNDARY 50
 #define SUCCESS 0
 #define ERROR -1
 #define OVERFLOW -2
@@ -51,7 +52,7 @@ int insert(int *arr, int index, int value) {
     int shifted, i;
     int o = sizeof(arr);
     shifted = MAX_ARRAY + 1;
-    if (index <= o && index >= 0) {
+    if (index <= ARRAY_BOUNDARY && index >= 0) {
         for (i = shifted; i >= index; i--) {
             arr[i] = arr[i - 1];
         }
@@ -76,7 +77,7 @@ struct testInsert *createInsertTest(struct testInsert *t, int indexTest, int val
 
 //Test-Insert: Takes in an array and runs the array with testing insert_values through insert function then uses compare function
 //Returns 0 if arrays match and -1 if arrays do not match expectations
-void test_insert(int *arr, int index, int value) {
+void createTestInsert(int *arr, int index, int value) {
     int *p, result;
     p = create();
     struct testInsert *test = createInsertTest(test, index, value, arr); 
@@ -89,37 +90,37 @@ void test_insert(int *arr, int index, int value) {
     }
 }
 
-//Test_Update: Calls the test_update helper function 10 times to provide the expected array
-void create_insert_tests() {
+//Test_Update: Calls the testsUpdate helper function 10 times to provide the expected array
+void createInsertTests() {
     int a[11] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 20};
-    test_insert(a, 11, 20);
+    createTestInsert(a, 11, 20);
             
     int b[11] = {2, 0, 20, 30, 40, 50, 60, 70, 80, 90};
-    test_insert(b, 1, 2);
+    createTestInsert(b, 1, 2);
     
     int c[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80};
-    test_insert(c, -6, 2);
+    createTestInsert(c, -6, 2);
    
     int d[11] = {0, 10, 20, 30, 40, 50, 60, 27, 70, 90};
-    test_insert(d, 8, 27);
+    createTestInsert(d, 8, 27);
               
     int e[11] = {0, 10, 99, 30, 40, 50, 60, 70, 80, 90};
-    test_insert(e, 2, 99);
+    createTestInsert(e, 2, 99);
                 
     int f[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-    test_insert(f, -2, 100);
+    createTestInsert(f, -2, 100);
                 
     int g[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-    test_insert(g, -20, 100);
+    createTestInsert(g, -20, 100);
                 
     int h[11] = {0, 10, 10, 20, 30, 40, 50, 60, 70, 90};
-    test_insert(h, 1, 10);
+    createTestInsert(h, 1, 10);
                 
     int i[11] = {0, 10, 20, 30, 40, 1000, 60, 70, 80, 90};
-    test_insert(i, 5, 1000);
+    createTestInsert(i, 5, 1000);
                 
     int j[10] = {0, 10, 20, 30, 40, 50, 60, 70, 90};
-    test_insert(j, 800, 8);           
+    createTestInsert(j, -20, 8);           
 }
 
 //Delete: Deletes in-place the value at the provided index in the given array
@@ -152,7 +153,7 @@ struct testDelete *createDeleteTest(struct testDelete *t, int indexTest, int exp
 
 //Takes in an array and runs the array with testing delete_index through delete function then uses compare function
 //Returns 0 if arrays match and -1 if arrays do not match expectations
-void test_delete(int *arr, int index) {
+void testDelete(int *arr, int index) {
     int *p, result;
     p = create();
     struct testDelete *test = createDeleteTest(test, index, arr); 
@@ -165,37 +166,37 @@ void test_delete(int *arr, int index) {
     }
 }
 
-//Test_Update: Calls the test_update helper function 10 times to provide the expected array
-void create_delete_tests() {
+//Test_Update: Calls the testsUpdate helper function 10 times to provide the expected array
+void createDeleteTests() {
     int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-    test_delete(a, 11);
+    testDelete(a, 11);
             
     int b[10] = {0, 20, 30, 40, 50, 60, 70, 80, 90};
-    test_delete(b, 1);
+    testDelete(b, 1);
     
     int c[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80};
-    test_delete(c, 9);
+    testDelete(c, 9);
    
     int d[10] = {0, 10, 20, 30, 40, 50, 60, 70, 90};
-    test_delete(d, 8);
+    testDelete(d, 8);
               
     int e[10] = {0, 10, 30, 40, 50, 60, 70, 80, 90};
-    test_delete(e, 2);
+    testDelete(e, 2);
                 
     int f[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-    test_delete(f, -2);
+    testDelete(f, -2);
                 
     int g[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-    test_delete(g, -20);
+    testDelete(g, -20);
                 
     int h[10] = {0, 10, 20, 30, 40, 50, 60, 70, 90};
-    test_delete(h, 8);
+    testDelete(h, 8);
                 
     int i[10] = {0, 10, 20, 30, 40, 60, 70, 80, 90};
-    test_delete(i, 5);
+    testDelete(i, 5);
                 
     int j[10] = {0, 10, 20, 30, 40, 50, 60, 70, 90};
-    test_delete(j, 8);           
+    testDelete(j, 8);           
 }
 
 //Search: Traverses a given array and checks if the target value is present
@@ -228,7 +229,7 @@ struct testSearch search_struct[10] = {
     {10, 0}
 };
 
-int test_search() {
+int testSearch() {
     int i, result;
     int *p;
     p = create();
@@ -270,7 +271,7 @@ struct testUpdate *createTest(struct testUpdate *t, int indexTest, int testValue
 //Calls update with the provided index and values 
 //Calls compare to verify if the resulting array from update matches the expectation
 //Returns 0 if arrays match and -1 if arrays do not match expectations
-void test_update(int *arr, int index, int value) {
+void testsUpdate(int *arr, int index, int value) {
     int *p;
     p = create();
     struct testUpdate *test = createTest(test, index, value, arr); 
@@ -278,45 +279,45 @@ void test_update(int *arr, int index, int value) {
     compare(p, test->expected);
 }
 
-//Test_Update: Calls the test_update helper function 10 times to provide the expected array
-void create_update_tests() {
+//Test_Update: Calls the testsUpdate helper function 10 times to provide the expected array
+void createUpdateTests() {
     int a[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-    test_update(a, 11, 2);
+    testsUpdate(a, 11, 2);
             
     int b[10] = {0, 2, 20, 30, 40, 50, 60, 70, 80, 90};
-    test_update(b, 1, 2);
+    testsUpdate(b, 1, 2);
     
     int c[10] = {0, 10, 9, 30, 40, 50, 60, 70, 80, 90};
-    test_update(c, 2, 9);
+    testsUpdate(c, 2, 9);
    
     int d[10] = {0, 10, 20, 30, 40, 50, 60, 70, 2000, 90};
-    test_update(d, 8, 2000);
+    testsUpdate(d, 8, 2000);
               
     int e[10] = {0, 10, 2000, 30, 40, 50, 60, 70, 80, 90};
-    test_update(e, 2, 2000);
+    testsUpdate(e, 2, 2000);
                 
     int f[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-    test_update(f, -2, 2);
+    testsUpdate(f, -2, 2);
                 
     int g[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-    test_update(g, -20, 2);
+    testsUpdate(g, -20, 2);
                 
     int h[10] = {0, 10, 20, 30, 40, 50, 60, 70, 28, 90};
-    test_update(h, 8, 28);
+    testsUpdate(h, 8, 28);
                 
     int i[10] = {0, 10, 20, 30, 40, 28, 60, 70, 80, 90};
-    test_update(i, 5, 28);
+    testsUpdate(i, 5, 28);
                 
     int j[10] = {0, 10, 20, 30, 40, 50, 60, 70, 29, 90};
-    test_update(j, 8, 29);           
+    testsUpdate(j, 8, 29);           
 }
 
 
 //Main calls table testing functions 
 
 int main(void) {
-    create_update_tests();
-    test_search();
-    create_delete_tests();
-    create_insert_tests();
+    createUpdateTests();
+    testSearch();
+    createDeleteTests();
+    createInsertTests();
 }

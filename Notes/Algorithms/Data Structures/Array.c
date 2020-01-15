@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h> 
 #define MAX_ARRAY 10
+#define INSERT_ARRAY 11
+#define DELETE_ARRAY 9
 #define ARRAY_BOUNDARY 50
 #define SUCCESS 0
 #define ERROR -1
@@ -33,15 +35,11 @@ int * create() {
 //Compare: Takes in the array that has been tested and an array of expected values
 //If the two arrays do not match print the difference
 //If two arrays match return a SUCCESS value
-int compare(int *arr1, int *arr2) {
+int compare(int *arr1, int *arr2, int length) {
     int i;
-    for (i = 0; i < MAX_ARRAY; i++) {
+    for (i = 0; i < length; i++) {
         if (arr1[i] != arr2[i]) { 
             printf("Array 1: %i does not match Array 2: %i at index: %i \n", arr1[i], arr2[i], i);
-            printf("Arr 1 \n");
-            traverse(arr1);
-            printf("Arr 2 \n");
-            traverse(arr2);
             return ERROR;
         }
      }
@@ -88,11 +86,11 @@ void createTestInsert(int *arr, int index, int value) {
     p = create();
     struct testInsert *test = createInsertTest(test, index, value, arr); 
     insert(p, test->index, test->value);
-    result = compare(p, test->expected);
+    result = compare(p, test->expected, INSERT_ARRAY);
     if (result == ERROR) {
         printf("Insert was unsuccessful. \n");
     } else {
-        printf("The insert of value %i at index %i was completed successfully. \n", test->value, test->index);
+        printf("The insert of value %i at index %i was inserted successfully. \n", test->value, test->index);
     }
 }
 
@@ -133,11 +131,10 @@ void createInsertTests() {
 //Returns a 0 if successfull, -1 if an error occurs and -2 if overflow occurs
 int delete(int *arr, int index) {
     int j = index + 1, i;
-    size_t o = sizeof(arr)/sizeof(arr[0]);
-    if (index > o || index <= 0) {
+    if (index > MAX_ARRAY || index <= 0) {
         return OVERFLOW;    
     }
-    if (index <= o) {
+    if (index <= MAX_ARRAY) {
         for (i = index; i < MAX_ARRAY; i++) {
             arr[i] = arr[j];
             j++;
@@ -163,15 +160,17 @@ struct testDelete *createDeleteTest(struct testDelete *t, int indexTest, int exp
 //Takes in an array and runs the array with testing delete_index through delete function then uses compare function
 //Returns 0 if arrays match and -1 if arrays do not match expectations
 void testDelete(int *arr, int index) {
-    int *p, result;
+    int *p, result, comp;
     p = create();
     struct testDelete *test = createDeleteTest(test, index, arr); 
-    delete(p, test->index);
-    result = compare(p, test->expected);
-    if (result == ERROR) {
-        printf("Delete was unsuccessful. \n");
+    result = delete(p, test->index);
+    comp = compare(p, test->expected, DELETE_ARRAY);
+    if (result == SUCCESS && comp == SUCCESS) {
+        printf("The value at index %i was deleted successfully. \n", test->index);
+    } else if (result == OVERFLOW) {
+        printf("Overflow has occurred! The index provided does not exist in the array for deletion. \n");
     } else {
-        printf("The value at index %i was completed successfully. \n", test->index);
+        printf("Delete was unsuccessful. \n");
     }
 }
 
@@ -288,7 +287,7 @@ void testsUpdate(int *arr, int index, int value) {
     p = create();
     struct testUpdate *test = createTest(test, index, value, arr); 
     update(p, test->index, test->value);
-    compare(p, test->expected);
+    compare(p, test->expected, MAX_ARRAY);
 }
 
 //Test_Update: Calls the testsUpdate helper function 10 times to provide the expected array
@@ -302,7 +301,6 @@ void createUpdateTests() {
     int c[10] = {0, 10, 9, 30, 40, 50, 60, 70, 80, 90};
     testsUpdate(c, 2, 9);
    
-   //problem
     int d[10] = {0, 10, 20, 30, 40, 50, 60, 70, 2000, 90};
     testsUpdate(d, 8, 2000);
               
@@ -315,17 +313,12 @@ void createUpdateTests() {
     int g[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
     testsUpdate(g, -20, 2);
     
-
-    //problem
     int h[10] = {0, 10, 20, 30, 40, 50, 60, 70, 28, 90};
     testsUpdate(h, 8, 28);
     
-
-    //problem
     int i[10] = {0, 10, 20, 30, 40, 28, 60, 70, 80, 90};
     testsUpdate(i, 5, 28);
-
-    //problem          
+     
     int j[10] = {0, 10, 20, 30, 40, 50, 60, 70, 29, 90};
     testsUpdate(j, 8, 29);           
 }
@@ -334,8 +327,8 @@ void createUpdateTests() {
 //Main calls table testing functions 
 
 int main(void) {
-    createUpdateTests();
+    // createUpdateTests();
     // testSearch();
     // createDeleteTests();
-    // createInsertTests();
+    createInsertTests();
 }

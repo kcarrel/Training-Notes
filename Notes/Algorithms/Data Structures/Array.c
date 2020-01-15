@@ -38,6 +38,10 @@ int compare(int *arr1, int *arr2) {
     for (i = 0; i < MAX_ARRAY; i++) {
         if (arr1[i] != arr2[i]) { 
             printf("Array 1: %i does not match Array 2: %i at index: %i \n", arr1[i], arr2[i], i);
+            printf("Arr 1 \n");
+            traverse(arr1);
+            printf("Arr 2 \n");
+            traverse(arr2);
             return ERROR;
         }
      }
@@ -251,11 +255,10 @@ int testSearch() {
 //Update: Updates the element of an array at a given index to equal the provided value
 //Returns a 0 if update is successful or -1 if an error occurs
 int update(int *arr, int index, int value) {
-    size_t o = sizeof(arr)/sizeof(arr[0]);
-    if (index > o || index <= 0) {
+    if (index > ARRAY_BOUNDARY || index <= 0) {
         return OVERFLOW;    
     }
-    if (index <= o) {
+    if (index <= ARRAY_BOUNDARY) {
         arr[index] = value;
         return SUCCESS;
     } 
@@ -299,6 +302,7 @@ void createUpdateTests() {
     int c[10] = {0, 10, 9, 30, 40, 50, 60, 70, 80, 90};
     testsUpdate(c, 2, 9);
    
+   //problem
     int d[10] = {0, 10, 20, 30, 40, 50, 60, 70, 2000, 90};
     testsUpdate(d, 8, 2000);
               
@@ -310,13 +314,18 @@ void createUpdateTests() {
                 
     int g[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
     testsUpdate(g, -20, 2);
-                
+    
+
+    //problem
     int h[10] = {0, 10, 20, 30, 40, 50, 60, 70, 28, 90};
     testsUpdate(h, 8, 28);
-                
+    
+
+    //problem
     int i[10] = {0, 10, 20, 30, 40, 28, 60, 70, 80, 90};
     testsUpdate(i, 5, 28);
-                
+
+    //problem          
     int j[10] = {0, 10, 20, 30, 40, 50, 60, 70, 29, 90};
     testsUpdate(j, 8, 29);           
 }
@@ -326,7 +335,7 @@ void createUpdateTests() {
 
 int main(void) {
     createUpdateTests();
-    testSearch();
-    createDeleteTests();
-    createInsertTests();
+    // testSearch();
+    // createDeleteTests();
+    // createInsertTests();
 }

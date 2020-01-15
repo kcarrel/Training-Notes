@@ -50,7 +50,7 @@ int compare(int *arr1, int *arr2) {
 // Returns a 0 if successful, -1 if an error occurs and -2 if overflow occurs
 int insert(int *arr, int index, int value) {
     int shifted, i;
-    int o = sizeof(arr);
+    size_t o = sizeof(arr);
     shifted = MAX_ARRAY + 1;
     if (index <= ARRAY_BOUNDARY && index >= 0) {
         for (i = shifted; i >= index; i--) {
@@ -127,7 +127,7 @@ void createInsertTests() {
 //Returns a 0 if successfull, -1 if an error occurs and -2 if overflow occurs
 int delete(int *arr, int index) {
     int j = index + 1, i;
-    int o = sizeof(arr);
+    size_t o = sizeof(arr)/sizeof(arr[0]);
     if (index <= o && index >= 0) {
         for (i = index; i < MAX_ARRAY; i++) {
             arr[i] = arr[j];
@@ -246,7 +246,7 @@ int testSearch() {
 //Update: Updates the element of an array at a given index to equal the provided value
 //Returns a 0 if update is successful or -1 if an error occurs
 int * update(int *arr, int index, int value) {
-    int o = sizeof(arr);
+    size_t o = sizeof(arr)/sizeof(arr[0]);
     if (index <= o && index >= 0) {
         arr[index] = value;
         return 0;

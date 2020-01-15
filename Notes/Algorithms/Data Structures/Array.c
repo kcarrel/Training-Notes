@@ -34,7 +34,6 @@ int * create() {
 //If the two arrays do not match print the difference
 //If two arrays match return a SUCCESS value
 int compare(int *arr1, int *arr2) {
-    // traverse(arr1);
     int i;
     for (i = 0; i < MAX_ARRAY; i++) {
         if (arr1[i] != arr2[i]) { 
@@ -52,7 +51,10 @@ int insert(int *arr, int index, int value) {
     int shifted, i;
     size_t o = sizeof(arr);
     shifted = MAX_ARRAY + 1;
-    if (index <= ARRAY_BOUNDARY && index >= 0) {
+    if (index > o || index <= 0) {
+        return OVERFLOW;    
+    }
+    if (index <= ARRAY_BOUNDARY) {
         for (i = shifted; i >= index; i--) {
             arr[i] = arr[i - 1];
         }
@@ -128,7 +130,10 @@ void createInsertTests() {
 int delete(int *arr, int index) {
     int j = index + 1, i;
     size_t o = sizeof(arr)/sizeof(arr[0]);
-    if (index <= o && index >= 0) {
+    if (index > o || index <= 0) {
+        return OVERFLOW;    
+    }
+    if (index <= o) {
         for (i = index; i < MAX_ARRAY; i++) {
             arr[i] = arr[j];
             j++;
@@ -245,12 +250,16 @@ int testSearch() {
 
 //Update: Updates the element of an array at a given index to equal the provided value
 //Returns a 0 if update is successful or -1 if an error occurs
-int * update(int *arr, int index, int value) {
+int update(int *arr, int index, int value) {
     size_t o = sizeof(arr)/sizeof(arr[0]);
-    if (index <= o && index >= 0) {
+    if (index > o || index <= 0) {
+        return OVERFLOW;    
+    }
+    if (index <= o) {
         arr[index] = value;
-        return 0;
+        return SUCCESS;
     } 
+    return ERROR;
 }
 
 struct testUpdate {

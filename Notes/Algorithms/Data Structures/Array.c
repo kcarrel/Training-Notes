@@ -12,7 +12,7 @@
 
 void traverse(int *arr) {
     int i;
-    for (i = 0; i < MAX_ARRAY; i++) {
+    for (i = 0; i <= INSERT_ARRAY; i++) {
         printf("%d \n", arr[i]);
     }
 }
@@ -50,20 +50,15 @@ int compare(int *arr1, int *arr2, int length) {
 //Insert: Inserts a value at the provided index in the given array
 // Returns a 0 if successful, -1 if an error occurs and -2 if overflow occurs
 int insert(int *arr, int index, int value) {
-    int shifted, i;
-    size_t o = sizeof(arr);
-    shifted = MAX_ARRAY + 1;
-    if (index > o || index <= 0) {
+    int i, temp;
+    if (index > INSERT_ARRAY || index <= 0) {
         return OVERFLOW;    
     }
-    if (index <= ARRAY_BOUNDARY) {
-        for (i = shifted; i >= index; i--) {
-            arr[i] = arr[i - 1];
-        }
-        arr[index - 1] = value;
-        return SUCCESS;
-    } 
-    return ERROR;
+    for (i = INSERT_ARRAY; i >= index; i--) 
+        arr[i] = arr[i - 1]; 
+    arr[index - 1] = value; 
+    return SUCCESS;
+    
 }
 
 struct testInsert {
@@ -73,6 +68,7 @@ struct testInsert {
 };
 
 struct testInsert *createInsertTest(struct testInsert *t, int indexTest, int valueTest, int expect[]) {
+    t = malloc(sizeof(*t) + sizeof(int));
     t->index = indexTest;
     t->value = valueTest;
     t->expected = expect;  
@@ -82,15 +78,18 @@ struct testInsert *createInsertTest(struct testInsert *t, int indexTest, int val
 //Test-Insert: Takes in an array and runs the array with testing insert_values through insert function then uses compare function
 //Returns 0 if arrays match and -1 if arrays do not match expectations
 void createTestInsert(int *arr, int index, int value) {
-    int *p, result;
+    int *p, result, comp;
     p = create();
     struct testInsert *test = createInsertTest(test, index, value, arr); 
-    insert(p, test->index, test->value);
-    result = compare(p, test->expected, INSERT_ARRAY);
-    if (result == ERROR) {
-        printf("Insert was unsuccessful. \n");
-    } else {
+    result = insert(p, test->index, test->value);
+    comp = compare(p, test->expected, INSERT_ARRAY);
+    if (result == SUCCESS && comp == SUCCESS) {
         printf("The insert of value %i at index %i was inserted successfully. \n", test->value, test->index);
+    } else if (result == OVERFLOW) {
+        printf("Index provided is out of range! \n");
+    } else {
+        printf("Insertion failure! \n");
+
     }
 }
 
@@ -99,17 +98,17 @@ void createInsertTests() {
     int a[11] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 20};
     createTestInsert(a, 11, 20);
             
-    int b[11] = {2, 0, 20, 30, 40, 50, 60, 70, 80, 90};
-    createTestInsert(b, 1, 2);
+    int b[11] = {0, 10, 2, 20, 30, 40, 50, 60, 70, 80, 90};
+    createTestInsert(b, 3, 2);
     
-    int c[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80};
-    createTestInsert(c, -6, 2);
+    // int c[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    // createTestInsert(c, -6, 2);
    
-    int d[11] = {0, 10, 20, 30, 40, 50, 60, 27, 70, 90};
+    int d[11] = {0, 10, 20, 30, 40, 50, 60, 27, 70, 80, 90};
     createTestInsert(d, 8, 27);
               
-    int e[11] = {0, 10, 99, 30, 40, 50, 60, 70, 80, 90};
-    createTestInsert(e, 2, 99);
+    int e[11] = {0, 10, 99, 20, 30, 40, 50, 60, 70, 80, 90};
+    createTestInsert(e, 3, 99);
                 
     int f[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
     createTestInsert(f, -2, 100);
@@ -117,11 +116,11 @@ void createInsertTests() {
     int g[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
     createTestInsert(g, -20, 100);
                 
-    int h[11] = {0, 10, 10, 20, 30, 40, 50, 60, 70, 90};
+    int h[11] = {10, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
     createTestInsert(h, 1, 10);
                 
-    int i[11] = {0, 10, 20, 30, 40, 1000, 60, 70, 80, 90};
-    createTestInsert(i, 5, 1000);
+    int i[11] = {0, 10, 20, 30, 40, 1000, 50, 60, 70, 80, 90};
+    createTestInsert(i, 6, 1000);
                 
     int j[10] = {0, 10, 20, 30, 40, 50, 60, 70, 90};
     createTestInsert(j, -20, 8);           
@@ -327,8 +326,8 @@ void createUpdateTests() {
 //Main calls table testing functions 
 
 int main(void) {
-    // createUpdateTests();
-    // testSearch();
-    // createDeleteTests();
+    createUpdateTests();
+    testSearch();
+    createDeleteTests();
     createInsertTests();
 }

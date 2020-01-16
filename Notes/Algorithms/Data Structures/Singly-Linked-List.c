@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+// use macros to define alloc failure and return 
+#define ALLOC_NODE 
 
 //node struct
 struct node {
@@ -11,9 +13,11 @@ struct node {
 //Returns the new node
 struct node * createNode(int val, struct node * next) {
     struct node * temp = malloc(sizeof(*temp));
-    temp->value = val;
-    temp->next = next;
-    return temp;
+    if (temp != NULL) {
+        temp->value = val;
+        temp->next = next;
+        return temp;
+    }
 }
 
 //Singly Linked List struct
@@ -27,6 +31,14 @@ SinglyLinkedList * createLinkedList() {
     SinglyLinkedList * temp = calloc(1, sizeof(*temp));
     return temp;
 }
+
+
+
+// repetition of a complex allocation procedure:
+
+//     checking for allocation errors
+//     the whole thing can be a function
+
 
 void main() {
 

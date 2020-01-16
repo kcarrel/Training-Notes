@@ -17,6 +17,8 @@ struct node * createNode(int val, struct node * next) {
         temp->value = val;
         temp->next = next;
         return temp;
+    } else {
+        printf("Memory Allocation failure.");
     }
 }
 

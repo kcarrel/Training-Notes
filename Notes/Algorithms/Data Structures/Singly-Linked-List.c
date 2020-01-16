@@ -10,7 +10,8 @@ struct node {
 };
 
 //createNode creates a node 
-//Returns the new node
+//Returns the new node if the memory allocation is successful
+//Prints an error message if memory allocation fails 
 struct node * createNode(int val, struct node * next) {
     struct node * temp = malloc(sizeof(*temp));
     if (temp != NULL) {

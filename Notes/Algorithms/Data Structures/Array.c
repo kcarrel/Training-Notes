@@ -101,8 +101,8 @@ void createInsertTests() {
     int b[11] = {0, 10, 2, 20, 30, 40, 50, 60, 70, 80, 90};
     createTestInsert(b, 3, 2);
     
-    // int c[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-    // createTestInsert(c, -6, 2);
+    int c[10] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    createTestInsert(c, -6, 2);
    
     int d[11] = {0, 10, 20, 30, 40, 50, 60, 27, 70, 80, 90};
     createTestInsert(d, 8, 27);
@@ -236,6 +236,8 @@ struct testSearch search_struct[10] = {
     {10, 0}
 };
 
+//Test Search loops through the values in the testSearch struct to provide to the search function
+// Prints out a success or error message based on the result of the search function
 int testSearch() {
     int i, result;
     int *p;

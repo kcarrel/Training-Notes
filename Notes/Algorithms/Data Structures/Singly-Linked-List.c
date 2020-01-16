@@ -1,42 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node {
+//node struct
+struct node {
     int value;
-    struct Node* next;
+    struct node * next;
 };
 
-
-
-void insert() {
-
+//createNode creates a node 
+//Returns the new node
+struct node * createNode(int val, struct node * next) {
+    struct node * temp = malloc(sizeof(*temp));
+    temp->value = val;
+    temp->next = next;
+    return temp;
 }
 
-void print(struct Node* head) {
-    struct Node* temp = head; 
-    while (temp != NULL) { 
-        printf("%d  ", temp->value);
-        temp = temp->next; 
-    } 
+//Singly Linked List struct
+typedef struct {
+    struct node * head;
+    struct node * tail;
+    int length;
+} SinglyLinkedList;
+
+SinglyLinkedList * createLinkedList() {
+    SinglyLinkedList * temp = calloc(1, sizeof(*temp));
+    return temp;
 }
 
 void main() {
-    struct Node* head = NULL;
-    struct Node* middle = NULL;
-    struct Node* tail = NULL;
 
-    head = (struct Node*)malloc(sizeof(struct Node)); 
-    middle = (struct Node*)malloc(sizeof(struct Node)); 
-    tail = (struct Node*)malloc(sizeof(struct Node)); 
 
-    head -> value = 10;
-    head -> next = middle;
-
-    middle -> value = 20;
-    middle -> next = tail;
-
-    tail -> value = 30;
-    tail -> next = NULL;
-    
-    print(head);
 }

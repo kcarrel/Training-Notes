@@ -24,6 +24,12 @@ void traverse(struct node *head) {
     }
 }
 
+//Compare: traverses a list of an "updated" linked list and an expected linked list & compares for matching values.
+//Results: If values do not match then an error code is returned. If all values match then a success code is returned.
+// int compare() {
+
+// }
+
 //addNode creates a node and makes it the next node to the provided reference node
 //Returns the new node if the memory allocation is successful
 //Prints an error message if memory allocation fails 
@@ -53,7 +59,7 @@ SinglyLinkedList * createLinkedList() {
 
 
 //deleteNode: Takes in an index, traverse the linked list until finding the node in question, reassigns the previous node-> next to the current node's ->next 
-//returns
+//returns the head reference for the linked list
 struct node * deleteNode(struct node * last, int index) {
     // if (last == NULL) {
     //     return EMPTY;
@@ -78,8 +84,8 @@ struct node * deleteNode(struct node * last, int index) {
 //     checking for allocation errors
 //     the whole thing can be a function
 
-//BuildList:
-//Returns 0 if list is successfully built, -1 if an error occurs and -2 if a memory allocation failure occurs
+//BuildList: Creates a head node then loops through an array of values which are provided to a addNode helper function to create a linked list
+//Returns the head node for reference in main if the linked list is successfully created 
 struct node * buildList(){ 
     struct node* head = (struct node*) malloc(sizeof(struct node)); 
     if (head != NULL) {
@@ -99,6 +105,7 @@ struct node * buildList(){
 }
 
 //Main first builds the testing singly linked list by calling the helper function buildList
+//To-do: Work in error codes while still returning references to the nodes being updated?
 void main() {
     struct node* head = buildList();
     struct node* result = deleteNode(head, 2);

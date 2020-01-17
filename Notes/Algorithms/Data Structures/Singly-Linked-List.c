@@ -79,6 +79,19 @@ struct node * deleteNode(struct node * last, int index) {
     return last;
 }
 
+struct node * reverseList(struct node * head) 
+{ 
+    struct node* prev = NULL; 
+    struct node* current = head; 
+    struct node* next = NULL; 
+    while (current != NULL) { 
+        next = current->next; 
+        current->next = prev; 
+        prev = current; 
+        current = next; 
+    } 
+    return prev;
+} 
 // repetition of a complex allocation procedure:
 
 //     checking for allocation errors
@@ -106,8 +119,17 @@ struct node * buildList(){
 
 //Main first builds the testing singly linked list by calling the helper function buildList
 //To-do: Work in error codes while still returning references to the nodes being updated?
+// Functions:
+//Add
+//Delete
+//Traverse
+//Reverse LL
 void main() {
     struct node* head = buildList();
     struct node* result = deleteNode(head, 2);
     traverse(result);
+
+    struct node* head1 = buildList();
+    struct node* result1 = reverseList(head1);
+    traverse(result1);
 }

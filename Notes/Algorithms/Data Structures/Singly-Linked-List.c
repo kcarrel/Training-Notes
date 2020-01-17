@@ -26,9 +26,21 @@ void traverse(struct node *head) {
 
 //Compare: traverses a list of an "updated" linked list and an expected linked list & compares for matching values.
 //Results: If values do not match then an error code is returned. If all values match then a success code is returned.
-// int compare() {
+int compare(struct node * results, struct node * expected) {
+    for (int i = 0; i < 10; i++) {
+        struct node * result = results;
+        struct node * expect = expected;
+        if (result->value == expect->value) {
+            result = results->next;
+            expect = expect->next;
+        } else {
+            printf("%d does not match %d.", result->value, expect->value);
+            return ERROR;
+        }
+    }
+    return SUCCESS;
 
-// }
+}
 
 //addNode creates a node and makes it the next node to the provided reference node
 //Returns the new node if the memory allocation is successful

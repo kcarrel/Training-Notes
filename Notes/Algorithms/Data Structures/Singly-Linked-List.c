@@ -111,14 +111,13 @@ struct node * reverseList(struct node * head)
 
 //BuildList: Creates a head node then loops through an array of values which are provided to a addNode helper function to create a linked list
 //Returns the head node for reference in main if the linked list is successfully created 
-struct node * buildList(){ 
+struct node * buildList(int *testVals){ 
     struct node* head = (struct node*) malloc(sizeof(struct node)); 
     if (head != NULL) {
         head->value = 0; 
         struct node* last = head;  
         struct node * current;
-        int i, testVals[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-        for (i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             current = addNode(testVals[i], last);
             last = current;
         }
@@ -137,11 +136,12 @@ struct node * buildList(){
 //Traverse
 //Reverse LL
 void main() {
-    struct node* head = buildList();
+    int testVals[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    struct node* head = buildList(testVals);
     struct node* result = deleteNode(head, 2);
     traverse(result);
 
-    struct node* head1 = buildList();
-    struct node* result1 = reverseList(head1);
-    traverse(result1);
+    // struct node* head1 = buildList();
+    // struct node* result1 = reverseList(head1);
+    // traverse(result1);
 }

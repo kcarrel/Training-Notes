@@ -111,13 +111,13 @@ struct node * reverseList(struct node * head)
 
 //BuildList: Creates a head node then loops through an array of values which are provided to a addNode helper function to create a linked list
 //Returns the head node for reference in main if the linked list is successfully created 
-struct node * buildList(int *testVals){ 
+struct node * buildList(int *testVals, int length){ 
     struct node* head = (struct node*) malloc(sizeof(struct node)); 
     if (head != NULL) {
         head->value = 0; 
         struct node* last = head;  
         struct node * current;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < length; i++) {
             current = addNode(testVals[i], last);
             last = current;
         }
@@ -126,6 +126,26 @@ struct node * buildList(int *testVals){
         printf("Memory allocation has failed.");
         // return OVERFLOW;
     }
+}
+
+void buildAddTest() {
+    //5 Pass 
+    printf("Build Passes: \n");
+    int testOne[11] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 82, 100};
+    int testTwo[11] = { 10, 20, 30, 40, 50, 60, 60, 70, 80, 90, 100};
+    int testThree[11] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200};
+    int testFour[11] = { 10, 20, 44, 30, 40, 50, 60, 70, 80, 90, 100};
+    int testFive[11] = { 10, 20, 30, 40, 29, 50, 60, 70, 80, 90, 100};
+
+    //5 Fail
+    printf("Build Fails: \n");
+    int testSix[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int testSeven[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int testEight[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int testNine[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int testTen[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+
 }
 
 //Main first builds the testing singly linked list by calling the helper function buildList
@@ -137,11 +157,11 @@ struct node * buildList(int *testVals){
 //Reverse LL
 void main() {
     int testVals[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    struct node* head = buildList(testVals);
+    struct node* head = buildList(testVals, 10);
     struct node* result = deleteNode(head, 2);
     traverse(result);
 
-    // struct node* head1 = buildList();
-    // struct node* result1 = reverseList(head1);
-    // traverse(result1);
+    struct node* head1 = buildList(testVals, 10);
+    struct node* result1 = reverseList(head1);
+    traverse(result1);
 }

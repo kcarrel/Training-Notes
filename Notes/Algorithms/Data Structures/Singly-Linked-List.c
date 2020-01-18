@@ -122,9 +122,9 @@ struct node * deleteNode(struct node * last, int index) {
 void buildDeleteTests() {
     //5 Pass 
     printf("Build Passes: \n");
-    int testOne[9] = { 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int testOne[9] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 
-    int testTwo[9] = { 10, 30, 40, 50, 60, 70, 80, 90, 100};
+    int testTwo[9] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 
     int testThree[9] = { 10, 20, 40, 50, 60, 70, 80, 90, 100};
 
@@ -158,6 +158,39 @@ struct node * reverseList(struct node * head)
     } 
     return prev;
 } 
+
+//To-Do: Are there too many interesting test cases for a successful reverse?
+void buildReverseTests() {
+    //5 Pass 
+    printf("Build Passes: \n");
+    int testOne[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int resultOne[11] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
+
+    int testTwo[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int resultTwo[11] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
+
+    int testThree[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int resultThree[11] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
+
+    int testFour[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int resultFour[11] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
+
+    int testFive[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int resultFive[11] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
+
+    //5 Fail
+    printf("Build Fails: \n");
+    int testSix[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testSeven[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testEight[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testNine[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testTen[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+}
+
 // repetition of a complex allocation procedure:
 
 //     checking for allocation errors

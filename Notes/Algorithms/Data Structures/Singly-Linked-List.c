@@ -57,6 +57,33 @@ struct node * addNode(int val, struct node * last) {
     }
 }
 
+
+void buildAddTests() {
+    //5 Pass 
+    printf("Build Passes: \n");
+    int testOne[11] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 82, 100};
+
+    int testTwo[11] = { 10, 20, 30, 40, 50, 60, 60, 70, 80, 90, 100};
+
+    int testThree[11] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200};
+
+    int testFour[11] = { 10, 20, 44, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testFive[11] = { 10, 20, 30, 40, 29, 50, 60, 70, 80, 90, 100};
+
+    //5 Fail
+    printf("Build Fails: \n");
+    int testSix[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testSeven[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testEight[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testNine[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testTen[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+}
+
 //Singly Linked List struct
 typedef struct {
     struct node * head;
@@ -89,6 +116,33 @@ struct node * deleteNode(struct node * last, int index) {
     free(temp->next);
     temp->next = newNext;
     return last;
+}
+
+
+void buildDeleteTests() {
+    //5 Pass 
+    printf("Build Passes: \n");
+    int testOne[9] = { 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testTwo[9] = { 10, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testThree[9] = { 10, 20, 40, 50, 60, 70, 80, 90, 100};
+
+    int testFour[9] = { 10, 20, 30,  50, 60, 70, 80, 90, 100};
+
+    int testFive[9] = { 10, 20, 30, 40, 50, 60, 70, 80, 100};
+
+    //5 Fail
+    printf("Build Fails: \n");
+    int testSix[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testSeven[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testEight[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testNine[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    int testTen[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 }
 
 struct node * reverseList(struct node * head) 
@@ -126,26 +180,6 @@ struct node * buildList(int *testVals, int length){
         printf("Memory allocation has failed.");
         // return OVERFLOW;
     }
-}
-
-void buildAddTest() {
-    //5 Pass 
-    printf("Build Passes: \n");
-    int testOne[11] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 82, 100};
-    int testTwo[11] = { 10, 20, 30, 40, 50, 60, 60, 70, 80, 90, 100};
-    int testThree[11] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200};
-    int testFour[11] = { 10, 20, 44, 30, 40, 50, 60, 70, 80, 90, 100};
-    int testFive[11] = { 10, 20, 30, 40, 29, 50, 60, 70, 80, 90, 100};
-
-    //5 Fail
-    printf("Build Fails: \n");
-    int testSix[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    int testSeven[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    int testEight[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    int testNine[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    int testTen[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-
-
 }
 
 //Main first builds the testing singly linked list by calling the helper function buildList

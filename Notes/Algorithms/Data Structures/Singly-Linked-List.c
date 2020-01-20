@@ -6,6 +6,7 @@
 #define SUCCESS 0
 #define ERROR -1
 #define OVERFLOW -2
+#define EMPTY -3
 
 
 //node struct
@@ -13,6 +14,7 @@ struct node {
     int value;
     struct node * next;
 };
+
 
 //Traverse: traverses a linked list and prints out the value of the current node, then sets the current node to the next node
 // Exits when the node->next points to NULL
@@ -73,9 +75,22 @@ void buildAddTests() {
 
     //5 Fail
     printf("Build Fails: \n");
-    int testSix[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    //Empty Test
+    int testSix[0] = {};
 
-    int testSeven[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    //Input too large
+    int testSeven[100] = { 
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+    };
 
     int testEight[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 
@@ -118,15 +133,15 @@ struct node * deleteNode(struct node * last, int index) {
     return last;
 }
 
-
+//Test cases for the delete function
 void buildDeleteTests() {
     //5 Pass 
     printf("Build Passes: \n");
-    int testOne[9] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int testOne[9] = { 10, 20, 30, 40, 50, 60, 70, 80, 90};
 
-    int testTwo[9] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    int testTwo[9] = { 10, 20, 30, 40, 50, 60, 70, 90, 100};
 
-    int testThree[9] = { 10, 20, 40, 50, 60, 70, 80, 90, 100};
+    int testThree[9] = { 10, 20, 40, 50, 60, 70, 90, 100};
 
     int testFour[9] = { 10, 20, 30,  50, 60, 70, 80, 90, 100};
 
@@ -134,9 +149,22 @@ void buildDeleteTests() {
 
     //5 Fail
     printf("Build Fails: \n");
-    int testSix[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    //Empty Input
+    int testSix[0] = {};
 
-    int testSeven[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    //Input too large
+    int testSeven[100] = { 
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+    };
 
     int testEight[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 
@@ -159,7 +187,7 @@ struct node * reverseList(struct node * head)
     return prev;
 } 
 
-//To-Do: Are there too many interesting test cases for a successful reverse?
+//To-Do: Aren't there too many interesting test cases for a successful reverse?
 void buildReverseTests() {
     //5 Pass 
     printf("Build Passes: \n");
@@ -180,9 +208,22 @@ void buildReverseTests() {
 
     //5 Fail
     printf("Build Fails: \n");
-    int testSix[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    //Empty List
+    int testSix[0] = {};
 
-    int testSeven[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    //Input too large
+    int testSeven[100] = { 
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+    };
 
     int testEight[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 

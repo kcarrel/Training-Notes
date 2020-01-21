@@ -20,6 +20,7 @@ typedef struct Node {
 void traverse(Node* head) {
     Node* current_node = head;
    	while (current_node != NULL) {
+        printf("%d \n", current_node->value);
         current_node = current_node->next;
     }
 }
@@ -100,11 +101,12 @@ void buildAddTests() {
 
 //deleteNode: Takes in an index, traverse the linked list until finding the node in question, reassigns the previous node-> next to the current node's ->next 
 //returns the head reference for the linked list
-struct node * deleteNode(struct node * last, int index) {
-    // if (last == NULL) {
-    //     return EMPTY;
-    // }
-    struct node * temp = last;
+int deleteNode(Node * last, int index) {
+    if (last == NULL) {
+        return EMPTY;
+    }
+    Node* temp = malloc(sizeof(Node)); 
+    temp = last;
     if (index == 0) {
         last = temp->next;
         free(temp);
@@ -113,10 +115,9 @@ struct node * deleteNode(struct node * last, int index) {
     for (int i = 0; temp != NULL && i < index - 1; i++) {
         temp = temp->next;
     } 
-    struct node * newNext = temp->next->next;
+    Node * newNext = temp->next->next;
     free(temp->next);
     temp->next = newNext;
-    return last;
 }
 
 //Test cases for the delete function
@@ -159,7 +160,7 @@ void buildDeleteTests() {
     int testTen[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 }
 
-struct node * reverseList(struct node * head) 
+int reverseList(Node * head) 
 { 
     Node* prev = NULL; 
     Node* current = head; 
@@ -170,7 +171,7 @@ struct node * reverseList(struct node * head)
         prev = current; 
         current = next; 
     } 
-    return prev;
+    return SUCCESS;
 } 
 
 //To-Do: Aren't there too many interesting test cases for a successful reverse?
@@ -257,8 +258,8 @@ void main() {
     head->value = 0;
     buildList(head, testVals, 10);
 
-    // Node* result = deleteNode(head, 2);
-    // traverse(result);
+    deleteNode(head, 2);
+    traverse(head);
 
 
 

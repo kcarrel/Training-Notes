@@ -10,28 +10,26 @@
 
 
 //node struct
-struct node {
+typedef struct Node {
     int value;
-    struct node * next;
-};
-
+    struct Node* next;
+} Node;
 
 //Traverse: traverses a linked list and prints out the value of the current node, then sets the current node to the next node
 // Exits when the node->next points to NULL
-void traverse(struct node *head) {
-    struct node *current_node = head;
-   	while ( current_node != NULL) {
-        printf("%d ", current_node->value);
+void traverse(Node* head) {
+    Node* current_node = head;
+   	while (current_node != NULL) {
         current_node = current_node->next;
     }
 }
 
 //Compare: traverses a list of an "updated" linked list and an expected linked list & compares for matching values.
 //Results: If values do not match then an error code is returned. If all values match then a success code is returned.
-int compare(struct node * results, struct node * expected) {
+int compare(Node * results, Node * expected) {
     for (int i = 0; i < 10; i++) {
-        struct node * result = results;
-        struct node * expect = expected;
+        Node * result = results;
+        Node * expect = expected;
         if (result->value == expect->value) {
             result = results->next;
             expect = expect->next;
@@ -41,21 +39,22 @@ int compare(struct node * results, struct node * expected) {
         }
     }
     return SUCCESS;
-
 }
 
 //addNode creates a node and makes it the next node to the provided reference node
 //Returns the new node if the memory allocation is successful
 //Prints an error message if memory allocation fails 
-struct node * addNode(int val, struct node * last) {
-    struct node * temp = malloc(sizeof(*temp));
-    if (temp != NULL) {
-        temp->value = val;
-        temp->next = NULL;
-        last->next = temp;
-        return temp;
+int addNode(int val, Node* last, Node* next) {
+
+    if (next != NULL) {
+        next->value = val;
+        next->next = NULL;
+        last->next = next;
+        // printf("%d \n", next->value);
+        return SUCCESS;
     } else {
         printf("Memory Allocation failure.");
+        return OVERFLOW;
     }
 }
 
@@ -98,19 +97,6 @@ void buildAddTests() {
 
     int testTen[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 }
-
-//Singly Linked List struct
-typedef struct {
-    struct node * head;
-    struct node * tail;
-    int length;
-} SinglyLinkedList;
-
-SinglyLinkedList * createLinkedList() {
-    SinglyLinkedList * temp = calloc(1, sizeof(*temp));
-    return temp;
-}
-
 
 //deleteNode: Takes in an index, traverse the linked list until finding the node in question, reassigns the previous node-> next to the current node's ->next 
 //returns the head reference for the linked list
@@ -175,9 +161,9 @@ void buildDeleteTests() {
 
 struct node * reverseList(struct node * head) 
 { 
-    struct node* prev = NULL; 
-    struct node* current = head; 
-    struct node* next = NULL; 
+    Node* prev = NULL; 
+    Node* current = head; 
+    Node* next = NULL; 
     while (current != NULL) { 
         next = current->next; 
         current->next = prev; 
@@ -237,22 +223,24 @@ void buildReverseTests() {
 //     checking for allocation errors
 //     the whole thing can be a function
 
-//BuildList: Creates a head node then loops through an array of values which are provided to a addNode helper function to create a linked list
-//Returns the head node for reference in main if the linked list is successfully created 
-struct node * buildList(int *testVals, int length){ 
-    struct node* head = (struct node*) malloc(sizeof(struct node)); 
+int buildList(Node * head, int *testVals, int length){ 
     if (head != NULL) {
-        head->value = 0; 
-        struct node* last = head;  
-        struct node * current;
+        Node* last = malloc(sizeof(Node)); 
         for (int i = 0; i < length; i++) {
-            current = addNode(testVals[i], last);
-            last = current;
+            Node* next = malloc(sizeof(Node)); 
+            if (i == 0) {
+                addNode(testVals[i], head, next);
+                last = next;
+
+            } else {
+                addNode(testVals[i], last, next);
+                last = next;
+            }
         }
-        return head;
+        return SUCCESS;
     } else {
         printf("Memory allocation has failed.");
-        // return OVERFLOW;
+        return OVERFLOW;
     }
 }
 
@@ -265,11 +253,16 @@ struct node * buildList(int *testVals, int length){
 //Reverse LL
 void main() {
     int testVals[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    struct node* head = buildList(testVals, 10);
-    struct node* result = deleteNode(head, 2);
-    traverse(result);
+    Node* head = malloc(sizeof(Node)); 
+    head->value = 0;
+    buildList(head, testVals, 10);
 
-    struct node* head1 = buildList(testVals, 10);
-    struct node* result1 = reverseList(head1);
-    traverse(result1);
+    // Node* result = deleteNode(head, 2);
+    // traverse(result);
+
+
+
+    // Node* head1 = buildList(testVals, 10);
+    // Node* result1 = reverseList(head1);
+    // traverse(result1);
 }

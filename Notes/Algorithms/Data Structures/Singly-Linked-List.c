@@ -162,15 +162,20 @@ void buildDeleteTests() {
 
 int reverseList(Node * head) 
 { 
+    if (head == NULL || head->next == NULL) {
+        return EMPTY;
+    }
     Node* prev = NULL; 
     Node* current = head; 
     Node* next = NULL; 
+
     while (current != NULL) { 
-        next = current->next; 
-        current->next = prev; 
-        prev = current; 
-        current = next; 
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
     } 
+    head = prev; 
     return SUCCESS;
 } 
 
@@ -259,11 +264,10 @@ void main() {
     buildList(head, testVals, 10);
 
     deleteNode(head, 2);
-    traverse(head);
 
-
-
-    // Node* head1 = buildList(testVals, 10);
-    // Node* result1 = reverseList(head1);
-    // traverse(result1);
+    Node* head1 = malloc(sizeof(Node)); 
+    head1->value = 0;
+    buildList(head1, testVals, 10);
+    reverseList(head1);
+    traverse(head1);
 }

@@ -27,15 +27,15 @@ void traverse(Node* head) {
 
 //Compare: traverses a list of an "updated" linked list and an expected linked list & compares for matching values.
 //Results: If values do not match then an error code is returned. If all values match then a success code is returned.
-int compare(Node * results, Node * expected) {
+int compare(Node * updated, Node * expected) {
     for (int i = 0; i < 10; i++) {
-        Node * result = results;
+        Node * update = updated;
         Node * expect = expected;
-        if (result->value == expect->value) {
-            result = results->next;
+        if (update->value == expect->value) {
+            update = update->next;
             expect = expect->next;
         } else {
-            printf("%d does not match %d. \n", result->value, expect->value);
+            printf("%d does not match %d. \n", update->value, expect->value);
             return ERROR;
         }
     }
@@ -52,6 +52,31 @@ int addNode(int val, Node* last, Node* next) {
         return SUCCESS;
     } else {
         printf("Memory Allocation failure.");
+        return OVERFLOW;
+    }
+    return ERROR;
+}
+
+//buildList takes in a head node, an array of testing values and an array length
+//loops through the test values to call on the helper function addNode in order to build a Linked List
+//Returns 0 if successful, -1 if an unknown error occurs, -2 if overflow occurs during memory allocation of space
+int buildList(Node * head, int *testVals, int length){ 
+    if (head != NULL) {
+        Node* last = malloc(sizeof(Node)); 
+        for (int i = 0; i < length; i++) {
+            Node* next = malloc(sizeof(Node)); 
+            if (i == 0) {
+                addNode(testVals[i], head, next);
+                last = next;
+
+            } else {
+                addNode(testVals[i], last, next);
+                last = next;
+            }
+        }
+        return SUCCESS;
+    } else {
+        printf("Memory allocation has failed.");
         return OVERFLOW;
     }
     return ERROR;
@@ -88,29 +113,48 @@ int deleteNode(Node * last, int index) {
 //  Runs test linked list through delete function
 //  Compares the updated test linked list with the expected linked list using compare helper function
 //  If the comparison is equivalent returns a 0 for success. If not -1 for error. 
-int testDelete(Node * test, int index, Node *expected ) {
-    // take in two linked lists and an int index
-    //run test linked list through delete function
-    // compare the updated test linked list with the expected linked list
+
+//toDo: make this do 1 thing
+int testDelete(int index, int *expectedVals, int length) {
+    int testVals[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    Node* test = malloc(sizeof(Node));
+    Node* expected = malloc(sizeof(Node));
+    if (test == NULL || expected == NULL) return OVERFLOW; 
+    test->value = 0;
+    buildList(test, testVals, 10);
+    deleteNode(test, index);
+    buildList(expected, expectedVals, length);
     int result;
+    result = compare(test, expected);
     if (result == 0) {
+        printf("Woohoo it matches!");
         return SUCCESS;
     }
     return ERROR;
 }
 
-//Test cases for the delete function
+//buildDeleteTests;
+//  takes in a Node test, calls on the helper function buildList to create a test linked list with the provided testing values
+//  calls helper function delete to update the test linked list by deleting the node at the provided test index
+//toDo: make this do 1 thing
+
 void buildDeleteTests() {
     //5 Pass 
     printf("Build Passes: \n");
+    int testIndexOne = 10;
     int testOne[9] = { 10, 20, 30, 40, 50, 60, 70, 80, 90};
+    testDelete(10, testOne, 10);
 
+    int testIndexTwo = 8;
     int testTwo[9] = { 10, 20, 30, 40, 50, 60, 70, 90, 100};
 
-    int testThree[9] = { 10, 20, 40, 50, 60, 70, 90, 100};
+    int testIndexThree = 3;
+    int testThree[9] = { 10, 20, 40, 50, 60, 70, 80, 90, 100};
 
-    int testFour[9] = { 10, 20, 30,  50, 60, 70, 80, 90, 100};
+    int testIndexFour = 4;
+    int testFour[9] = { 10, 20, 30, 50, 60, 70, 80, 90, 100};
 
+    int testIndexFive = 9;
     int testFive[9] = { 10, 20, 30, 40, 50, 60, 70, 80, 100};
 
     //5 Fail
@@ -216,46 +260,14 @@ void buildReverseTests() {
     int testTen[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 }
 
-//buildList takes in a head node, an array of testing values and an array length
-//loops through the test values to call on the helper function addNode in order to build a Linked List
-//Returns 0 if successful, -1 if an unknown error occurs, -2 if overflow occurs during memory allocation of space
-int buildList(Node * head, int *testVals, int length){ 
-    if (head != NULL) {
-        Node* last = malloc(sizeof(Node)); 
-        for (int i = 0; i < length; i++) {
-            Node* next = malloc(sizeof(Node)); 
-            if (i == 0) {
-                addNode(testVals[i], head, next);
-                last = next;
-
-            } else {
-                addNode(testVals[i], last, next);
-                last = next;
-            }
-        }
-        return SUCCESS;
-    } else {
-        printf("Memory allocation has failed.");
-        return OVERFLOW;
-    }
-    return ERROR;
-}
-
 //Main uses buildList to create the Singly Linked List that is then passed to the helper functions addNode, deleteNode and reverseList for updates.
-int main() {
-    int testVals[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    Node* head = malloc(sizeof(Node));
-    if (head == NULL) return OVERFLOW; 
-    head->value = 0;
-    
-    // buildList(head, testVals, 10);
+void main() {
+    buildDeleteTests();
 
-    // deleteNode(head, 2);
-
-    Node* head1 = malloc(sizeof(Node)); 
-    if (head1 == NULL) return OVERFLOW; 
-    head1->value = 0;
-    buildList(head1, testVals, 10);
-    // reverseList(head1);
-    traverse(head1);
+//     Node* head1 = malloc(sizeof(Node)); 
+//     if (head1 == NULL) return OVERFLOW; 
+//     head1->value = 0;
+//     buildList(head1, testVals, 10);
+//     // reverseList(head1);
+//     traverse(head1);
 }

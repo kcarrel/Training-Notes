@@ -57,46 +57,6 @@ int addNode(int val, Node* last, Node* next) {
     return ERROR;
 }
 
-
-void buildAddTests() {
-    //5 Pass 
-    printf("Build Passes: \n");
-    int testOne[11] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 82, 100};
-
-    int testTwo[11] = { 10, 20, 30, 40, 50, 60, 60, 70, 80, 90, 100};
-
-    int testThree[11] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200};
-
-    int testFour[11] = { 10, 20, 44, 30, 40, 50, 60, 70, 80, 90, 100};
-
-    int testFive[11] = { 10, 20, 30, 40, 29, 50, 60, 70, 80, 90, 100};
-
-    //5 Fail
-    printf("Build Fails: \n");
-    //Empty Test
-    int testSix[0] = {};
-
-    //Input too large
-    int testSeven[100] = { 
-        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-        10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-        10, 20, 30, 40, 50, 60, 70, 80, 90, 100
-    };
-
-    int testEight[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-
-    int testNine[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-
-    int testTen[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-}
-
 //deleteNode: Takes in an index, traverse the linked list until finding the node in question, reassigns the previous node-> next to the current node's ->next 
 //Returns 0 if successful, -1 if an unknown error occurs, -2 if overflow occurs during memory allocation of space
 int deleteNode(Node * last, int index) {
@@ -121,6 +81,22 @@ int deleteNode(Node * last, int index) {
     free(temp->next);
     temp->next = newNext;
     return SUCCESS;
+}
+
+//testDelete:
+//  Takes in two linked lists and an int index
+//  Runs test linked list through delete function
+//  Compares the updated test linked list with the expected linked list using compare helper function
+//  If the comparison is equivalent returns a 0 for success. If not -1 for error. 
+int testDelete(Node * test, int index, Node *expected ) {
+    // take in two linked lists and an int index
+    //run test linked list through delete function
+    // compare the updated test linked list with the expected linked list
+    int result;
+    if (result == 0) {
+        return SUCCESS;
+    }
+    return ERROR;
 }
 
 //Test cases for the delete function
@@ -183,6 +159,18 @@ int reverseList(Node * head)
     head = prev; 
     return SUCCESS;
 } 
+
+//reverseTest: takes in two linked lists
+//  Runs test linked list through reverse function
+//  Calls compare helper function to compare the updated test linked list with the expected linked list
+//  Returns: If the comparison is equivalent returns a 0 for success. If not -1 for error. 
+int reverseTest(Node * test, Node * expected) {
+    int result;
+    if (result == 0) {
+        return SUCCESS;
+    }
+    return ERROR;
+}
 
 void buildReverseTests() {
     //5 Pass 
@@ -259,14 +247,15 @@ int main() {
     Node* head = malloc(sizeof(Node));
     if (head == NULL) return OVERFLOW; 
     head->value = 0;
-    buildList(head, testVals, 10);
+    
+    // buildList(head, testVals, 10);
 
-    deleteNode(head, 2);
+    // deleteNode(head, 2);
 
     Node* head1 = malloc(sizeof(Node)); 
     if (head1 == NULL) return OVERFLOW; 
     head1->value = 0;
     buildList(head1, testVals, 10);
-    reverseList(head1);
+    // reverseList(head1);
     traverse(head1);
 }

@@ -16,7 +16,7 @@ typedef struct Node {
 } Node;
 
 //Traverse: traverses a linked list and prints out the value of the current node, then sets the current node to the next node
-// Exits when the node->next points to NULL
+// Exits when the node->next points to NULL (signifying end of linked list)
 void traverse(Node* head) {
     Node* current_node = head;
    	while (current_node != NULL) {
@@ -35,7 +35,7 @@ int compare(Node * results, Node * expected) {
             result = results->next;
             expect = expect->next;
         } else {
-            printf("%d does not match %d.", result->value, expect->value);
+            printf("%d does not match %d. \n", result->value, expect->value);
             return ERROR;
         }
     }
@@ -106,6 +106,8 @@ int deleteNode(Node * last, int index) {
     Node* temp = malloc(sizeof(Node)); 
     if (temp != NULL) {
         temp = last;
+    } else {
+        return OVERFLOW;
     }
     if (index == 0) {
         last = temp->next;
@@ -252,15 +254,17 @@ int buildList(Node * head, int *testVals, int length){
 }
 
 //Main uses buildList to create the Singly Linked List that is then passed to the helper functions addNode, deleteNode and reverseList for updates.
-void main() {
+int main() {
     int testVals[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    Node* head = malloc(sizeof(Node)); 
+    Node* head = malloc(sizeof(Node));
+    if (head == NULL) return OVERFLOW; 
     head->value = 0;
     buildList(head, testVals, 10);
 
     deleteNode(head, 2);
 
     Node* head1 = malloc(sizeof(Node)); 
+    if (head1 == NULL) return OVERFLOW; 
     head1->value = 0;
     buildList(head1, testVals, 10);
     reverseList(head1);

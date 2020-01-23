@@ -37,8 +37,12 @@ int compare(Node * updated, Node * expected) {
         Node * update = updated;
         Node * expect = expected;
         if (update->value == expect->value) {
-            update = update->next;
-            expect = expect->next;
+            if (update->next == expect->next) {
+                if (update->prev == expect->prev) {
+                    update = update->next;
+                    expect = expect->next;
+                }
+            }
         } else {
             printf("%d does not match %d. \n", update->value, expect->value);
             return ERROR;

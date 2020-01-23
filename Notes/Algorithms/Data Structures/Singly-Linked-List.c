@@ -201,7 +201,7 @@ void buildDeleteTests() {
 
 //reverseList takes in a pointer to a head Node then uses temporary nodes (previous/current/next) to copy and replace node values & node next appropriately 
 //Returns 0 if successful, -1 if an unknown error occurs, -2 if overflow occurs during memory allocation of space
-int reverseList(Node * head) 
+int reverseList(Node * head, Node * expected) 
 { 
     if (head == NULL || head->next == NULL) {
         return EMPTY;
@@ -217,6 +217,7 @@ int reverseList(Node * head)
         current = next;
     } 
     head = prev; 
+    compare(head, expected);
     return SUCCESS;
 } 
 
@@ -225,51 +226,45 @@ int reverseList(Node * head)
 //  Calls compare helper function to compare the updated test linked list with the expected linked list
 //  Returns: If the comparison is equivalent returns a 0 for success. If not -1 for error. 
 
-int testReverse(int *expectedVals) {
+int testReverse(int *expectedVals, int expectedHead) {
     int testVals[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
     Node* test = malloc(sizeof(Node));
     Node* expected = malloc(sizeof(Node));
     if (test == NULL || expected == NULL) return OVERFLOW; 
     test->value = 0;
+    expected->value = expectedHead;
     buildList(test, testVals, 10);
     int success;
-    success = reverseList(test);
+    success = reverseList(test, expected);
     if (success == 0) {
-        int result;
-        result = compare(test, expected);
-        if (result == 0) {
-            printf("The Reversed Linked Lists match. \n");
             return SUCCESS;
-        }
     }
-    printf("The Reversed Linked Lists do not match. \n");
     return ERROR;
-    
 }
 
 void buildReverseTests() {
     //5 Pass 
     printf("Build Passes: \n");
-    int resultOne[11] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
-    testReverse(resultOne);
+    int resultOne[10] = {90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
+    testReverse(resultOne, 100);
 
-    int resultTwo[11] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
-    testReverse(resultTwo);
+    int resultTwo[10] = {90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
+    testReverse(resultTwo, 100);
 
-    int resultThree[11] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
-    testReverse(resultThree);
+    int resultThree[10] = {90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
+    testReverse(resultThree, 100);
 
-    int resultFour[11] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
-    testReverse(resultFour);
+    int resultFour[10] = {90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
+    testReverse(resultFour, 100);
 
-    int resultFive[11] = {100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
-    testReverse(resultFive);
+    int resultFive[10] = {90, 80, 70, 60, 50, 40, 30, 20, 10, 0};
+    testReverse(resultFive, 100);
 
     //5 Fail
     printf("Build Fails: \n");
     //Empty List
     int resultSix[0] = {};
-    testReverse(resultSix);
+    testReverse(resultSix, -7);
 
     //Input too large
     int resultSeven[100] = { 
@@ -284,16 +279,16 @@ void buildReverseTests() {
         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
         10, 20, 30, 40, 50, 60, 70, 80, 90, 100
     };
-    testReverse(resultSeven);
+    testReverse(resultSeven, 10);
 
     int resultEight[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    testReverse(resultEight);
+    testReverse(resultEight, 0);
 
     int resultNine[10] = { -120, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    testReverse(resultNine);
+    testReverse(resultNine, -6);
 
     int resultTen[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    testReverse(resultTen);
+    testReverse(resultTen, 2);
 
 }
 
@@ -301,10 +296,4 @@ void buildReverseTests() {
 void main() {
     buildDeleteTests();
     buildReverseTests();
-//     Node* head1 = malloc(sizeof(Node)); 
-//     if (head1 == NULL) return OVERFLOW; 
-//     head1->value = 0;
-//     buildList(head1, testVals, 10);
-//     // reverseList(head1);
-//     traverse(head1);
 }

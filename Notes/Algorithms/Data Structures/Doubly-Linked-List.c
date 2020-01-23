@@ -36,7 +36,7 @@ int compare(Node * updated, Node * expected) {
     for (int i = 0; i < 10; i++) {
         Node * update = updated;
         Node * expect = expected;
-        if (update->value == expect->value && ) {
+        if (update->value == expect->value) {
             update = update->next;
             expect = expect->next;
         } else {
@@ -136,7 +136,7 @@ int testDelete(int index, int *expectedVals, int length) {
     Node* expected = malloc(sizeof(Node));
     if (test == NULL || expected == NULL) return OVERFLOW; 
     test->value = 0;
-    head->prev = NULL;
+    test->prev = NULL;
     buildList(test, testVals, 10);
     int success;
     success = deleteNode(test, index);

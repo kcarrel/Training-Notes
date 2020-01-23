@@ -22,8 +22,10 @@ typedef struct Node {
 // Exits when the node->next points to NULL (signifying end of linked list)
 void traverse(Node* head) {
     Node* current_node = head;
+    Node* next = head->next;
+    Node* prev = head->prev;
    	while (current_node != NULL) {
-        printf("%d \n", current_node->value);
+        printf("Current Value: %d \n", current_node->value);    
         current_node = current_node->next;
     }
 }
@@ -34,7 +36,7 @@ int compare(Node * updated, Node * expected) {
     for (int i = 0; i < 10; i++) {
         Node * update = updated;
         Node * expect = expected;
-        if (update->value == expect->value) {
+        if (update->value == expect->value && ) {
             update = update->next;
             expect = expect->next;
         } else {
@@ -48,27 +50,30 @@ int compare(Node * updated, Node * expected) {
 
 //addNode creates a node and makes it the next node to the provided reference node
 //Returns 0 if successful, -1 if an unknown error occurs, -2 if overflow occurs during memory allocation of space
-int addNode(int val, Node* last, Node* next) {
-    if (next != NULL) {
-        next->value = val;
-        next->next = NULL;
-        last->next = next;
-        return SUCCESS;
-    } else {
-        printf("Memory Allocation failure. \n");
-        return OVERFLOW;
+void addNode(int val, Node* last, Node* next) {
+    Node* temp = last; 
+  
+    next->value = val; 
+    next->next = NULL; 
+
+    if (temp == NULL) { 
+        next->prev = NULL; 
+        temp = next; 
+        return; 
+    } 
+  
+    while (temp->next != NULL) {
+        temp = temp->next; 
     }
-    return ERROR;
+    temp->next = next; 
+    next->prev = temp; 
+    return; 
 }
 
 //buildList takes in a head node, an array of testing values and an array length
 //loops through the test values to call on the helper function addNode in order to build a Linked List
 //Returns 0 if successful, -1 if an unknown error occurs, -2 if overflow occurs during memory allocation of space
 int buildList(Node * head, int *testVals, int length){ 
-    if (length < 0 || length > LIMIT ) {
-        printf("A Linked List cannot be created with a number of nodes less than 0 or exceeding 15. \n");
-        return OVERFLOW;
-    }
     if (head != NULL) {
         Node* last = malloc(sizeof(Node)); 
         for (int i = 0; i < length; i++) {
@@ -87,7 +92,6 @@ int buildList(Node * head, int *testVals, int length){
         printf("Memory allocation has failed.");
         return OVERFLOW;
     }
-    return ERROR;
 }
 
 //deleteNode: Takes in an index, traverse the linked list until finding the node in question, reassigns the previous node-> next to the current node's ->next 
@@ -132,6 +136,7 @@ int testDelete(int index, int *expectedVals, int length) {
     Node* expected = malloc(sizeof(Node));
     if (test == NULL || expected == NULL) return OVERFLOW; 
     test->value = 0;
+    head->prev = NULL;
     buildList(test, testVals, 10);
     int success;
     success = deleteNode(test, index);

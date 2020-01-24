@@ -40,6 +40,12 @@ void addNode(int data) {
     return ERROR;
 }
 
+void buildTree() {
+
+}
+
+//main provides buildTree an array to insert in level order into a tree
 void main() {
-    
+    int arr[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; 
+    int n = sizeof(arr)/sizeof(arr[0]); 
 }

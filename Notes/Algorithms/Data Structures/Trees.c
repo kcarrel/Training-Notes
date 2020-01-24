@@ -16,6 +16,16 @@ typedef struct Node {
     struct Node* right;
 } Node;
 
+//Note: Per Sasha's feedback traverse function will accept a function pointer
+// eX: so you can do traverse(tree, print_fn)
+// traverse(tree, collect_fn)
+void traverse() {
+
+}
+
+void addNode(int data) {
+
+}
 
 void main() {
     

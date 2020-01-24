@@ -23,8 +23,21 @@ void traverse() {
 
 }
 
+//To-do Note: may want to update addNode to take in a pointer to a Node for the later usage in other functions + to maintain ERROR/SUCCESS MESSAGE
+//addNode:
+//  Takes in a data value then creates a new node. If mem allocation does not fail then the node is assigned a value and left/right is set to NULL
+//  returns 0 if successful, -1 if an error occurs and -2 if memory allocation failure occurs. 
 void addNode(int data) {
-
+    Node* node = (Node*)malloc(sizeof(Node)); 
+    if (node != NULL) {
+        node->value = data;
+        node->left = NULL; 
+        node->right = NULL; 
+        return SUCCESS;
+    } else {
+        return OVERFLOW;
+    }
+    return ERROR;
 }
 
 void main() {

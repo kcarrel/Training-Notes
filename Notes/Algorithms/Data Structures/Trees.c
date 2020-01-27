@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 // use macros to define alloc failure and return 
-#define ALLOC_NODE 
+// #define ALLOC_NODE 
 
 #define SUCCESS 0
 #define ERROR -1
@@ -19,32 +19,37 @@ typedef struct Node {
 //Note: Per Sasha's feedback traverse function will accept a function pointer
 // eX: so you can do traverse(tree, print_fn)
 // traverse(tree, collect_fn)
-void traverse() {
-
+void traverse(Node * root) {
+    if (root != NULL) {
+        traverse(root->left);
+        printf("%d", root->value);
+        traverse(root->right);
+    }
 }
 
 //To-do Note: may want to update addNode to take in a pointer to a Node for the later usage in other functions + to maintain ERROR/SUCCESS MESSAGE
 //addNode:
 //  Takes in a data value then creates a new node. If mem allocation does not fail then the node is assigned a value and left/right is set to NULL
 //  returns 0 if successful, -1 if an error occurs and -2 if memory allocation failure occurs. 
-int addRoot(Node * temp, int data) {
-    if (temp != NULL) {
-        temp->value = data;
-        temp->left = NULL; 
-        temp->right = NULL; 
-        return SUCCESS;
+Node * addNode(int data) {
+    Node* node = (Node*)malloc(sizeof(Node)); 
+    if (node != NULL) {
+        node->value = data;
+        node->left = NULL; 
+        node->right = NULL; 
+        return node;
     } else {
-        return OVERFLOW;
+        printf("Memory allocation has failed.");
     }
-    return ERROR;
 }
 
 // buildTree takes in an array of numbers, a root Node, integer and size of an array
-// reursively builds a tree in-line order with the provided array of numbers
-// To-do: Add in error handling. Would prefer to still used recursion but not have to need to return the root node...
+// Builds a tree in-line order with the provided array of numbers
+// Moved away from recursively implementing this function so as to allow for error messages 
 Node * buildTree(int *arr, Node * root, int i, int n) {
     if (i < n) {
-        addRoot(root, arr[i]);
+        Node * temp = addNode(arr[i]);
+        root = temp;
         root->left = buildTree(arr, root->left, 2 * i + 1, n);
         root->right = buildTree(arr, root->right, 2 * i + 2, n);
     }
@@ -57,10 +62,10 @@ int main() {
     int n = sizeof(arr)/sizeof(arr[0]); 
     Node * root = (Node*)malloc(sizeof(Node)); 
     if (root != NULL) {
-        buildTree(arr, root, 0, n);
+        root = buildTree(arr, root, 0, n);
     } else {
         return OVERFLOW;
     }
-    // traverse(root);
+    traverse(root);
     return ERROR;
 }

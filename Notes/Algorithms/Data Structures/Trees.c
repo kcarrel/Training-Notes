@@ -27,12 +27,11 @@ void traverse() {
 //addNode:
 //  Takes in a data value then creates a new node. If mem allocation does not fail then the node is assigned a value and left/right is set to NULL
 //  returns 0 if successful, -1 if an error occurs and -2 if memory allocation failure occurs. 
-void addNode(int data) {
-    Node* node = (Node*)malloc(sizeof(Node)); 
-    if (node != NULL) {
-        node->value = data;
-        node->left = NULL; 
-        node->right = NULL; 
+int addRoot(Node * temp, int data) {
+    if (temp != NULL) {
+        temp->value = data;
+        temp->left = NULL; 
+        temp->right = NULL; 
         return SUCCESS;
     } else {
         return OVERFLOW;
@@ -40,12 +39,28 @@ void addNode(int data) {
     return ERROR;
 }
 
-void buildTree() {
-
+// buildTree takes in an array of numbers, a root Node, integer and size of an array
+// reursively builds a tree in-line order with the provided array of numbers
+// To-do: Add in error handling. Would prefer to still used recursion but not have to need to return the root node...
+Node * buildTree(int *arr, Node * root, int i, int n) {
+    if (i < n) {
+        addRoot(root, arr[i]);
+        root->left = buildTree(arr, root->left, 2 * i + 1, n);
+        root->right = buildTree(arr, root->right, 2 * i + 2, n);
+    }
+    return root;
 }
 
 //main provides buildTree an array to insert in level order into a tree
-void main() {
+int main() {
     int arr[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; 
     int n = sizeof(arr)/sizeof(arr[0]); 
+    Node * root = (Node*)malloc(sizeof(Node)); 
+    if (root != NULL) {
+        buildTree(arr, root, 0, n);
+    } else {
+        return OVERFLOW;
+    }
+    // traverse(root);
+    return ERROR;
 }

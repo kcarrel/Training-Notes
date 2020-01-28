@@ -93,18 +93,41 @@ Node * buildTree(int *arr, Node * root, int i, int n) {
     return root;
 }
 
-//main provides buildTree an array to insert in level order into a tree
-int main() {
+// newTree creates a new tree to run test cases against
+// returns the root to the tree
+Node * newTree() {
     int arr[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; 
     int n = sizeof(arr)/sizeof(arr[0]); 
     Node * root = (Node*)malloc(sizeof(Node)); 
     if (root != NULL) {
         root = buildTree(arr, root, 0, n);
-        traverse(root);
-
+        return root;
     } else {
-        return OVERFLOW;
+        printf("An error has occurred.");
     }
-    deleteNode(root, 2);
+}
+
+// reverseTree takes in a root node  of a tree then recursively reverses the tree
+Node * reverseTree(Node * root) {
+    if (root == NULL) {
+        return NULL;
+    }
+    Node * temp = root->left;
+    root->left = reverseTree(root->right);
+    root->right = reverseTree(temp);
+    return root;
+}
+//functions:
+//Delete Node
+//Reverse Tree
+
+//main provides buildTree an array to insert in level order into a tree
+int main() {
+    
+   Node * root = newTree();
+   traverse(root);
+
+   reverseTree(root);
+   traverse(root);
     
 }

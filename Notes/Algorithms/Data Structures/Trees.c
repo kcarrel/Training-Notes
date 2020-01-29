@@ -63,6 +63,17 @@ Node * addNode(Node * root, int data) {
     return root;
 }
 
+// newTree creates a new tree to run test cases against
+// returns the root to the tree
+Node * newTree(int *arr, int length) {
+    Node * root;
+    root = NULL;
+    for (int i = 0; i < length; i++) {
+        root = addNode(root, arr[i]);
+    }
+    return root;
+}
+
 // finds the smallestNode and returns the node
 Node * smallestNode(Node * root) {
     if (root == NULL) {
@@ -114,6 +125,22 @@ Node * deleteNode(Node * root, int value) {
     return root;
 }
 
+//testDelete
+int testDelete(int value, int *expectedVals) {
+    int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int n = sizeof(arr)/sizeof(arr[0]); 
+    Node * test = newTree(arr, n);
+    Node* expected = malloc(sizeof(Node));
+    if (test == NULL || expected == NULL) return OVERFLOW; 
+    deleteNode(test, value);
+    int result;
+    result = compare(test, expected);
+    if (result == 0) {
+        return SUCCESS;
+    }
+    return ERROR;
+}
+
 // searchNode takes in a root node and a value to find
 // if/else figures out which branch the node would be in based on value
 // returns 0 if value is successfully found 
@@ -136,18 +163,6 @@ Node * searchNode(Node * root, int value) {
     return root;
 }
 
-// newTree creates a new tree to run test cases against
-// returns the root to the tree
-Node * newTree() {
-    int arr[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; 
-    int n = sizeof(arr)/sizeof(arr[0]); 
-    Node * root;
-    root = NULL;
-    for (int i = 0; i < n; i++) {
-        root = addNode(root, arr[i]);
-    }
-    return root;
-}
 
 // reverseTree takes in a root node  of a tree then recursively reverses the tree
 // returns the root node
@@ -168,12 +183,5 @@ Node * reverseTree(Node * root) {
 
 //main provides buildTree an array to insert in level order into a tree
 int main() {
-    Node * root = newTree();
-    traverse(root);
-    deleteNode(root, 2);
-    printf("Deleting \n");
-    traverse(root);
-    reverseTree(root);
-    printf("Reversing \n");
-    traverse(root);
+    
 }

@@ -101,6 +101,28 @@ Node * deleteNode(Node * root, int value) {
     return root;
 }
 
+// searchNode takes in a root node and a value to find
+// if/else figures out which branch the node would be in based on value
+// returns 0 if value is successfully found 
+Node * searchNode(Node * root, int value) {
+    if (root == NULL) {
+        printf("Root node is empty.");
+        return root;
+    } 
+    if (value < root->value) {
+        root->left = searchNode(root->left, value);
+    } else if (value > root->value) {
+        root->right = searchNode(root->right, value);
+    } else if (root->left && root->right){
+        Node * temp = smallestNode(root->right);
+        root->value = temp->value;
+        root->right = searchNode(root->right, root->value);
+    } else {
+        return 0;
+    }
+    return root;
+}
+
 // newTree creates a new tree to run test cases against
 // returns the root to the tree
 Node * newTree() {

@@ -28,6 +28,19 @@ void traverse(Node * root) {
     return ;
 }
 
+//Compare: traverses a list of an "updated" linked list and an expected linked list & compares for matching values.
+//Results: If values do not match then an error code is returned. If all values match then a success code is returned.
+int compare(Node * updated, Node * expected) {
+    if (updated == NULL && expected == NULL) return EMPTY;
+    if (updated != NULL && expected != NULL) {
+        return (
+            updated->value == expected->value && 
+            compare(updated->left, expected->left) && 
+            compare(updated->right, expected->right) 
+        );
+    }
+    return ERROR;
+}
 
 //  addNode:
 //  Takes in a data value then creates a new node. If mem allocation does not fail then the node is assigned a value and left/right is set to NULL

@@ -225,11 +225,20 @@ Node * reverseTree(Node * root) {
     return root;
 }
 
-//functions:
-//Delete Node
-//Reverse Tree
-//Search tree
-
+int testReverse(int *expectedVals, int length) {
+    int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int n = sizeof(arr)/sizeof(arr[0]); 
+    Node * test = newTree(arr, n);
+    Node* expected = malloc(sizeof(Node));
+    if (test == NULL || expected == NULL) return OVERFLOW; 
+    reverseTree(test);
+    int result;
+    result = compare(test, expected);
+    if (result == 0) {
+        return SUCCESS;
+    }
+    return ERROR;
+}
 //main provides buildTree an array to insert in level order into a tree
 int main() {
     

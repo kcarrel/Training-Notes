@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 // use macros to define alloc failure and return 
 // #define ALLOC_NODE 
 
@@ -31,16 +32,10 @@ void traverse(Node * root) {
 
 //Compare: traverses a list of an "updated" linked list and an expected linked list & compares for matching values.
 //Results: If values do not match then an error code is returned. If all values match then a success code is returned.
-int compare(Node * updated, Node * expected) {
-    if (updated == NULL && expected == NULL) return EMPTY;
-    if (updated != NULL && expected != NULL) {
-        return (
-            updated->value == expected->value && 
-            compare(updated->left, expected->left) && 
-            compare(updated->right, expected->right) 
-        );
-    }
-    return ERROR;
+bool compare(Node * updated, Node * expected) {
+    if (updated == NULL && expected == NULL) return true;
+    if(NULL != updated && NULL != expected) return compare(updated->left, expected->left) && compare(updated->right, expected->right) && (updated->value == expected->value);
+    return false;
 }
 
 //  addNode:
@@ -75,6 +70,7 @@ Node * newTree(int *arr, int length) {
     return root;
 }
 
+
 // finds the smallestNode and returns the node
 Node * smallestNode(Node * root) {
     if (root == NULL) {
@@ -97,23 +93,46 @@ Node * largestNode(Node * root) {
     }  
 }
 
-// deleteNode takes in a root node and a value to delete
-// if/else figures out which branch the node would be based on value
-// returns root of updated tree
-Node * deleteNode(Node * root, int value) {
+
+// searchNode takes in a root node and a value to find
+// if/else figures out which branch the node would be in based on value
+// returns 0 if value is successfully found 
+Node * searchNode(Node * root, int value, int * i) {
     if (root == NULL) {
         printf("Root node is empty.");
         return root;
     } 
-
     if (value < root->value) {
-        root->left = deleteNode(root->left, value);
+        root->left = searchNode(root->left, value, i);
     } else if (value > root->value) {
-        root->right = deleteNode(root->right, value);
+        root->right = searchNode(root->right, value, i);
     } else if (root->left && root->right){
         Node * temp = smallestNode(root->right);
         root->value = temp->value;
-        root->right = deleteNode(root->right, root->value);
+        root->right = searchNode(root->right, root->value, i);
+    } else {
+        *i = SUCCESS;
+        return 0;
+    }
+    return root;
+}
+
+// deleteNode takes in a root node and a value to delete 
+// if/else figures out which branch the node would be based on value
+// returns root of updated tree
+Node * deleteNode(Node * root, int value, int * i) {
+    if (root == NULL) {
+        return root;
+    } 
+
+    if (value < root->value) {
+        root->left = deleteNode(root->left, value, i);
+    } else if (value > root->value) {
+        root->right = deleteNode(root->right, value, i);
+    } else if (root->left && root->right){
+        Node * temp = smallestNode(root->right);
+        root->value = temp->value;
+        root->right = deleteNode(root->right, root->value, i);
     } else {
         Node * temp = root;
         if (root->left == NULL) {
@@ -121,52 +140,76 @@ Node * deleteNode(Node * root, int value) {
         } else if (root->right == NULL) {
             root = root->left;
         }
+        *i = SUCCESS;
         free(temp);
     }
     return root;
 }
 
 //testDelete
-int testDelete(int value, int *expectedVals, int length) {
-    int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-    int n = sizeof(arr)/sizeof(arr[0]); 
-    Node * test = newTree(arr, n);
-    Node* expected = malloc(sizeof(Node));
+int testDelete(int value,int *testVals, int *expectedVals, int n, int length) {
+    Node * test = newTree(testVals, n);
+    Node* expected = newTree(expectedVals, length);
     if (test == NULL || expected == NULL) return OVERFLOW; 
-    deleteNode(test, value);
-    int result;
-    result = compare(test, expected);
-    if (result == 0) {
-        return SUCCESS;
+    int success, search = 5;
+    searchNode(test, value, &search);
+    printf("SUCCESS: %d \n", search);
+    if (search != SUCCESS) {
+        printf("The value %d could not be deleted from the Tree successfully because it is not present. \n", value);
+        return ERROR;
     }
+    deleteNode(test, value, &success);
+    if (success == SUCCESS) {
+        if (compare(test, expected)) {
+            printf("The value %d was deleted from the Tree successfully! \n", value);
+            return SUCCESS;  
+        }
+    }
+    printf("The value %d could not be deleted from the Tree successfully. \n", value);
     return ERROR;
 }
 
 void buildDeleteTests() {
     //5 Pass 
+    int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int n = sizeof(arr)/sizeof(arr[0]); 
+
     printf("Build Delete Test Passes: \n");
     int testOne[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; 
-    testDelete(10, testOne, 9);
+    testDelete(10, arr, testOne, n, 9);
 
     int testTwo[9] = { 1, 2, 3, 4, 5, 6, 7, 9, 10 }; 
-    testDelete(8, testTwo, 9);
+    testDelete(8, arr, testTwo, n, 9);
 
     int testThree[9] = { 1, 2, 4, 5, 6, 7, 8, 9, 10 }; 
-    testDelete(3, testThree, 9);
+    testDelete(3, arr, testThree, n, 9);
 
     int testFour[9] = { 1, 2, 3, 5, 6, 7, 8, 9, 10 }; 
-    testDelete(4, testFour, 9);
+    testDelete(4, arr, testFour, n, 9);
 
     int testFive[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 10 }; 
-    testDelete(9, testFive, 9);
+    testDelete(9, arr, testFive, n, 9);
 
     //5 Fail
     printf("Build Delete Test Fails: \n");
     //Empty Input
+    int arrSix[0] = {};
     int testSix[0] = {};
-    testDelete(9, testSix, 0);
+    testDelete(9, arrSix, testSix, 0, 0);
 
     //Input too large
+     int arrSeven[100] = { 
+        1, 2, 3, 4, 5, 6, 7, 8, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+    };
     int testSeven[100] = { 
         1, 2, 3, 4, 5, 6, 7, 8, 10,
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
@@ -179,102 +222,16 @@ void buildDeleteTests() {
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
     };
-    testDelete(9, testSeven, 100);
+    testDelete(9, arrSeven, testSeven,100, 99);
 
     int testEight[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    testDelete(11, testEight, 10);
+    testDelete(11, testEight, testEight, 10, 10);
 
     int testNine[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    testDelete(20, testNine, 10);
+    testDelete(20, testNine, testNine, 10, 10);
 
     int testTen[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    testDelete(-20, testTen, 10);
-}
-
-// searchNode takes in a root node and a value to find
-// if/else figures out which branch the node would be in based on value
-// returns 0 if value is successfully found 
-Node * searchNode(Node * root, int value) {
-    if (root == NULL) {
-        printf("Root node is empty.");
-        return root;
-    } 
-    if (value < root->value) {
-        root->left = searchNode(root->left, value);
-    } else if (value > root->value) {
-        root->right = searchNode(root->right, value);
-    } else if (root->left && root->right){
-        Node * temp = smallestNode(root->right);
-        root->value = temp->value;
-        root->right = searchNode(root->right, root->value);
-    } else {
-        return 0;
-    }
-    return root;
-}
-
-int testSearch(int value, int *expectedVals, int length) {
-    int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-    int n = sizeof(arr)/sizeof(arr[0]); 
-    Node * test = newTree(arr, n);
-    Node* expected = malloc(sizeof(Node));
-    if (test == NULL || expected == NULL) return OVERFLOW; 
-    searchNode(test, value);
-    int result;
-    result = compare(test, expected);
-    if (result == 0) {
-        return SUCCESS;
-    }
-    return ERROR;
-}
-
-void buildSearchTests() {
-    //5 Pass 
-    printf("Build Search Test Passes: \n");
-    int testOne[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    testSearch(10, testOne, 9);
-
-    int testTwo[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    testSearch(8, testTwo, 9);
-
-    int testThree[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    testSearch(3, testThree, 9);
-
-    int testFour[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    testSearch(4, testFour, 9);
-
-    int testFive[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    testSearch(9, testFive, 9);
-
-    //5 Fail
-    printf("Build Search Test Fails: \n");
-    //Empty Input
-    int testSix[0] = {};
-    testSearch(9, testSix, 0);
-
-    //Input too large & multiple "successes"
-    int testSeven[100] = { 
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-    };
-    testSearch(9, testSeven, 100);
-
-    int testEight[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    testSearch(11, testEight, 10);
-
-    int testNine[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    testSearch(20, testNine, 10);
-
-    int testTen[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    testSearch(-20, testTen, 10);
+    testDelete(-20, testTen, testTen, 10, 10);
 }
 
 // reverseTree takes in a root node  of a tree then recursively reverses the tree
@@ -359,5 +316,7 @@ void buildReverseTests() {
 
 //main provides buildTree an array to insert in level order into a tree
 int main() {
-    
+    buildDeleteTests();
+    // buildSearchTests();
+    // buildReverseTests();
 }

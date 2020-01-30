@@ -126,7 +126,7 @@ Node * deleteNode(Node * root, int value) {
 }
 
 //testDelete
-int testDelete(int value, int *expectedVals) {
+int testDelete(int value, int *expectedVals, int length) {
     int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
     int n = sizeof(arr)/sizeof(arr[0]); 
     Node * test = newTree(arr, n);
@@ -139,6 +139,55 @@ int testDelete(int value, int *expectedVals) {
         return SUCCESS;
     }
     return ERROR;
+}
+
+void buildDeleteTests() {
+    //5 Pass 
+    printf("Build Delete Test Passes: \n");
+    int testOne[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; 
+    testDelete(10, testOne, 9);
+
+    int testTwo[9] = { 1, 2, 3, 4, 5, 6, 7, 9, 10 }; 
+    testDelete(8, testTwo, 9);
+
+    int testThree[9] = { 1, 2, 4, 5, 6, 7, 8, 9, 10 }; 
+    testDelete(3, testThree, 9);
+
+    int testFour[9] = { 1, 2, 3, 5, 6, 7, 8, 9, 10 }; 
+    testDelete(4, testFour, 9);
+
+    int testFive[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 10 }; 
+    testDelete(9, testFive, 9);
+
+    //5 Fail
+    printf("Build Delete Test Fails: \n");
+    //Empty Input
+    int testSix[0] = {};
+    testDelete(9, testSix, 0);
+
+    //Input too large
+    int testSeven[100] = { 
+        1, 2, 3, 4, 5, 6, 7, 8, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+    };
+    testDelete(9, testSeven, 100);
+
+    int testEight[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    testDelete(11, testEight, 10);
+
+    int testNine[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    testDelete(20, testNine, 10);
+
+    int testTen[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    testDelete(-20, testTen, 10);
 }
 
 // searchNode takes in a root node and a value to find

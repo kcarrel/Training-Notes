@@ -212,6 +212,21 @@ Node * searchNode(Node * root, int value) {
     return root;
 }
 
+int testSearch(int *expectedVals, int value, int length) {
+    int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int n = sizeof(arr)/sizeof(arr[0]); 
+    Node * test = newTree(arr, n);
+    Node* expected = malloc(sizeof(Node));
+    if (test == NULL || expected == NULL) return OVERFLOW; 
+    searchNode(test, value);
+    int result;
+    result = compare(test, expected);
+    if (result == 0) {
+        return SUCCESS;
+    }
+    return ERROR;
+}
+
 
 // reverseTree takes in a root node  of a tree then recursively reverses the tree
 // returns the root node

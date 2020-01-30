@@ -304,12 +304,13 @@ int testReverse(int *expectedVals, int length) {
     int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
     int n = sizeof(arr)/sizeof(arr[0]); 
     Node * test = newTree(arr, n);
-    Node* expected = malloc(sizeof(Node));
-    if (test == NULL || expected == NULL) return OVERFLOW; 
+    Node* expected = newTree(expectedVals, length);
+    if (test == NULL || expected == NULL) {
+        printf("Improper memory allocation has occurred. \n");
+        return OVERFLOW; 
+    }    
     reverseTree(test);
-    int result;
-    result = compare(test, expected);
-    if (result == 0) {
+    if (compare(test, expected)) {
         printf("The test case was reversed successfully! \n");
         return SUCCESS;
     }
@@ -372,5 +373,5 @@ void buildReverseTests() {
 int main() {
     buildDeleteTests();
     buildSearchTests();
-    // buildReverseTests();
+    buildReverseTests();
 }

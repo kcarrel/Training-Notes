@@ -8,6 +8,7 @@
 #define OVERFLOW -2
 #define EMPTY -3
 
+#define LIMIT 10
 
 //node struct
 typedef struct Node {
@@ -251,9 +252,9 @@ void buildSearchTests() {
     int testSix[0] = {};
     testSearch(9, testSix, 0);
 
-    //Input too large
+    //Input too large & multiple "successes"
     int testSeven[100] = { 
-        1, 2, 3, 4, 5, 6, 7, 8, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
@@ -298,10 +299,64 @@ int testReverse(int *expectedVals, int length) {
     int result;
     result = compare(test, expected);
     if (result == 0) {
+        printf("The test case was reversed successfully! \n");
         return SUCCESS;
     }
+    printf("The test case was not reversed successfully. \n");
     return ERROR;
 }
+
+// problem: how many interesting reverse test cases are there...?
+void buildReverseTests() {
+    //5 Pass 
+    printf("Build Reverse Test Passes: \n");
+    int resultOne[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    testReverse(resultOne, 10);
+
+    int resultTwo[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    testReverse(resultTwo, 10);
+
+    int resultThree[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    testReverse(resultThree, 10);
+
+    int resultFour[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    testReverse(resultFour, 10);
+
+    int resultFive[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    testReverse(resultFive, 10);
+
+    //5 Fail
+    printf("Build Reverse Test Fails: \n");
+    //Empty List
+    int resultSix[0] = {};
+    testReverse(resultSix, -7);
+
+    //Input too large
+    int resultSeven[100] = { 
+        10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+        10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+        10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+        10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+        10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+        10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+        10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+        10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+        10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+       10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+    };
+    testReverse(resultSeven, 100);
+
+    int resultEight[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    testReverse(resultEight, 0);
+
+    int resultNine[10] = { -120, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    testReverse(resultNine, -6);
+
+    int resultTen[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    testReverse(resultTen, 2);
+
+}
+
 //main provides buildTree an array to insert in level order into a tree
 int main() {
     

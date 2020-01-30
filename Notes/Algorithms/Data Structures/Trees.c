@@ -99,7 +99,6 @@ Node * largestNode(Node * root) {
 // returns 0 if value is successfully found 
 Node * searchNode(Node * root, int value, int * i) {
     if (root == NULL) {
-        printf("Root node is empty.");
         return root;
     } 
     if (value < root->value) {
@@ -115,6 +114,51 @@ Node * searchNode(Node * root, int value, int * i) {
         return 0;
     }
     return root;
+}
+
+int testSearch(int value, int expectedOutcome, int length) {
+    int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int n = sizeof(arr)/sizeof(arr[0]); 
+    Node * test = newTree(arr, n);
+    if (test == NULL) return OVERFLOW; 
+    int success = ERROR;
+    searchNode(test, value, &success);
+    if (success == SUCCESS && expectedOutcome == SUCCESS) {
+        printf("The value %d was successfully found as expected. \n", value);
+        return SUCCESS;
+    } else if (success == ERROR && expectedOutcome == ERROR) {
+        printf("The value %d was not found as expected. \n", value);
+        return SUCCESS;
+    }
+    printf("Mismatch: An unknown error has occurred. \n");
+    return ERROR;
+}
+
+void buildSearchTests() {
+    //5 Pass 
+    printf("Build Search Test Passes: \n");
+    testSearch(10, SUCCESS, 9);
+
+    testSearch(8, SUCCESS, 9);
+
+    testSearch(3, SUCCESS, 9);
+
+    testSearch(4, SUCCESS, 9);
+
+    testSearch(9, SUCCESS, 9);
+
+    //5 Fail
+    printf("Build Search Test Fails: \n");
+    //Empty Input
+    testSearch(99, ERROR, 0);
+
+    testSearch(-9, ERROR, 100);
+
+    testSearch(11, ERROR, 10);
+
+    testSearch(20, ERROR, 10);
+
+    testSearch(-20, ERROR, 10);
 }
 
 // deleteNode takes in a root node and a value to delete 
@@ -147,20 +191,30 @@ Node * deleteNode(Node * root, int value, int * i) {
 }
 
 //testDelete
+// First creates a test Tree with the test values, expected tree with the expected values.
+// checks to see if memory allocation failed if so returns OVERFLOW -3
+// checks to see if the value in question is even present if so return SUCCESS 0 or ERROR -1
+// If value is present in Tree then deleteNode function is called - if that function returns a SUCCESS code and the compare function finds both trees to be equal returns SUCCESS
+// If the value is not properly deleted then an ERROR -1 is returned
 int testDelete(int value,int *testVals, int *expectedVals, int n, int length) {
     Node * test = newTree(testVals, n);
     Node* expected = newTree(expectedVals, length);
-    if (test == NULL || expected == NULL) return OVERFLOW; 
-    int success, search = 5;
-    searchNode(test, value, &search);
-    printf("SUCCESS: %d \n", search);
+    if (test == NULL || expected == NULL) {
+        printf("Improper memory allocation has occurred. \n");
+        return OVERFLOW; 
+    }
+    int search = ERROR;
+    Node * temp = newTree(testVals, n);
+    searchNode(temp, value, &search);
     if (search != SUCCESS) {
         printf("The value %d could not be deleted from the Tree successfully because it is not present. \n", value);
         return ERROR;
     }
+    int success;
     deleteNode(test, value, &success);
     if (success == SUCCESS) {
         if (compare(test, expected)) {
+            
             printf("The value %d was deleted from the Tree successfully! \n", value);
             return SUCCESS;  
         }
@@ -317,6 +371,6 @@ void buildReverseTests() {
 //main provides buildTree an array to insert in level order into a tree
 int main() {
     buildDeleteTests();
-    // buildSearchTests();
+    buildSearchTests();
     // buildReverseTests();
 }

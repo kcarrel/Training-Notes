@@ -212,7 +212,7 @@ Node * searchNode(Node * root, int value) {
     return root;
 }
 
-int testSearch(int *expectedVals, int value, int length) {
+int testSearch(int value, int *expectedVals, int length) {
     int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
     int n = sizeof(arr)/sizeof(arr[0]); 
     Node * test = newTree(arr, n);
@@ -227,6 +227,54 @@ int testSearch(int *expectedVals, int value, int length) {
     return ERROR;
 }
 
+void buildSearchTests() {
+    //5 Pass 
+    printf("Build Search Test Passes: \n");
+    int testOne[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    testSearch(10, testOne, 9);
+
+    int testTwo[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    testSearch(8, testTwo, 9);
+
+    int testThree[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    testSearch(3, testThree, 9);
+
+    int testFour[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    testSearch(4, testFour, 9);
+
+    int testFive[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    testSearch(9, testFive, 9);
+
+    //5 Fail
+    printf("Build Search Test Fails: \n");
+    //Empty Input
+    int testSix[0] = {};
+    testSearch(9, testSix, 0);
+
+    //Input too large
+    int testSeven[100] = { 
+        1, 2, 3, 4, 5, 6, 7, 8, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+    };
+    testSearch(9, testSeven, 100);
+
+    int testEight[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    testSearch(11, testEight, 10);
+
+    int testNine[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    testSearch(20, testNine, 10);
+
+    int testTen[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    testSearch(-20, testTen, 10);
+}
 
 // reverseTree takes in a root node  of a tree then recursively reverses the tree
 // returns the root node

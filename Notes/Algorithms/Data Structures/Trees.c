@@ -18,17 +18,28 @@ typedef struct Node {
     struct Node* right;
 } Node;
 
-//Note: Per Sasha's feedback traverse function will accept a function pointer
+
+//Note: Per Sasha's feedback traverse function would accept a function pointer
 // eX: so you can do traverse(tree, print_fn)
-// traverse(tree, collect_fn)
-void traverse(Node * root) {
-    if (root != NULL) {
-        traverse(root->left);
-        printf("%d \n", root->value);
-        traverse(root->right);
-    }
-    return ;
-}
+
+// Was only using traverse when fiddling with code to print out and visually verify trees rather than part of the "production" code
+// Am not calling it in the code otherwise so am not fully implementing Sasha's feedback but researched this method and in practice it would look something like the below
+
+// void printFunction(Node * root) {
+//     printf("%d \n", root->value);
+// }
+
+//  void (*print)(int);
+//  print = &printFunction;
+// traverse(root, print);
+// void traverse(Node * root, *print) {
+//     if (root != NULL) {
+//         traverse(root->left);
+//         printf("%d \n", root->value);
+//         traverse(root->right);
+//     }
+//     return ;
+// }
 
 //Compare: traverses a list of an "updated" linked list and an expected linked list & compares for matching values.
 //Results: If values do not match then an error code is returned. If all values match then a success code is returned.
@@ -71,6 +82,7 @@ Node * newTree(int *arr, int length) {
 }
 
 
+// smallestNode
 // finds the smallestNode and returns the node
 Node * smallestNode(Node * root) {
     if (root == NULL) {
@@ -82,6 +94,7 @@ Node * smallestNode(Node * root) {
     }  
 }
 
+// largestNode
 // finds the largestNode and returns the node
 Node * largestNode(Node * root) {
     if (root == NULL) {
@@ -116,7 +129,14 @@ Node * searchNode(Node * root, int value, int * i) {
     return root;
 }
 
-int testSearch(int value, int expectedOutcome, int length) {
+// testSearch takes in a test value to search for, the expected resulting Tree
+// First creates a newTree with the testvalues
+// Checks to see if a memory allocation resulted, if so returns OVERFLOW -2
+// Next calls searchNode to see if the node in question is present in the test Tree
+// Checks to see if the return result of SearchNode matches the expectedOutcome(SUCCESS or ERROR) provided by the test cases
+// If both match returns a corresponding success message and return SUCCESS
+// If there is a mismatch in expectations and results a corresponding error message and returns ERROR
+int testSearch(int value, int expectedOutcome) {
     int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
     int n = sizeof(arr)/sizeof(arr[0]); 
     Node * test = newTree(arr, n);
@@ -134,31 +154,34 @@ int testSearch(int value, int expectedOutcome, int length) {
     return ERROR;
 }
 
+// buildSearchTests
+// creates 5 test cases expected to pass the testSearch function
+// creates 5 test cases expected to fail the testSearch function
 void buildSearchTests() {
     //5 Pass 
     printf("Build Search Test Passes: \n");
-    testSearch(10, SUCCESS, 9);
+    testSearch(10, SUCCESS);
 
-    testSearch(8, SUCCESS, 9);
+    testSearch(8, SUCCESS);
 
-    testSearch(3, SUCCESS, 9);
+    testSearch(3, SUCCESS);
 
-    testSearch(4, SUCCESS, 9);
+    testSearch(4, SUCCESS);
 
-    testSearch(9, SUCCESS, 9);
+    testSearch(9, SUCCESS);
 
     //5 Fail
     printf("Build Search Test Fails: \n");
     //Empty Input
-    testSearch(99, ERROR, 0);
+    testSearch(99, ERROR);
 
-    testSearch(-9, ERROR, 100);
+    testSearch(-9, ERROR);
 
-    testSearch(11, ERROR, 10);
+    testSearch(11, ERROR);
 
-    testSearch(20, ERROR, 10);
+    testSearch(20, ERROR);
 
-    testSearch(-20, ERROR, 10);
+    testSearch(-20, ERROR);
 }
 
 // deleteNode takes in a root node and a value to delete 
@@ -190,9 +213,9 @@ Node * deleteNode(Node * root, int value, int * i) {
     return root;
 }
 
-//testDelete
+// testDelete
 // First creates a test Tree with the test values, expected tree with the expected values.
-// checks to see if memory allocation failed if so returns OVERFLOW -3
+// checks to see if memory allocation failed if so returns OVERFLOW -2
 // checks to see if the value in question is even present if so return SUCCESS 0 or ERROR -1
 // If value is present in Tree then deleteNode function is called - if that function returns a SUCCESS code and the compare function finds both trees to be equal returns SUCCESS
 // If the value is not properly deleted then an ERROR -1 is returned
@@ -223,6 +246,9 @@ int testDelete(int value,int *testVals, int *expectedVals, int n, int length) {
     return ERROR;
 }
 
+// buildDeleteTests
+// creates 5 test cases expected to pass the testDelete function
+// creates 5 test cases expected to fail the testDelete function
 void buildDeleteTests() {
     //5 Pass 
     int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
@@ -300,6 +326,14 @@ Node * reverseTree(Node * root) {
     return root;
 }
 
+// testReverse
+// First creates a test Tree with the test value 
+// Then creates an expected tree with the expected values
+// checks to see if memory allocation failed if so returns OVERFLOW -2
+// calls helper function reverseTree on the testTree
+// compares the reversed test tree against the expected tree
+// if both are the same then prints a success message and returns a SUCCESS code 0
+// if not, prints an error message and returns an ERROR code -1
 int testReverse(int *expectedVals, int length) {
     int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
     int n = sizeof(arr)/sizeof(arr[0]); 
@@ -318,6 +352,9 @@ int testReverse(int *expectedVals, int length) {
     return ERROR;
 }
 
+// buildReverseTests
+// creates 5 test cases expected to pass the testReverse function
+// creates 5 test cases expected to fail the testReverse function
 // problem: how many interesting reverse test cases are there...?
 void buildReverseTests() {
     //5 Pass 
@@ -369,7 +406,7 @@ void buildReverseTests() {
 
 }
 
-//main provides buildTree an array to insert in level order into a tree
+//main calls buildDeleteTests, buildSearchTests and buildReverseTests in succession to begin the process of testing the search, reverse and delete functions
 int main() {
     buildDeleteTests();
     buildSearchTests();

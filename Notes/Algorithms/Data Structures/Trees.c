@@ -41,7 +41,7 @@ typedef struct Node {
 //     return ;
 // }
 
-//Compare: traverses a list of an "updated" linked list and an expected linked list & compares for matching values.
+//Compare: traverses a list of an "updated" tree and an expected tree & compares for matching values.
 //Results: If values do not match then an error code is returned. If all values match then a success code is returned.
 bool compare(Node * updated, Node * expected) {
     if (updated == NULL && expected == NULL) return true;

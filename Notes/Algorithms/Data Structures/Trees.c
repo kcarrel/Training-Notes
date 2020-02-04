@@ -32,10 +32,10 @@ typedef struct Node {
 //  void (*print)(int);
 //  print = &printFunction;
 // traverse(root, print);
-// void traverse(Node * root, *print) {
+// void traverse(Node * root, void * print) {
 //     if (root != NULL) {
 //         traverse(root->left);
-//         printf("%d \n", root->value);
+//         (print)(root);
 //         traverse(root->right);
 //     }
 //     return ;
@@ -188,27 +188,35 @@ void buildSearchTests() {
 // if/else figures out which branch the node would be based on value
 // returns root of updated tree
 Node * deleteNode(Node * root, int value, int * i) {
+    // 1st base case
     if (root == NULL) {
         return root;
     } 
-
+    //In left side
     if (value < root->value) {
         root->left = deleteNode(root->left, value, i);
+    //In right side
     } else if (value > root->value) {
         root->right = deleteNode(root->right, value, i);
-    } else if (root->left && root->right){
-        Node * temp = smallestNode(root->right);
-        root->value = temp->value;
-        root->right = deleteNode(root->right, root->value, i);
+    // 2nd base case
     } else {
-        Node * temp = root;
-        if (root->left == NULL) {
-            root = root->right;
+        // No children! Just a leaf. Delete with wild abandon.
+        if (root->left == NULL && root->right == NULL) {
+            *i = SUCCESS;
+            root = NULL;
+        // Child only on the left
         } else if (root->right == NULL) {
+            *i = SUCCESS;
             root = root->left;
+        // Child only on the right
+        } else if (root->left == NULL) {
+            *i = SUCCESS;
+            root = root->right;
+        // Child on left and right
+        } else {
+            Node * temp = smallestNode(root->right);
+            root->value = deleteNode(root->right, temp->value, i);
         }
-        *i = SUCCESS;
-        free(temp);
     }
     return root;
 }
@@ -226,18 +234,11 @@ int testDelete(int value,int *testVals, int *expectedVals, int n, int length) {
         printf("Improper memory allocation has occurred. \n");
         return OVERFLOW; 
     }
-    int search = ERROR;
     Node * temp = newTree(testVals, n);
-    searchNode(temp, value, &search);
-    if (search != SUCCESS) {
-        printf("The value %d could not be deleted from the Tree successfully because it is not present. \n", value);
-        return ERROR;
-    }
-    int success;
+    int success = ERROR;
     deleteNode(test, value, &success);
     if (success == SUCCESS) {
         if (compare(test, expected)) {
-            
             printf("The value %d was deleted from the Tree successfully! \n", value);
             return SUCCESS;  
         }
@@ -264,22 +265,22 @@ void buildDeleteTests() {
     int testThree[9] = { 1, 2, 4, 5, 6, 7, 8, 9, 10 }; 
     testDelete(3, arr, testThree, n, 9);
 
-    int testFour[9] = { 1, 2, 3, 5, 6, 7, 8, 9, 10 }; 
-    testDelete(4, arr, testFour, n, 9);
+    int testFour[9] = { 1, 2, 3, 4, 5, 6, 8, 9, 10 }; 
+    testDelete(7, arr, testFour, n, 9);
 
     int testFive[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 10 }; 
     testDelete(9, arr, testFive, n, 9);
 
     //5 Fail
     printf("Build Delete Test Fails: \n");
-    //Empty Input
+    //Empty Input - Memory Allocation Failure
     int arrSix[0] = {};
     int testSix[0] = {};
     testDelete(9, arrSix, testSix, 0, 0);
 
     //Input too large
      int arrSeven[100] = { 
-        1, 2, 3, 4, 5, 6, 7, 8, 10,
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
@@ -334,10 +335,8 @@ Node * reverseTree(Node * root) {
 // compares the reversed test tree against the expected tree
 // if both are the same then prints a success message and returns a SUCCESS code 0
 // if not, prints an error message and returns an ERROR code -1
-int testReverse(int *expectedVals, int length) {
-    int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-    int n = sizeof(arr)/sizeof(arr[0]); 
-    Node * test = newTree(arr, n);
+int testReverse(int *testValues, int n, int *expectedVals, int length) {
+    Node * test = newTree(testValues, n);
     Node* expected = newTree(expectedVals, length);
     if (test == NULL || expected == NULL) {
         printf("Improper memory allocation has occurred. \n");
@@ -357,31 +356,21 @@ int testReverse(int *expectedVals, int length) {
 // creates 5 test cases expected to fail the testReverse function
 // problem: how many interesting reverse test cases are there...?
 void buildReverseTests() {
-    //5 Pass 
+    int arr[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int n = sizeof(arr)/sizeof(arr[0]); 
+    //1 Pass 
     printf("Build Reverse Test Passes: \n");
     int resultOne[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    testReverse(resultOne, 10);
-
-    int resultTwo[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    testReverse(resultTwo, 10);
-
-    int resultThree[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    testReverse(resultThree, 10);
-
-    int resultFour[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    testReverse(resultFour, 10);
-
-    int resultFive[10] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    testReverse(resultFive, 10);
+    testReverse(arr, n, resultOne, 10);
 
     //5 Fail
     printf("Build Reverse Test Fails: \n");
     //Empty List
-    int resultSix[0] = {};
-    testReverse(resultSix, -7);
+    int resultTwo[0] = {};
+    testReverse(arr, n, resultTwo, 0);
 
     //Input too large
-    int resultSeven[100] = { 
+    int resultThree[100] = { 
         10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
         10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
         10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
@@ -393,16 +382,16 @@ void buildReverseTests() {
         10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
        10, 9, 8, 7, 6, 5, 4, 3, 2, 1
     };
-    testReverse(resultSeven, 100);
+    testReverse(arr, n, resultThree, 100);
 
-    int resultEight[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    testReverse(resultEight, 0);
+    int resultFour[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    testReverse(arr, n, resultFour, 10);
 
-    int resultNine[10] = { -120, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    testReverse(resultNine, -6);
+    int resultFive[10] = { -120, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    testReverse(arr, n, resultFive, 10);
 
-    int resultTen[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    testReverse(resultTen, 2);
+    int resultSix[10] = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    testReverse( arr, n, resultSix, 10);
 
 }
 

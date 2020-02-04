@@ -30,7 +30,17 @@ bool compare() {
 
 // To-dos:
 // Insert a key
+// testInsert
+// buildInsertTests
+
+// Search
+// testSearch
+// buildSearchTests
+
 // Delete a key
+// testDelete
+// buildDeleteTests
+
 
 void main() {
    

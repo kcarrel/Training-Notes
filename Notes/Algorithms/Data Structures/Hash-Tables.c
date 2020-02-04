@@ -42,6 +42,15 @@ Item * createItem(int key, int value, int success) {
     return item;
 }
 
+HashTable * createHashTable(int size, int count, items) {
+    HashTable * hashtable = malloc(sizeof(HashTable));
+    if (hashtable == NULL) return OVERFLOW;
+    hashtable->size = size;
+    hashtable->count = 0;
+    hashtable->items = calloc((size_t)hashtable->size, sizeof(Item *));
+    return hashtable;
+}
+
 // To-dos:
 // Insert a key
 // testInsert

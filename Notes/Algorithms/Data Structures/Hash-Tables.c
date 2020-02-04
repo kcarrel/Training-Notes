@@ -8,10 +8,17 @@
 #define EMPTY -3
 
 // Hash struct
-typedef struct Hash {
+typedef struct Item {
     int key;
     int value;
-} Hash;
+} Item;
+
+typedef struct HashTable {
+   int size;
+   int count;
+   Item** items;
+} HashTable;
+
 
 void print() {
 
@@ -26,7 +33,14 @@ bool compare() {
     return false;
 }
 
-
+Item * createItem(int key, int value, int success) {
+    Item * item = malloc(sizeof(Item));
+    if (item == NULL) return OVERFLOW;
+    item->key = key;
+    item->value = value;
+    success = SUCCESS;
+    return item;
+}
 
 // To-dos:
 // Insert a key

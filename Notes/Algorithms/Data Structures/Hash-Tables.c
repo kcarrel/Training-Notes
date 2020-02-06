@@ -7,18 +7,15 @@
 #define OVERFLOW -2
 #define EMPTY -3
 
+#define SIZE 10
+
 // Hash struct
 typedef struct Item {
     int key;
     int value;
 } Item;
 
-typedef struct HashTable {
-   int size;
-   int count;
-   Item** items;
-} HashTable;
-
+Item * hashTable[SIZE];
 
 void print() {
 
@@ -33,28 +30,46 @@ bool compare() {
     return false;
 }
 
+int hashing(int key) {
+    return key % SIZE;
+}
+// creates a new Item struct
+// returns new struct
 Item * createItem(int key, int value, int success) {
     Item * item = malloc(sizeof(Item));
-    if (item == NULL) return OVERFLOW;
-    item->key = key;
-    item->value = value;
-    success = SUCCESS;
-    return item;
+    if (item == NULL) {
+    } else {
+        item->key = key;
+        item->value = value;
+        success = SUCCESS;
+        return item;
+    }
 }
 
-HashTable * createHashTable(int size, int count, items) {
-    HashTable * hashtable = malloc(sizeof(HashTable));
-    if (hashtable == NULL) return OVERFLOW;
-    hashtable->size = size;
-    hashtable->count = 0;
-    hashtable->items = calloc((size_t)hashtable->size, sizeof(Item *));
-    return hashtable;
+//To-do: will need to think of how to handle collisions 
+// buildHashTable receives an array of values
+// loops through the values to create a key for the current value then inserts it into the existing hashTable.
+// returns a SUCCESS code 
+void buildHashTable(int *values) {
+    for (int i = 0; i < SIZE; i++) {
+        int success = ERROR;
+        int key = hashing(values[i]);
+        hashTable[key] = createItem(key, values[i], success);
+   }
 }
 
 // To-dos:
 // Insert a key
 // testInsert
 // buildInsertTests
+
+//InsertTests
+// 5 passes
+// 5 Fails
+// Empty Array
+// Too large for hash table
+// Collision
+
 
 // Search
 // testSearch

@@ -21,8 +21,12 @@ void print() {
 
 }
 
-void traverse() {
-
+void traverse(Item * item) {
+    int value = item->value;
+    int key = item->key;
+    for (int i = 0; i < SIZE; i++) {
+        printf("Key: %d Value: %d \n", key, value);
+    }
 }
 
 bool compare(Item * hashTable, Item * expected) {
@@ -98,12 +102,26 @@ int searchHashTable(int key) {
     return ERROR;
 }
 
-int testSearch() {
+int testSearch(int key, int expectedOutcome) {
+
     return ERROR;
 }
 
 void buildSearchTests() {
+printf("Build Search Test Passes: \n");
+    testSearch(10, SUCCESS);
+    testSearch(8, SUCCESS);
+    testSearch(3, SUCCESS);
+    testSearch(4, SUCCESS);
+    testSearch(9, SUCCESS);
 
+    //5 Fail
+    printf("Build Search Test Fails: \n");
+    testSearch(99, ERROR);
+    testSearch(-9, ERROR);
+    testSearch(11, ERROR);
+    testSearch(20, ERROR);
+    testSearch(-20, ERROR);
 }
 
 int deleteItem() {

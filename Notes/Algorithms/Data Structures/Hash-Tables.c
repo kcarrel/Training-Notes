@@ -68,6 +68,7 @@ void buildInsertTests() {
     // Empty Array
     // Too large for hash table
     // Collision
+    // Full Hash Table
 }
 //To-do: will need to think of how to handle collisions 
 // buildHashTable receives an array of keys and an array of values
@@ -110,12 +111,26 @@ int deleteItem() {
     return ERROR;
 }
 
-int testDelete() {
 
+//To-do: Like above need to make adjustments based on potential insertion collisions messing up the hashing function
+// Also saw an alternative way to do delete is just to set the key to -1?
+// testDelete takes in an Item struct
+// finds the key of the provided Item then passes it to the helper function to hash it and find the corresponding index
+// if the key at the position in the hashTable indicated by the hashing function matches the received key then sets an empty delete Item equal to the Item at the hashIndex
+// if a failure occurs return an ERROR code
+int testDelete(Item * item) {
+    int key = item->key;
+    int hashIndex = hashing(key);
+    if (hashTable[hashIndex]->key == key) {
+        Item * deleteItem;
+        hashTable[hashIndex] = deleteItem;
+        return SUCCESS;
+    }  
+    return ERROR;
 }
 
 void buildDeleteTests() {
-    
+
 }
 
 void main() {

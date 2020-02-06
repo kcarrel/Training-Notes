@@ -49,13 +49,18 @@ Item * createItem(int key, int value, int success) {
 //To-do: will need to think of how to handle collisions 
 // buildHashTable receives an array of values
 // loops through the values to create a key for the current value then inserts it into the existing hashTable.
-// returns a SUCCESS code 
+// returns a SUCCESS code if all values are added into the hashTable successfully 
 void buildHashTable(int *values) {
+    int errcode = SUCCESS;
     for (int i = 0; i < SIZE; i++) {
         int success = ERROR;
         int key = hashing(values[i]);
         hashTable[key] = createItem(key, values[i], success);
+        if (hashTable[key]->value != values[i]) {
+            errcode = ERROR;
+        }
    }
+   return errcode;
 }
 
 // To-dos:

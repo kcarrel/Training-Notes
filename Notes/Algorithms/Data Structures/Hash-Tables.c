@@ -6,6 +6,8 @@
 #define ERROR -1
 #define OVERFLOW -2
 #define EMPTY -3
+#define TEST 9
+#define EXPECTED 10
 
 #define SIZE 10
 
@@ -15,7 +17,8 @@ typedef struct Item {
     int value;
 } Item;
 
-Item * hashTable[SIZE];
+Item* testHash[SIZE];
+Item* expectedHash[SIZE];
 
 void print() {
 
@@ -54,10 +57,17 @@ Item * createItem(int key, int value, int success) {
 // calls a helper function to create an Item struct with the provided key and value
 // adds the new Item to the hashTable
 // if the expected value is in the hashTable at the expected key then returns a success code
-void insert(int key, int value, int success) {
-    hashTable[key] = createItem(key, value, success);
-    if (hashTable[key]->value != value) {
-        success = ERROR;
+void insert(int type, int key, int value, int success) {
+    if (type == TEST) {
+        testHash[key] = createItem(key, value, success);
+        if (testHash[key]->value != value) {
+            success = ERROR;
+        }
+    } else if (type == EXPECTED) {
+        expectedHash[key] = createItem(key, value, success);
+        if (expectedHash[key]->value != value) {
+            success = ERROR;
+        }
     }
 }
 
@@ -79,12 +89,12 @@ void buildInsertTests() {
 // key[i] will be mapped to value[i] when building the hashTable
 // loops through the values to create a key for the current value then inserts it into the existing hashTable.
 // returns a SUCCESS code if all values are added into the hashTable successfully 
-int buildHashTable(int *keys, int *values) {
+int buildHashTable(int type, int *keys, int *values) {
     int errcode = SUCCESS;
     for (int i = 0; i < SIZE; i++) {
         int success = ERROR;
         int key = hashing(keys[i]);
-        insert(key, values[i], success);
+        insert(type, key, values[i], success);
    }
    return errcode;
 }
@@ -92,18 +102,30 @@ int buildHashTable(int *keys, int *values) {
 //to-do: Will need to think of a rescue in the case of a collision insertion
 // searchHashTable takes in an integer key
 // calls the helper function to hash the received key to correspond to an expected index within the hash table
-// if the key at the position in the hashTable indicated by the hashing function matches the received key then return a SUCCESS code
+// if the key at the position in the test hashTable indicated by the hashing function matches the received key then return a SUCCESS code
 // if a mistmatch occurs return an ERROR code
-int searchHashTable(int key) {
+int searchHashTable(int type, int key, int * success) {
     int hashIndex = hashing(key);
-    if (hashTable[hashIndex]->key == key) {
-        return SUCCESS;
+    if (testHash[hashIndex]->key == key) {
+        *success = SUCCESS;
     }
-    return ERROR;
 }
 
 int testSearch(int key, int expectedOutcome) {
-
+    //build the testHash
+    int keys[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int value[10]= { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    buildHashTable( 9, keys, value);
+    int success = ERROR;
+    searchHashTable(9, key, &success);
+    if (success == SUCCESS && expectedOutcome == SUCCESS) {
+        printf("The key %d was successfully found as expected. \n", key);
+        return SUCCESS;
+    } else if (success == ERROR && expectedOutcome == ERROR) {
+        printf("The key %d was not found as expected. \n", key);
+        return SUCCESS;
+    }
+    printf("Mismatch: An unknown error has occurred. \n");
     return ERROR;
 }
 

@@ -105,6 +105,7 @@ int buildHashTable(int type, int *keys, int *values) {
 // if the key at the position in the test hashTable indicated by the hashing function matches the received key then return a SUCCESS code
 // if a mistmatch occurs return an ERROR code
 int searchHashTable(int type, int key, int * success) {
+    if (key > SIZE || key < 0) return ERROR;
     int hashIndex = hashing(key);
     if (testHash[hashIndex]->key == key) {
         *success = SUCCESS;
@@ -112,6 +113,7 @@ int searchHashTable(int type, int key, int * success) {
 }
 
 int testSearch(int key, int expectedOutcome) {
+   
     //build the testHash
     int keys[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     int value[10]= { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
@@ -131,7 +133,7 @@ int testSearch(int key, int expectedOutcome) {
 
 void buildSearchTests() {
 printf("Build Search Test Passes: \n");
-    testSearch(10, SUCCESS);
+    testSearch(1, SUCCESS);
     testSearch(8, SUCCESS);
     testSearch(3, SUCCESS);
     testSearch(4, SUCCESS);
@@ -161,9 +163,9 @@ int deleteItem() {
 int testDelete(Item * item) {
     int key = item->key;
     int hashIndex = hashing(key);
-    if (hashTable[hashIndex]->key == key) {
+    if (testHash[hashIndex]->key == key) {
         Item * deleteItem;
-        hashTable[hashIndex] = deleteItem;
+        testHash[hashIndex] = deleteItem;
         return SUCCESS;
     }  
     return ERROR;
@@ -174,5 +176,5 @@ void buildDeleteTests() {
 }
 
 void main() {
-   
+   buildSearchTests();
 }

@@ -46,6 +46,18 @@ Item * createItem(int key, int value, int success) {
     }
 }
 
+
+// insert takes in a key and value
+// calls a helper function to create an Item struct with the provided key and value
+// adds the new Item to the hashTable
+// if the expected value is in the hashTable at the expected key then returns a success code
+void insert(int key, int value, int success) {
+    hashTable[key] = createItem(key, value, success);
+    if (hashTable[key]->value != value) {
+        success = ERROR;
+    }
+}
+
 //To-do: will need to think of how to handle collisions 
 // buildHashTable receives an array of values
 // loops through the values to create a key for the current value then inserts it into the existing hashTable.
@@ -55,10 +67,7 @@ void buildHashTable(int *values) {
     for (int i = 0; i < SIZE; i++) {
         int success = ERROR;
         int key = hashing(values[i]);
-        hashTable[key] = createItem(key, values[i], success);
-        if (hashTable[key]->value != values[i]) {
-            errcode = ERROR;
-        }
+        insert(key, values[i], success);
    }
    return errcode;
 }

@@ -17,24 +17,31 @@ typedef struct Item {
     int value;
 } Item;
 
+//create global testHash and expectedHash for testFunctions to use
 Item* testHash[SIZE];
 Item* expectedHash[SIZE];
 
-void print() {
-
-}
-
-void traverse(Item * item) {
-    int value = item->value;
-    int key = item->key;
+void traverse() {
     for (int i = 0; i < SIZE; i++) {
-        printf("Key: %d Value: %d \n", key, value);
+        int value = testHash[i]->value;
+        int key = testHash[i]->key;        
+        printf("Test Key: %d Value: %d \n", key, value);
+    }
+    for (int i = 0; i < SIZE; i++) {
+        int value = expectedHash[i]->value;
+        int key = expectedHash[i]->key;
+        printf("Expected Key: %d Value: %d \n", key, value);
     }
 }
 
-bool compare(Item * hashTable, Item * expected) {
+//compare checks the Items
+bool compare() {
+    for (int i = 0; i < SIZE; i++) {
+        if (testHash[i] != expectedHash[i]) {
+            return false;
+        }
+    }
     return true;
-    return false;
 }
 
 int hashing(int key) {
@@ -113,7 +120,6 @@ int searchHashTable(int type, int key, int * success) {
 }
 
 int testSearch(int key, int expectedOutcome) {
-   
     //build the testHash
     int keys[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     int value[10]= { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
@@ -148,33 +154,87 @@ printf("Build Search Test Passes: \n");
     testSearch(-20, ERROR);
 }
 
-int deleteItem() {
-    return SUCCESS; 
-    return ERROR;
-}
-
-
 //To-do: Like above need to make adjustments based on potential insertion collisions messing up the hashing function
 // Also saw an alternative way to do delete is just to set the key to -1?
-// testDelete takes in an Item struct
+// deleteItem takes in an Item struct
 // finds the key of the provided Item then passes it to the helper function to hash it and find the corresponding index
 // if the key at the position in the hashTable indicated by the hashing function matches the received key then sets an empty delete Item equal to the Item at the hashIndex
 // if a failure occurs return an ERROR code
-int testDelete(Item * item) {
-    int key = item->key;
+void deleteItem(int key, int * success) {
     int hashIndex = hashing(key);
     if (testHash[hashIndex]->key == key) {
         Item * deleteItem;
         testHash[hashIndex] = deleteItem;
-        return SUCCESS;
+        *success = SUCCESS;
     }  
+}
+
+//need to make a clear hashTable function? 
+// Stopping point: testing for delete is failing need to figure out why the expectedKeys aren't being inserted into the expectedTable 
+int testDelete(int key, int * expectedValues, int * expectedKeys) {
+    int keys[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int value[10]= { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    buildHashTable( 9, keys, value);
+    buildHashTable( 10, expectedKeys, expectedValues);
+    int success = ERROR;
+    deleteItem(key, &success);
+    if (success == SUCCESS && compare()) {
+        printf("The key %d was deleted successfully found as expected. \n", key);
+        return SUCCESS;
+    } 
+    printf("Success: %d", success);
+    traverse();
+    printf("Mismatch: An unknown error has occurred. \n");
     return ERROR;
 }
 
-void buildDeleteTests() {
 
+void buildDeleteTests() {
+    printf("Build Delete Test Passes: \n");
+    int testKeys1[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; 
+    int testValues1[9] = {10, 20, 30, 40, 50, 60, 70, 80 , 90};
+    testDelete(10,testKeys1, testValues1);
+
+    int testKeys2[9] = { 1, 2, 3, 4, 5, 6, 7, 9, 10 }; 
+    int testValues2[9] = {10, 20, 30, 40, 50, 60, 70, 90, 100};
+    testDelete(8,testKeys2,testValues2);
+
+    int testKeys3[9] = { 1, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int testValues3[9] = {10, 30, 40, 50, 60, 70, 80 , 90, 100};
+    testDelete(2,testKeys3, testValues3);
+
+    int testKeys4[9] = { 1, 2, 3, 4, 6, 7, 8, 9, 10 }; 
+    int testValues4[9] = {10, 20, 30, 40, 60, 70, 80 , 90, 100};
+    testDelete(5,testKeys4, testValues4);
+
+    int testKeys5[9] = { 1, 2, 4, 5, 6, 7, 8, 9, 10 }; 
+    int testValues5[9] = {10, 20, 40, 50, 60, 70, 80 , 90, 100};
+    testDelete(3,testKeys5, testValues5);
+
+    //5 Fail
+    printf("Build Delete Test Fails: \n");
+    int testKeys6[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int testValues6[10] = {10, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
+    testDelete(-10,testKeys6, testValues6);
+
+    int testKeys7[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    int testValues7[10] = {10, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
+    testDelete(-8,testKeys7,testValues7);
+
+    int testKeys8[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int testValues8[10] = {10, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
+    testDelete(-92,testKeys8, testValues8);
+
+    int testKeys9[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int testValues9[10] = {10, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
+    testDelete(50,testKeys9, testValues9);
+
+    int testKeys10[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    int testValues10[10] = {10, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
+    testDelete(-30,testKeys10, testValues10);
 }
 
 void main() {
-   buildSearchTests();
+//    buildSearchTests();
+   buildDeleteTests();
 }

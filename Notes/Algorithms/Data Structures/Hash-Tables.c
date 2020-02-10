@@ -8,7 +8,6 @@
 #define EMPTY -3
 #define TEST 9
 #define EXPECTED 10
-
 #define SIZE 10
 
 // Hash struct
@@ -37,7 +36,11 @@ void traverse() {
 //compare checks the Items
 bool compare() {
     for (int i = 0; i < SIZE; i++) {
-        if (testHash[i] != expectedHash[i]) {
+        int testKey = testHash[i]->key;
+        int testValue = testHash[i]->value;
+        int expectedKey = expectedHash[i]->key;
+        int expectedValue = expectedHash[i]->value;
+        if (testKey != expectedKey || testValue != expectedValue) {
             return false;
         }
     }
@@ -70,6 +73,7 @@ void insert(int type, int key, int value, int success) {
         if (testHash[key]->value != value) {
             success = ERROR;
         }
+        
     } else if (type == EXPECTED) {
         expectedHash[key] = createItem(key, value, success);
         if (expectedHash[key]->value != value) {
@@ -99,9 +103,8 @@ void buildInsertTests() {
 int buildHashTable(int type, int *keys, int *values) {
     int errcode = SUCCESS;
     for (int i = 0; i < SIZE; i++) {
-        int success = ERROR;
         int key = hashing(keys[i]);
-        insert(type, key, values[i], success);
+        insert(type, key, values[i], errcode);
    }
    return errcode;
 }
@@ -163,15 +166,15 @@ printf("Build Search Test Passes: \n");
 void deleteItem(int key, int * success) {
     int hashIndex = hashing(key);
     if (testHash[hashIndex]->key == key) {
-        Item * deleteItem;
-        testHash[hashIndex] = deleteItem;
+        free(testHash[hashIndex]);
+        insert(9, key, NULL, *success);
         *success = SUCCESS;
-    }  
+    }
 }
 
 //need to make a clear hashTable function? 
 // Stopping point: testing for delete is failing need to figure out why the expectedKeys aren't being inserted into the expectedTable 
-int testDelete(int key, int * expectedValues, int * expectedKeys) {
+int testDelete(int key, int *expectedKeys, int *expectedValues) {
     int keys[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     int value[10]= { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
     buildHashTable( 9, keys, value);
@@ -182,33 +185,31 @@ int testDelete(int key, int * expectedValues, int * expectedKeys) {
         printf("The key %d was deleted successfully found as expected. \n", key);
         return SUCCESS;
     } 
-    printf("Success: %d", success);
-    traverse();
-    printf("Mismatch: An unknown error has occurred. \n");
+    printf("The key %d could not be deleted successfully as expected. \n", key);
     return ERROR;
 }
 
 
 void buildDeleteTests() {
     printf("Build Delete Test Passes: \n");
-    int testKeys1[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; 
-    int testValues1[9] = {10, 20, 30, 40, 50, 60, 70, 80 , 90};
-    testDelete(10,testKeys1, testValues1);
+    int testKeys1[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int testValues1[10] = { 0, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
+    testDelete(1,testKeys1, testValues1);
 
-    int testKeys2[9] = { 1, 2, 3, 4, 5, 6, 7, 9, 10 }; 
-    int testValues2[9] = {10, 20, 30, 40, 50, 60, 70, 90, 100};
+    int testKeys2[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int testValues2[10] = {10, 20, 30, 40, 50, 60, 70, 0, 90, 100};
     testDelete(8,testKeys2,testValues2);
 
-    int testKeys3[9] = { 1, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-    int testValues3[9] = {10, 30, 40, 50, 60, 70, 80 , 90, 100};
+    int testKeys3[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int testValues3[10] = {10, 0, 30, 40, 50, 60, 70, 80 , 90, 100};
     testDelete(2,testKeys3, testValues3);
 
-    int testKeys4[9] = { 1, 2, 3, 4, 6, 7, 8, 9, 10 }; 
-    int testValues4[9] = {10, 20, 30, 40, 60, 70, 80 , 90, 100};
+    int testKeys4[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int testValues4[10] = {10, 20, 30, 40, 0, 60, 70, 80 , 90, 100};
     testDelete(5,testKeys4, testValues4);
 
-    int testKeys5[9] = { 1, 2, 4, 5, 6, 7, 8, 9, 10 }; 
-    int testValues5[9] = {10, 20, 40, 50, 60, 70, 80 , 90, 100};
+    int testKeys5[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
+    int testValues5[10] = {10, 20, 0, 40, 50, 60, 70, 80 , 90, 100};
     testDelete(3,testKeys5, testValues5);
 
     //5 Fail
@@ -217,24 +218,13 @@ void buildDeleteTests() {
     int testValues6[10] = {10, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
     testDelete(-10,testKeys6, testValues6);
 
-    int testKeys7[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    int testKeys7[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
     int testValues7[10] = {10, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
-    testDelete(-8,testKeys7,testValues7);
-
-    int testKeys8[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-    int testValues8[10] = {10, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
-    testDelete(-92,testKeys8, testValues8);
-
-    int testKeys9[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-    int testValues9[10] = {10, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
-    testDelete(50,testKeys9, testValues9);
-
-    int testKeys10[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    int testValues10[10] = {10, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
-    testDelete(-30,testKeys10, testValues10);
+    testDelete(50,testKeys7, testValues7);
+  
 }
 
 void main() {
-//    buildSearchTests();
+   buildSearchTests();
    buildDeleteTests();
 }

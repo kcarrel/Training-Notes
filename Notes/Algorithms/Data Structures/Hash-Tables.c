@@ -4,10 +4,10 @@
 
 #define SUCCESS 0
 #define ERROR -1
-#define OVERFLOW -2
-#define EMPTY -3
+
 #define TEST 9
 #define EXPECTED 10
+
 #define SIZE 10
 
 // Hash struct
@@ -20,20 +20,23 @@ typedef struct Item {
 Item* testHash[SIZE];
 Item* expectedHash[SIZE];
 
-void traverse() {
-    for (int i = 0; i < SIZE; i++) {
-        int value = testHash[i]->value;
-        int key = testHash[i]->key;        
-        printf("Test Key: %d Value: %d \n", key, value);
-    }
-    for (int i = 0; i < SIZE; i++) {
-        int value = expectedHash[i]->value;
-        int key = expectedHash[i]->key;
-        printf("Expected Key: %d Value: %d \n", key, value);
-    }
-}
+// traverse function is for visual confirmation of differences between hashTables when building functionality. 
+// void traverse() {
+//     for (int i = 0; i < SIZE; i++) {
+//         int value = testHash[i]->value;
+//         int key = testHash[i]->key;        
+//         printf("Test Key: %d Value: %d \n", key, value);
+//     }
+//     for (int i = 0; i < SIZE; i++) {
+//         int value = expectedHash[i]->value;
+//         int key = expectedHash[i]->key;
+//         printf("Expected Key: %d Value: %d \n", key, value);
+//     }
+// }
 
-//compare checks the Items
+//compare checks the testHash and expectedHash for parity
+// if the two HashTables match returns true
+// if a mismatch occurs returns false
 bool compare() {
     for (int i = 0; i < SIZE; i++) {
         int testKey = testHash[i]->key;
@@ -47,9 +50,12 @@ bool compare() {
     return true;
 }
 
+// hashing takes in a key
+// returns a "hashed" index based on the SIZE of the hashTable
 int hashing(int key) {
     return key % SIZE;
 }
+
 // creates a new Item struct
 // returns new struct
 Item * createItem(int key, int value, int success) {
@@ -82,20 +88,6 @@ void insert(int type, int key, int value, int success) {
     }
 }
 
-int testInsert() {
-    return ERROR;
-}
-
-void buildInsertTests() {
-    //InsertTests
-    // 5 passes
-    // 5 Fails
-    // Empty Array
-    // Too large for hash table
-    // Collision
-    // Full Hash Table
-}
-//To-do: will need to think of how to handle collisions 
 // buildHashTable receives an array of keys and an array of values
 // key[i] will be mapped to value[i] when building the hashTable
 // loops through the values to create a key for the current value then inserts it into the existing hashTable.
@@ -109,12 +101,11 @@ int buildHashTable(int type, int *keys, int *values) {
    return errcode;
 }
 
-//to-do: Will need to think of a rescue in the case of a collision insertion
-// searchHashTable takes in an integer key
+// searchHashTable takes in an integer key and a type
 // calls the helper function to hash the received key to correspond to an expected index within the hash table
 // if the key at the position in the test hashTable indicated by the hashing function matches the received key then return a SUCCESS code
 // if a mistmatch occurs return an ERROR code
-int searchHashTable(int type, int key, int * success) {
+int searchHashTable(int key, int * success) {
     if (key > SIZE || key < 0) return ERROR;
     int hashIndex = hashing(key);
     if (testHash[hashIndex]->key == key) {
@@ -122,13 +113,19 @@ int searchHashTable(int type, int key, int * success) {
     }
 }
 
+
+// testSearch
+// First creates a testHash with the testing key/value pairs. 
+// calls the helper function searchHashTable on the testHash
+// if the key/value pair is found successfully and the expectedOutcome matches a SUCCESS code 0 is returned then a success message is printed and a SUCCESS code is returned
+// if the value is not found then a failure message is printed and an ERROR -1 is returned
 int testSearch(int key, int expectedOutcome) {
     //build the testHash
     int keys[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     int value[10]= { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
     buildHashTable( 9, keys, value);
     int success = ERROR;
-    searchHashTable(9, key, &success);
+    searchHashTable(key, &success);
     if (success == SUCCESS && expectedOutcome == SUCCESS) {
         printf("The key %d was successfully found as expected. \n", key);
         return SUCCESS;
@@ -140,6 +137,9 @@ int testSearch(int key, int expectedOutcome) {
     return ERROR;
 }
 
+// buildSearchTests
+// creates 5 test cases expected to pass the testSearch function
+// creates 5 test cases (out of range) expected to fail the testSearch function
 void buildSearchTests() {
 printf("Build Search Test Passes: \n");
     testSearch(1, SUCCESS);
@@ -157,12 +157,10 @@ printf("Build Search Test Passes: \n");
     testSearch(-20, ERROR);
 }
 
-//To-do: Like above need to make adjustments based on potential insertion collisions messing up the hashing function
-// Also saw an alternative way to do delete is just to set the key to -1?
-// deleteItem takes in an Item struct
+// deleteItem takes in a key to delete and an int to signify success of deletion
 // finds the key of the provided Item then passes it to the helper function to hash it and find the corresponding index
 // if the key at the position in the hashTable indicated by the hashing function matches the received key then sets an empty delete Item equal to the Item at the hashIndex
-// if a failure occurs return an ERROR code
+// if a failure occurs then the success code remains as ERROR
 void deleteItem(int key, int * success) {
     int hashIndex = hashing(key);
     if (testHash[hashIndex]->key == key) {
@@ -172,8 +170,12 @@ void deleteItem(int key, int * success) {
     }
 }
 
-//need to make a clear hashTable function? 
-// Stopping point: testing for delete is failing need to figure out why the expectedKeys aren't being inserted into the expectedTable 
+// testDelete
+// First creates a testHash with the testing key/value pairs. Then creates an expectedHash with the provided expected key/value pairs.
+// calls the helper function deleteItem on the testHash
+// compares the updated testHash and expectedHash to see if the delete was successfull (or not) as expected
+// if the key/value pair is deleted successfully and the hashes match a SUCCESS code 0 is returned
+// if the value is not properly deleted then an ERROR -1 is returned
 int testDelete(int key, int *expectedKeys, int *expectedValues) {
     int keys[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     int value[10]= { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
@@ -189,7 +191,9 @@ int testDelete(int key, int *expectedKeys, int *expectedValues) {
     return ERROR;
 }
 
-
+// buildDeleteTests
+// creates 5 test cases expected to pass the testDelete function
+// creates 2 test cases (out of range) expected to fail the testDelete function
 void buildDeleteTests() {
     printf("Build Delete Test Passes: \n");
     int testKeys1[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
@@ -223,7 +227,7 @@ void buildDeleteTests() {
     testDelete(50,testKeys7, testValues7);
   
 }
-
+//main calls buildSearchTests and buildDeleteTests in succession to begin the process of testing the search, reverse and delete functions
 void main() {
    buildSearchTests();
    buildDeleteTests();

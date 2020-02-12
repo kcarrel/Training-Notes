@@ -123,12 +123,13 @@ HashTable * createTestHashTable() {
 // calls the helper function to hash the received key to correspond to an expected index within the hash table
 // if the key at the position in the test hashTable indicated by the hashing function matches the received key then return a SUCCESS code
 // if a mistmatch occurs return an ERROR code
-int searchHashTable(HashTable * hashTable, int key, int * success) {
+int searchHashTable(HashTable * hashTable, int key) {
     if (key > SIZE || key < 0) return ERROR;
     int hashIndex = hashing(key);
     if (hashTable->items[hashIndex]->key == key) {
-        *success = SUCCESS;
+        return SUCCESS;
     }
+    return ERROR;
 }
 
 
@@ -139,8 +140,7 @@ int searchHashTable(HashTable * hashTable, int key, int * success) {
 // if the value is not found then a failure message is printed and an ERROR -1 is returned
 int testSearch(int key, int expectedOutcome) {
     HashTable * testHash = createTestHashTable();
-    int success = ERROR;
-    searchHashTable(testHash, key, &success);
+    int success = searchHashTable(testHash, key);
     if (success == SUCCESS && expectedOutcome == SUCCESS) {
         printf("The key %d was successfully found as expected. \n", key);
         return SUCCESS;
@@ -207,7 +207,7 @@ printf("Build Search Test Passes: \n");
 // buildDeleteTests
 // creates 5 test cases expected to pass the testDelete function
 // creates 2 test cases (out of range) expected to fail the testDelete function
-//to-do: will need a free testTable function to
+// to-do: will need a free testTable function to
 // void buildDeleteTests() {
     
 

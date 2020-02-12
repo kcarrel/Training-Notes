@@ -60,8 +60,7 @@ int hashing(int key) {
 // returns new struct
 Item * createItem(int key, int value, int * success) {
     Item * item = malloc(sizeof(Item));
-    if (item == NULL) {
-    } else {
+    if (item != NULL) {        
         item->key = key;
         item->value = value;
         *success = SUCCESS;
@@ -82,7 +81,7 @@ int insert(int type, int key, int value) {
         }
         
     } else if (type == EXPECTED) {
-        expectedHash[key] = createItem(key, value, success);
+        expectedHash[key] = createItem(key, value, &success);
         if (expectedHash[key]->value != value) {
             return ERROR;
         }

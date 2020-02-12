@@ -58,13 +58,12 @@ int hashing(int key) {
 
 // creates a new Item struct
 // returns new struct
-Item * createItem(int key, int value, int success) {
+Item * createItem(int key, int value) {
     Item * item = malloc(sizeof(Item));
     if (item == NULL) {
     } else {
         item->key = key;
         item->value = value;
-        success = SUCCESS;
         return item;
     }
 }
@@ -73,19 +72,20 @@ Item * createItem(int key, int value, int success) {
 // calls a helper function to create an Item struct with the provided key and value
 // adds the new Item to the hashTable
 // if the expected value is in the hashTable at the expected key then returns a success code
-void insert(int type, int key, int value, int success) {
+int insert(int type, int key, int value) {
     if (type == TEST) {
-        testHash[key] = createItem(key, value, success);
+        testHash[key] = createItem(key, value);
         if (testHash[key]->value != value) {
-            success = ERROR;
+            return ERROR;
         }
         
     } else if (type == EXPECTED) {
-        expectedHash[key] = createItem(key, value, success);
+        expectedHash[key] = createItem(key, value);
         if (expectedHash[key]->value != value) {
-            success = ERROR;
+            return ERROR;
         }
     }
+    return SUCCESS;
 }
 
 // buildHashTable receives an array of keys and an array of values
@@ -93,12 +93,10 @@ void insert(int type, int key, int value, int success) {
 // loops through the values to create a key for the current value then inserts it into the existing hashTable.
 // returns a SUCCESS code if all values are added into the hashTable successfully 
 int buildHashTable(int type, int *keys, int *values) {
-    int errcode = SUCCESS;
     for (int i = 0; i < SIZE; i++) {
         int key = hashing(keys[i]);
-        insert(type, key, values[i], errcode);
+        return insert(type, key, values[i]);
    }
-   return errcode;
 }
 
 // searchHashTable takes in an integer key and a type
@@ -165,7 +163,7 @@ void deleteItem(int key, int * success) {
     int hashIndex = hashing(key);
     if (testHash[hashIndex]->key == key) {
         free(testHash[hashIndex]);
-        insert(9, key, NULL, *success);
+        insert(9, key, NULL);
         *success = SUCCESS;
     }
 }

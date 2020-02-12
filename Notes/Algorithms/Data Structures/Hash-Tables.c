@@ -65,6 +65,7 @@ Item * createItem(int key, int value, int * success) {
         *success = SUCCESS;
         return item;
     }
+    return NULL;
 }
 
 // creates a new HashTable struct

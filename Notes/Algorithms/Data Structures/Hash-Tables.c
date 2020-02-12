@@ -58,12 +58,13 @@ int hashing(int key) {
 
 // creates a new Item struct
 // returns new struct
-Item * createItem(int key, int value) {
+Item * createItem(int key, int value, int * success) {
     Item * item = malloc(sizeof(Item));
     if (item == NULL) {
     } else {
         item->key = key;
         item->value = value;
+        *success = SUCCESS;
         return item;
     }
 }
@@ -73,14 +74,15 @@ Item * createItem(int key, int value) {
 // adds the new Item to the hashTable
 // if the expected value is in the hashTable at the expected key then returns a success code
 int insert(int type, int key, int value) {
+    int success = ERROR;
     if (type == TEST) {
-        testHash[key] = createItem(key, value);
+        testHash[key] = createItem(key, value, &success);
         if (testHash[key]->value != value) {
             return ERROR;
         }
         
     } else if (type == EXPECTED) {
-        expectedHash[key] = createItem(key, value);
+        expectedHash[key] = createItem(key, value, success);
         if (expectedHash[key]->value != value) {
             return ERROR;
         }

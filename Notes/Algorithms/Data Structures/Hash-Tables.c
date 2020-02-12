@@ -89,11 +89,11 @@ int insert(int type, int key, int value) {
     return SUCCESS;
 }
 
-// buildHashTable receives an array of keys and an array of values
+// bulkInsert receives an array of keys and an array of values
 // key[i] will be mapped to value[i] when building the hashTable
 // loops through the values to create a key for the current value then inserts it into the existing hashTable.
 // returns a SUCCESS code if all values are added into the hashTable successfully 
-int buildHashTable(int type, int *keys, int *values) {
+int bulkInsert(int type, int *keys, int *values) {
     for (int i = 0; i < SIZE; i++) {
         int key = hashing(keys[i]);
         return insert(type, key, values[i]);
@@ -122,7 +122,7 @@ int testSearch(int key, int expectedOutcome) {
     //build the testHash
     int keys[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     int value[10]= { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    buildHashTable( 9, keys, value);
+    bulkInsert( 9, keys, value);
     int success = ERROR;
     searchHashTable(key, &success);
     if (success == SUCCESS && expectedOutcome == SUCCESS) {
@@ -178,8 +178,8 @@ void deleteItem(int key, int * success) {
 int testDelete(int key, int *expectedKeys, int *expectedValues) {
     int keys[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     int value[10]= { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    buildHashTable( 9, keys, value);
-    buildHashTable( 10, expectedKeys, expectedValues);
+    bulkInsert( 9, keys, value);
+    bulkInsert( 10, expectedKeys, expectedValues);
     int success = ERROR;
     deleteItem(key, &success);
     if (success == SUCCESS && compare()) {

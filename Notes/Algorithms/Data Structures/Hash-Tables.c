@@ -20,14 +20,6 @@ typedef struct HashTable {
     Item** items;
 } HashTable;
 
-// traverse function is for visual confirmation of differences between hashTables when building functionality. 
-// will delete after changing structure is completed 
-void traverse(HashTable * testHash) {
-    for (int i = 0; i < testHash->size; i++) {
-        printf("Test Key: %s Value: %d \n", testHash->items[i]->key, testHash->items[i]->value);
-    }
-}
-
 //returns true if a collision would happen for the initially hashed index for a key/value pair and false if no collision would occurred 
 bool isCollision(HashTable * table, int index) {
     if (table->items[index] != NULL) {
@@ -224,7 +216,6 @@ int testDelete(char key[], int value, int expectedOutcome) {
         printf("The key/value pair: %s and %d could not be deleted successfully as expected. \n", key, value);
         return ERROR;
     } 
-    traverse(testHash);
     printf("Mismatch has occurred. Result does not match expected outcome for success or failure. \n");
     return ERROR;
 }

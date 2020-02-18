@@ -5,8 +5,6 @@
 
 #define SUCCESS 0
 #define ERROR -1
-#define OVERFLOW -2
-#define LIMIT 100
 
 // Hash Item struct
 typedef struct Item {
@@ -14,13 +12,13 @@ typedef struct Item {
     int value;
 } Item;
 
-//Hash Table struct
+// Hash Table struct
 typedef struct HashTable {
     int size;
     Item** items;
 } HashTable;
 
-//returns true if a collision would happen for the initially hashed index for a key/value pair and false if no collision would occurred 
+// returns true if a collision would happen for the initially hashed index for a key/value pair and false if no collision would occurred 
 bool isCollision(HashTable * table, int index) {
     if (table->items[index] != NULL) {
         return true;
@@ -28,8 +26,7 @@ bool isCollision(HashTable * table, int index) {
     return false;
 }
 
-
-//compare checks the testHash and expectedHash for parity
+// compare checks the testHash and expectedHash for parity
 // if the two HashTables match returns true
 // if a mismatch occurs returns false
 bool compare(HashTable * testHash, HashTable * expectedHash) {
@@ -45,8 +42,8 @@ bool compare(HashTable * testHash, HashTable * expectedHash) {
     return true;
 }
 
-// hashing takes in a key
-// returns a "hashed" index based on the SIZE of the hashTable
+// hashing 
+// returns a "hashed" index based on modulus of the key's ASCII integer sum and the SIZE of the hashTable
 int hashing(HashTable *hashtable, char *key ) {
     int i = 0;
     int count = 0;
@@ -74,7 +71,7 @@ Item * createItem(char key[], int value, int * success) {
 // creates a new HashTable struct
 // returns new HashTable struct
 HashTable * createHashTable(int size) {
-    if (size < 1 || size > LIMIT) return NULL;
+    if (size < 1 || size > 100) return NULL;
     HashTable * hashTable = malloc(sizeof(HashTable));
     hashTable->items = malloc(sizeof(Item) * size);
     if (hashTable == NULL || hashTable->items == NULL) {
@@ -89,7 +86,7 @@ HashTable * createHashTable(int size) {
 
 
 // insert 
-// adds the new Item to the hashTable
+// adds the new Item struct to the hashTable
 // if the expected value is in the hashTable at the expected key then returns a success code
 int insert(HashTable * hashTable, char key[], int value) {
     int success = ERROR;
@@ -109,10 +106,9 @@ int insert(HashTable * hashTable, char key[], int value) {
     return SUCCESS;
 }
 
-// bulkInsert receives an hashTable->itemsay of keys and an array of values
-// key[i] will be mapped to value[i] when building the hashTable
-// loops through the values to create a key for the current value then inserts it into the existing hashTable.
+// bulkInsert 
 // returns a SUCCESS code if all values are added into the hashTable successfully 
+// returns an ERROR code if a value cannot be added into the hashTable 
 int bulkInsert(HashTable * hashTable, char keys[][10], int* values) {
     int success = NULL;
     for (int i = 0; i < hashTable->size; i++) {
@@ -124,6 +120,7 @@ int bulkInsert(HashTable * hashTable, char keys[][10], int* values) {
    return SUCCESS;
 }
 
+// createTestHashTable
 // returns a HashTable struct to use for testing 
 HashTable * createTestHashTable() {
     char keys[10][10] = { "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen"};
@@ -187,8 +184,8 @@ void buildSearchTests() {
 }
  
 // deleteItem
-// if key/value pair is successfully
-//
+// if key/value pair is successfully deleted return SUCCESS code
+// if key/value pair cannot be deleted return ERROR code 
 int deleteItem(HashTable * hashTable, char key[], int value) {
     int hashIndex = hashing(hashTable, key);
     for (int i = 0; i < hashTable->size; i++) {
@@ -221,7 +218,7 @@ int testDelete(char key[], int value, int expectedOutcome) {
 }
 
 // buildDeleteTests
-// creates 3 test cases expected to pass the testDelete function
+// creates 4 test cases expected to pass the testDelete function
 // creates 2 test cases (out of range) expected to fail the testDelete function
 void buildDeleteTests() {
     printf("Build Delete Test Passes: \n");

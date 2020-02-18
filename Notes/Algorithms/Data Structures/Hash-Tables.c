@@ -179,7 +179,7 @@ int testSearch(char key[], int value, int expectedOutcome) {
 // creates 5 test cases (out of range) expected to fail the testSearch function
 void buildSearchTests() {
     printf("Build Search Test Passes: \n");
-    testSearch("KeyOne", 10, SUCCESS);
+    testSearch("KeyTwo", 20, SUCCESS);
     testSearch("KeyEight", 80, SUCCESS);
     testSearch("KeyThree", 30, SUCCESS);
     testSearch("KeyFour", 40, SUCCESS);
@@ -194,78 +194,63 @@ void buildSearchTests() {
     testSearch("Bad", 40, ERROR);
 }
  
-// deleteItem takes in a key to delete and an int to signify success of deletion
-// finds the key of the provided Item then passes it to the helper function to hash it and find the corresponding index
-// if the key at the position in the hashTable indicated by the hashing function matches the received key then sets an empty delete Item equal to the Item at the hashIndex
-// if a failure occurs then the success code remains as ERROR
-// void deleteItem(HashTable * hashTable, int key, int * success) {
-//     int hashIndex = hashing(key);
-//     if (hashTable->items[hashIndex]->key == key) {
-//         free(hashTable->items[hashIndex]);
-//         insert(hashTable, key, NULL);
-//         *success = SUCCESS;
-//     }
-// }
+// deleteItem
+// if key/value pair is successfully
+//
+int deleteItem(HashTable * hashTable, char key[], int value) {
+    int hashIndex = hashing(hashTable, key);
+    for (int i = 0; i < hashTable->size; i++) {
+        int index = (hashIndex + i) % hashTable->size;
+        if (hashTable->items[index]->value == value && strcmp(hashTable->items[index]->key, key) == 0) {
+            free(hashTable->items[index]);
+            insert(hashTable, key, NULL);
+            return SUCCESS;
+        } 
+    }
+    return ERROR;
+}
 
 // testDelete
-// First creates a testHash with the testing key/value pairs. Then creates an expectedHash with the provided expected key/value pairs.
-// calls the helper function deleteItem on the testHash
-// compares the updated testHash and expectedHash to see if the delete was successfull (or not) as expected
-// if the key/value pair is deleted successfully and the hashes match a SUCCESS code 0 is returned
-// if the value is not properly deleted then an ERROR -1 is returned
-// int testDelete(int key, int *expectedKeys, int *expectedValues) {  
-//     HashTable * testHash = createTestHashTable();  
-//     HashTable * expectedHash = createHashTable(10);
-//     bulkInsert(expectedHash, expectedKeys, expectedValues);
-//     int success = ERROR;
-//     deleteItem(testHash, key, &success);
-//     if (success == SUCCESS && compare()) {
-//         printf("The key %d was deleted successfully found as expected. \n", key);
-//         return SUCCESS;
-//     } 
-//     printf("The key %d could not be deleted successfully as expected. \n", key);
-//     return ERROR;
-// }
+// if the key/value pair is deleted successfully, the key/value pair cannot be found in the testHash and the expectation is that this deletion is successfull a SUCCESS code 0 is returned and corresponding message printed
+// if the key/value pair is not deleted successfully, the key/value pair cannot be found in the testHash and the expectation is that this deletion fails an ERROR code -1 is returned and corresponding message printed
+int testDelete(char key[], int value, int expectedOutcome) {  
+    HashTable * testHash = createTestHashTable();  
+    int deleteSuccess = deleteItem(testHash, key, value);
+    int searchSuccess = searchHashTable(testHash, key, value);
+    if (deleteSuccess == SUCCESS && searchSuccess == ERROR && expectedOutcome == SUCCESS) {
+        printf("The key/value pair: %s and %d was deleted successfully as expected. \n", key, value);
+        return SUCCESS;
+    }  else if (deleteSuccess == ERROR && searchSuccess == ERROR && expectedOutcome == ERROR) {
+        printf("The key/value pair: %s and %d could not be deleted successfully as expected. \n", key, value);
+        return ERROR;
+    } 
+    traverse(testHash);
+    printf("Mismatch has occurred. Result does not match expected outcome for success or failure. \n");
+    return ERROR;
+}
 
-// // buildDeleteTests
-// // creates 5 test cases expected to pass the testDelete function
-// // creates 2 test cases (out of range) expected to fail the testDelete function
-// // to-do: will need a free testTable function to
-// void buildDeleteTests() {
-//     printf("Build Delete Test Passes: \n");
-//     int testKeys1[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-//     int testValues1[10] = { 0, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
-//     testDelete(1,testKeys1, testValues1);
+// buildDeleteTests
+// creates 3 test cases expected to pass the testDelete function
+// creates 2 test cases (out of range) expected to fail the testDelete function
+void buildDeleteTests() {
+    printf("Build Delete Test Passes: \n");
+    testDelete("KeyOne", 10, SUCCESS);
+    testDelete("KeyTwo", 20, SUCCESS);
+    testDelete("KeyEight", 80, SUCCESS);
+    testDelete("KeyTen", 100, SUCCESS);
 
-//     int testKeys2[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-//     int testValues2[10] = {10, 20, 30, 40, 50, 60, 70, 0, 90, 100};
-//     testDelete(8,testKeys2,testValues2);
 
-//     int testKeys3[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-//     int testValues3[10] = {10, 0, 30, 40, 50, 60, 70, 80 , 90, 100};
-//     testDelete(2,testKeys3, testValues3);
+    printf("Build Delete Test Fails: \n");
+    // neither key nor value present
+    testDelete("Keyyyyyyy", 0, ERROR);
+    // key present value not
+    testDelete("KeyOne", 100, ERROR);
+    // key not present value present
+    testDelete("KeyZero", 100, ERROR);
+}
 
-//     int testKeys4[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-//     int testValues4[10] = {10, 20, 30, 40, 0, 60, 70, 80 , 90, 100};
-//     testDelete(5,testKeys4, testValues4);
-
-//     int testKeys5[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-//     int testValues5[10] = {10, 20, 0, 40, 50, 60, 70, 80 , 90, 100};
-//     testDelete(3,testKeys5, testValues5);
-
-//     //5 Fail
-//     printf("Build Delete Test Fails: \n");
-//     int testKeys6[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-//     int testValues6[10] = {10, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
-//     testDelete(-10,testKeys6, testValues6);
-
-//     int testKeys7[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; 
-//     int testValues7[10] = {10, 20, 30, 40, 50, 60, 70, 80 , 90, 100};
-//     testDelete(50,testKeys7, testValues7);
-  
-// }
 //main calls buildSearchTests and buildDeleteTests in succession to begin the process of testing the search, reverse and delete functions
 void main() {    
    buildSearchTests();
-//    buildDeleteTests();
+   buildDeleteTests();
 }

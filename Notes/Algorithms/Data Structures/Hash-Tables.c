@@ -30,7 +30,7 @@ bool isCollision(HashTable * table, int index) {
 // if the two HashTables match returns true
 // if a mismatch occurs returns false
 bool equals(HashTable * testHash, HashTable * expectedHash) {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < expectedHash->size; i++) {
         char testKey[] = testHash->items[i]->key;
         int testValue = testHash->items[i]->value;
         char expectedKey[] = expectedHash->items[i]->key;

@@ -26,16 +26,16 @@ bool isCollision(HashTable * table, int index) {
     return false;
 }
 
-// compare checks the testHash and expectedHash for parity
+// equal checks the testHash and expectedHash for parity
 // if the two HashTables match returns true
 // if a mismatch occurs returns false
-bool compare(HashTable * testHash, HashTable * expectedHash) {
+bool equal(HashTable * testHash, HashTable * expectedHash) {
     for (int i = 0; i < 10; i++) {
-        int testKey = testHash->items[i]->key;
+        char testKey[] = testHash->items[i]->key;
         int testValue = testHash->items[i]->value;
-        int expectedKey = expectedHash->items[i]->key;
+        char expectedKey[] = expectedHash->items[i]->key;
         int expectedValue = expectedHash->items[i]->value;
-        if (testKey != expectedKey || testValue != expectedValue) {
+        if (strcmp(testKey, expectedKey) != 0 || testValue != expectedValue) {
             return false;
         }
     }

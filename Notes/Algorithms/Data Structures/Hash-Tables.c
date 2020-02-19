@@ -5,6 +5,8 @@
 
 #define SUCCESS 0
 #define ERROR -1
+// Defined limit for a string key length 
+#define LIMIT 10
 
 // Hash Item struct
 typedef struct Item {
@@ -31,11 +33,7 @@ bool isCollision(HashTable * table, int index) {
 // if a mismatch occurs returns false
 bool equals(HashTable * testHash, HashTable * expectedHash) {
     for (int i = 0; i < expectedHash->size; i++) {
-        char testKey[] = testHash->items[i]->key;
-        int testValue = testHash->items[i]->value;
-        char expectedKey[] = expectedHash->items[i]->key;
-        int expectedValue = expectedHash->items[i]->value;
-        if (strcmp(testKey, expectedKey) != 0 || testValue != expectedValue) {
+        if (strcmp(testHash->items[i]->key, expectedHash->items[i]->key) != 0 || testHash->items[i]->value != expectedHash->items[i]->value) {
             return false;
         }
     }
@@ -150,6 +148,14 @@ int searchHashTable(HashTable * hashTable, char key[], int value) {
 // if the value is not found then a failure message is printed and an ERROR -1 is returned
 // if the outcome does not match what is expected a mismatch message is printed and an ERROr -1 is returned 
 int testSearch(char key[], int value, int expectedOutcome) {
+    size_t len = strlen(key);
+    if (len > LIMIT) {
+        printf("ERROR: The key %s provided has a character count over the limit allowed within the hashTable. \n", key);
+        return ERROR;
+    } else if (key[0] == '\0') {
+        printf("ERROR: The key provided is an empty string and cannot be found in the hashTable. \n");
+        return ERROR;
+    }
     HashTable * testHash = createTestHashTable();
     int success = searchHashTable(testHash, key, value);
     if (success == SUCCESS && expectedOutcome == SUCCESS) {
@@ -179,8 +185,8 @@ void buildSearchTests() {
     testSearch("KeyNinety", 0, ERROR);
     testSearch("LaLa", 10, ERROR);
     testSearch("Error", 20, ERROR);
-    testSearch("-KeyNine", 30, ERROR);
-    testSearch("Bad", 40, ERROR);
+    testSearch("", 30, ERROR);
+    testSearch("VERYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYLONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNG", 40, ERROR);
 }
  
 // deleteItem

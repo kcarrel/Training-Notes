@@ -42,6 +42,7 @@ bool equals(HashTable * testHash, HashTable * expectedHash) {
 
 // hashing 
 // returns a "hashed" index based on modulus of the key's ASCII integer sum and the SIZE of the hashTable
+// Explanation:  I used loselose because it was a simple hashing function that seemed adequate for the purposes of this exercise.
 int hashing(HashTable *hashtable, char *key ) {
     int i = 0;
     int count = 0;

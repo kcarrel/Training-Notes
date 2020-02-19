@@ -135,6 +135,9 @@ int searchHashTable(HashTable * hashTable, char key[], int value) {
     int hashIndex = hashing(hashTable,key);
     for (int i = 0; i < hashTable->size; i++) {
         int index = (hashIndex + i) % hashTable->size;
+        if (hashTable->items[index]->value == NULL || hashTable->items[index]->key == NULL) {
+            return ERROR;
+        }
         if (hashTable->items[index]->value == value && strcmp(hashTable->items[index]->key, key) == 0) {
             return SUCCESS;
         }
@@ -197,8 +200,8 @@ int deleteItem(HashTable * hashTable, char key[], int value) {
     for (int i = 0; i < hashTable->size; i++) {
         int index = (hashIndex + i) % hashTable->size;
         if (hashTable->items[index]->value == value && strcmp(hashTable->items[index]->key, key) == 0) {
+            free(hashTable->items[index]->key);
             free(hashTable->items[index]);
-            insert(hashTable, key, NULL);
             return SUCCESS;
         } 
     }

@@ -100,7 +100,7 @@ int insert(HashTable * hashTable, char key[], int value) {
         } 
     }
     hashTable->items[index] = createItem(key, value, &success);
-    if (hashTable->items[index]->value != value && success != SUCCESS) {
+    if (success != SUCCESS) {
         return ERROR;
     }
     return SUCCESS;

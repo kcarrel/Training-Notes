@@ -136,10 +136,7 @@ int searchHashTable(HashTable * hashTable, char key[], int value) {
     int hashIndex = hashing(hashTable,key);
     for (int i = 0; i < hashTable->size; i++) {
         int index = (hashIndex + i) % hashTable->size;
-        if (hashTable->items[index] == NULL) {
-            return ERROR;
-        }
-        if (hashTable->items[index]->value == value && strcmp(hashTable->items[index]->key, key) == 0) {
+        if (hashTable->items[index] != NULL && hashTable->items[index]->value == value && strcmp(hashTable->items[index]->key, key) == 0) {
             return SUCCESS;
         }
     }
@@ -154,7 +151,7 @@ int searchHashTable(HashTable * hashTable, char key[], int value) {
 int testSearch(char key[], int value, int expectedOutcome) {
     size_t len = strlen(key);
     if (len > LIMIT) {
-        printf("ERROR: The key %s provided has a character count over the limit allowed within the hashTable. \n", key);
+        printf("ERROR: The key provided has a character count over the limit allowed within the hashTable. \n");
         return ERROR;
     } else if (key[0] == '\0') {
         printf("ERROR: The key provided is an empty string and cannot be found in the hashTable. \n");
@@ -200,7 +197,7 @@ int deleteItem(HashTable * hashTable, char key[], int value) {
     int hashIndex = hashing(hashTable, key);
     for (int i = 0; i < hashTable->size; i++) {
         int index = (hashIndex + i) % hashTable->size;
-        if (hashTable->items[index]->value == value && strcmp(hashTable->items[index]->key, key) == 0) {
+        if (hashTable->items[index] != NULL && hashTable->items[index]->value == value && strcmp(hashTable->items[index]->key, key) == 0) {
             free(hashTable->items[index]->key);
             free(hashTable->items[index]);
             return SUCCESS;

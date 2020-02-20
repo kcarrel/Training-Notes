@@ -137,7 +137,9 @@ HashTable * createTestHashTable() {
     return testHash;
 }
 
-
+// testInsertCollision
+// prints an ERROR message and returns ERROR if key value pairs cannot be inserted into hashTable or if key value pairs at specified indexes do not match expectations
+// prints a SUCCESS message and returns SUCCESS if key value pairs are inserted correctly at the expected indexes after resolving a hashing collision
 int testInsertCollision(HashTable * hashTable, char keyOne[], int valueOne, char keyTwo[], int valueTwo) {
     int index1 = hashing(hashTable, keyOne);
     int index2 = (index1 + 1) % hashTable->size;
@@ -161,6 +163,10 @@ int testInsertCollision(HashTable * hashTable, char keyOne[], int valueOne, char
     }
 }
 
+
+// testInsertCapcity
+// prints an error message and returns ERROR if insert is unsuccessful due to hashTable being at capcity
+// returns SUCCESS if all key/value pairs can be inserted into the hashTable
 int testInsertCapacity() {
     HashTable * testHash = createHashTable(10);
     char keys[100][10] = {
@@ -198,7 +204,10 @@ int testInsertCapacity() {
     return SUCCESS;
 
 }
- 
+
+// buildInsertTests
+// creates a test for the case of collisions
+// createas a test for the case of hashTable capcity being reached
 void buildInsertTests() {
    //build an empty hashTable to test insert/collision on
     HashTable * testHash = createHashTable(10);
@@ -328,7 +337,7 @@ void buildDeleteTests() {
     testDelete("KeyZero", 100, ERROR);
 }
 
-//main calls buildSearchTests and buildDeleteTests in succession to begin the process of testing the search, reverse and delete functions
+//main calls buildSearchTests, buildDeleteTests and buildInsertTests in succession to begin the process of testing the search, delete and insert functions
 void main() {    
    buildSearchTests();
    buildDeleteTests();

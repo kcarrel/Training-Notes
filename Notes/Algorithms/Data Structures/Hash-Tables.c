@@ -91,13 +91,15 @@ HashTable * createHashTable(int size) {
 int insert(HashTable * hashTable, char key[], int value) {
     int success = ERROR;
     int index = hashing(hashTable, key);
-    if (isCollision(hashTable, index)) {
+    while (isCollision(hashTable, index) && index <= hashTable->size) {
         //find next free space  
-        while(index <= hashTable->size && hashTable->items[index] != NULL && hashTable->items[index]->key != key && hashTable->items[index]->key != -1) 
-        { 
-            index++; 
-            index % hashTable->size; 
-        } 
+        
+        index++; 
+        index % hashTable->size; 
+        
+    }
+    if (index > hashTable->size) {
+        return ERROR;
     }
     hashTable->items[index] = createItem(key, value, &success);
     if (success != SUCCESS) {
@@ -117,7 +119,7 @@ int bulkInsert(HashTable * hashTable, char keys[][10], int keyCount, int* values
         printf("ERROR: The number of key/value pairs provided exceeds the amount allowed to be inserted in the hashTable. \n");
         return ERROR;
     }
-    int success = NULL;
+    int success;
     for (int i = 0; i < hashTable->size; i++) {
         success = insert(hashTable , keys[i], values[i]);
         if (success == ERROR) {
@@ -160,6 +162,44 @@ int testInsertCollision(HashTable * hashTable, char keyOne[], int valueOne, char
         return ERROR;
     }
 }
+
+int testInsertCapacity() {
+    HashTable * testHash = createHashTable(10);
+    char keys[100][10] = {
+        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
+        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
+        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
+        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
+        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
+        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
+        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
+        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
+        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
+        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
+    };
+    int values[100] = {
+         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+         10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+    };
+    int success = SUCCESS;
+    for (int i = 0; i < 100; i++) {
+        success = insert(testHash, keys[i], values[i]);
+        if (success != SUCCESS) {
+            printf("ERROR! HashTable is at capacity! No more values can be added. \n");
+            return ERROR;
+        }
+    }
+    return SUCCESS;
+
+}
  
 void buildInsertTests() {
    //build an empty hashTable to test insert/collision on
@@ -169,7 +209,10 @@ void buildInsertTests() {
    // Brute Forced a Collision (Same Key = Same hashingIndex)
    // Expect that the second KeyOne will have an index = hashing(KeyOne) + 1 % hashTable->size
     testInsertCollision(testHash, "KeyOne", 10, "KeyOne", 20);
-
+    
+    printf("Build Insert Capacity Test: \n");
+    //Test how Insert handles being sent # of values that exceeds hashTable capabilities
+    testInsertCapacity();
 }
 
 // searchHashTable

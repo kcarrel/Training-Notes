@@ -20,6 +20,7 @@ typedef struct HashTable {
     Item** items;
 } HashTable;
 
+
 // returns true if a collision would happen for the initially hashed index for a key/value pair and false if no collision would occurred 
 bool isCollision(HashTable * table, int index) {
     if (table->items[index] != NULL) {
@@ -92,7 +93,7 @@ int insert(HashTable * hashTable, char key[], int value) {
     int index = hashing(hashTable, key);
     if (isCollision(hashTable, index)) {
         //find next free space  
-        while(hashTable->items[index] != NULL && hashTable->items[index]->key != key && hashTable->items[index]->key != -1) 
+        while(index <= hashTable->size && hashTable->items[index] != NULL && hashTable->items[index]->key != key && hashTable->items[index]->key != -1) 
         { 
             index++; 
             index % hashTable->size; 

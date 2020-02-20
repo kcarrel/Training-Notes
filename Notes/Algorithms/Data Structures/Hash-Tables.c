@@ -99,7 +99,6 @@ int insert(HashTable * hashTable, char key[], int value) {
             index % hashTable->size; 
         } 
     }
-
     hashTable->items[index] = createItem(key, value, &success);
     if (success != SUCCESS) {
         return ERROR;
@@ -136,6 +135,41 @@ HashTable * createTestHashTable() {
     HashTable * testHash = createHashTable(10);
     bulkInsert(testHash, keys, 10, value, 10);
     return testHash;
+}
+
+
+int testInsertCollision(HashTable * hashTable, char keyOne[], int valueOne, char keyTwo[], int valueTwo) {
+    int index1 = hashing(hashTable, keyOne);
+    int index2 = (index1 + 1) % hashTable->size;
+    int success1 = insert(hashTable, keyOne, valueOne);
+    int success2 = insert(hashTable, keyTwo, valueTwo);
+    if (success1 != SUCCESS || success2 != SUCCESS) {
+        printf("Key value pairs were not inserted in the hashTable. \n");
+        return ERROR;
+    }
+    if (hashTable->items[index1] == NULL || hashTable->items[index2] == NULL) {
+        printf("The key value pairs were not inserted at the expected indexes. \n");
+        return ERROR;
+    }
+    //Only checking values instead of both values and keys as a value wouldn't be inserted without the expected key pair and for relative simplicity
+    if (hashTable->items[index1]->value == valueOne && hashTable->items[index2]->value == valueTwo) {
+        printf("The key value pairs are in the hashTable at the expected indexes after resolving a hashing collision. \n");
+        return SUCCESS;
+    } else {
+        printf("The key value pairs were not inserted at the expected indexes. \n");
+        return ERROR;
+    }
+}
+ 
+void buildInsertTests() {
+   //build an empty hashTable to test insert/collision on
+    HashTable * testHash = createHashTable(10);
+    printf("Build Insert Collision Test: \n");
+
+   // Brute Forced a Collision (Same Key = Same hashingIndex)
+   // Expect that the second KeyOne will have an index = hashing(KeyOne) + 1 % hashTable->size
+    testInsertCollision(testHash, "KeyOne", 10, "KeyOne", 20);
+
 }
 
 // searchHashTable
@@ -257,4 +291,5 @@ void buildDeleteTests() {
 void main() {    
    buildSearchTests();
    buildDeleteTests();
+   buildInsertTests();
 }

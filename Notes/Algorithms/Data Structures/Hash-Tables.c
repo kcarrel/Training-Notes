@@ -93,10 +93,8 @@ int insert(HashTable * hashTable, char key[], int value) {
     int index = hashing(hashTable, key);
     while (isCollision(hashTable, index) && index <= hashTable->size) {
         //find next free space  
-        
         index++; 
-        index % hashTable->size; 
-        
+        index % hashTable->size;  
     }
     if (index > hashTable->size) {
         return ERROR;
@@ -252,7 +250,7 @@ int testSearch(char key[], int value, int expectedOutcome) {
         printf("The key/value pair: %s and %d was not found as expected. \n", key, value);
         return SUCCESS;
     }
-    printf("Mismatch has occurred. Result does not match expected outcome for success or failure. \n");
+    printf("ERROR: The key/value pair: %s and %d could not be found in the hashTable which does not match expectations. \n", key, value);
     return ERROR;
 }
 

@@ -99,6 +99,7 @@ int insert(HashTable * hashTable, char key[], int value) {
             index % hashTable->size; 
         } 
     }
+
     hashTable->items[index] = createItem(key, value, &success);
     if (success != SUCCESS) {
         return ERROR;
@@ -109,7 +110,14 @@ int insert(HashTable * hashTable, char key[], int value) {
 // bulkInsert 
 // returns a SUCCESS code if all values are added into the hashTable successfully 
 // returns an ERROR code if a value cannot be added into the hashTable 
-int bulkInsert(HashTable * hashTable, char keys[][10], int* values) {
+int bulkInsert(HashTable * hashTable, char keys[][10], int keyCount, int* values, int valuesCount) {
+    if (keyCount != valuesCount) {
+        printf("ERROR: The number of keys provided does not match the number of value pairs provided. \n");
+        return ERROR;
+    } else if (keyCount > hashTable->size) {
+        printf("ERROR: The number of key/value pairs provided exceeds the amount allowed to be inserted in the hashTable. \n");
+        return ERROR;
+    }
     int success = NULL;
     for (int i = 0; i < hashTable->size; i++) {
         success = insert(hashTable , keys[i], values[i]);
@@ -126,7 +134,7 @@ HashTable * createTestHashTable() {
     char keys[10][10] = { "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen"};
     int value[10]= { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
     HashTable * testHash = createHashTable(10);
-    bulkInsert(testHash, keys, value);
+    bulkInsert(testHash, keys, 10, value, 10);
     return testHash;
 }
 

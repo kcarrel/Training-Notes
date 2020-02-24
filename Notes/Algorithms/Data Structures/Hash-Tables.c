@@ -29,6 +29,11 @@ bool isCollision(HashTable * table, int index) {
     return false;
 }
 
+void traverse(HashTable * hashTable) {
+    for (int i = 0; i < hashTable->size; i++) {
+        printf("Key: %s Value: %d \n", hashTable->items[i]->key, hashTable->items[i]->value);
+    }
+}
 // equals checks the testHash and expectedHash for parity
 // if the two HashTables match returns true
 // if a mismatch occurs returns false
@@ -87,26 +92,44 @@ HashTable * createHashTable(int size) {
     return hashTable;
 }
 
-
-// insert 
+// insertion
 // adds the new Item struct to the hashTable
 // if the expected value is in the hashTable at the expected key then returns a success code
-int insert(HashTable * hashTable, char key[], int value) {
+// if not, returns an error code
+int insertion(HashTable * hashTable, int index, char key[], int value) {
     int success = ERROR;
-    int index = hashing(hashTable, key);
-    while (isCollision(hashTable, index) && index <= hashTable->size) {
-        //find next free space  
-        index++; 
-        index % hashTable->size;  
-    }
-    if (index > hashTable->size) {
-        return ERROR;
-    }
-    hashTable->items[index] = createItem(key, value, &success);
+    hashTable->items[index] = createItem(key, value, &success);     
     if (success != SUCCESS) {
         return ERROR;
     }
     return SUCCESS;
+}
+
+// insert 
+// adds the new Item struct to the hashTable using a helper function called insertion
+// if the expected value is in the hashTable at the expected key then returns a success code
+int insert(HashTable * hashTable, char key[], int value) {
+    int hashIndex = hashing(hashTable, key);
+    if (isCollision(hashTable, hashIndex)) {
+        //check second half of hashTable
+        for (int i = 0; i < hashTable->size; i++) {
+            int index = (hashIndex + i) % hashTable->size;
+            if (isCollision(hashTable, index)) {
+                index++; 
+                index % hashTable->size;  
+            } else {
+                return insertion(hashTable, index, key, value);
+            }
+        }
+        //check the first half of the hashTable before the initially hashedIndex
+        for (int i = 0; i < hashIndex; i++) {
+            if (isCollision(hashTable, i) == false) {
+                return insertion(hashTable, i, key, value);
+            }
+        }
+        return ERROR;
+    }
+    return insertion(hashTable, hashIndex, key, value);
 }
 
 // bulkInsert 
@@ -172,29 +195,13 @@ int testInsertCollision(HashTable * hashTable, char keyOne[], int valueOne, char
 // returns SUCCESS if all key/value pairs can be inserted into the hashTable
 int testInsertCapacity() {
     HashTable * testHash = createHashTable(10);
-    char keys[100][10] = {
+    char keys[11][10] = {
         "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
-        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
-        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
-        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
-        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
-        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
-        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
-        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
-        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
-        "KeyOne", "KeyTwo", "KeyThree", "KeyFour", "KeyFive", "KeySix", "KeySeven", "KeyEight", "KeyNine", "KeyTen",
+        "KeyEleven", 
     };
-    int values[100] = {
+    int values[11] = {
          10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-         10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
-         10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+         11
     };
     int success = SUCCESS;
     for (int i = 0; i < 100; i++) {

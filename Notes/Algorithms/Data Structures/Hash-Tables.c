@@ -318,7 +318,7 @@ int testDelete(char key[], int value, int expectedOutcome) {
         printf("The key/value pair: %s and %d could not be deleted successfully as expected. \n", key, value);
         return ERROR;
     } 
-    printf("Mismatch has occurred. Result does not match expected outcome for success or failure. \n");
+    printf("ERROR: The key/value pair: %s and %d could not be deleted in the hashTable which does not match expectations. \n", key, value);
     return ERROR;
 }
 

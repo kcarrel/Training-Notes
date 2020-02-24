@@ -33,6 +33,9 @@ bool isCollision(HashTable * table, int index) {
 // if the two HashTables match returns true
 // if a mismatch occurs returns false
 bool equals(HashTable * testHash, HashTable * expectedHash) {
+    if (testHash->size != expectedHash->size ) {
+        return false;
+    }
     for (int i = 0; i < expectedHash->size; i++) {
         if (strcmp(testHash->items[i]->key, expectedHash->items[i]->key) != 0 || testHash->items[i]->value != expectedHash->items[i]->value) {
             return false;

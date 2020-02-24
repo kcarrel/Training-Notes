@@ -37,7 +37,13 @@ bool equals(HashTable * testHash, HashTable * expectedHash) {
         return false;
     }
     for (int i = 0; i < expectedHash->size; i++) {
-        if (strcmp(testHash->items[i]->key, expectedHash->items[i]->key) != 0 || testHash->items[i]->value != expectedHash->items[i]->value) {
+        if (testHash->items[i] == NULL && expectedHash->items[i] == NULL) {
+            continue; 
+        } else if (testHash->items[i] != NULL && expectedHash->items[i] != NULL) {
+            if (strcmp(testHash->items[i]->key, expectedHash->items[i]->key) != 0 || testHash->items[i]->value != expectedHash->items[i]->value) {
+                return false;
+            }
+        } else {
             return false;
         }
     }
@@ -339,9 +345,23 @@ void buildDeleteTests() {
     testDelete("KeyZero", 100, ERROR);
 }
 
-//main calls buildSearchTests, buildDeleteTests and buildInsertTests in succession to begin the process of testing the search, delete and insert functions
+int equalsEmpty(){
+    HashTable * testHash = createTestHashTable();
+    HashTable * expectedHash = createTestHashTable();
+    if (equals(testHash, expectedHash)) {
+        printf("The two empty hashTables are equivalent which is the equivalent outcome.!\n");
+        return SUCCESS;
+    } else {
+        printf("The two empty hashTables are not equivalent which is not the expected outcome.  \n");
+        return ERROR;
+    }
+}
+ 
+ 
+ //main calls buildSearchTests, buildDeleteTests, buildInsertTests and equalsEmpty in succession to begin the process of testing the search, delete and insert functions
 void main() {    
    buildSearchTests();
    buildDeleteTests();
    buildInsertTests();
+   equalsEmpty();
 }

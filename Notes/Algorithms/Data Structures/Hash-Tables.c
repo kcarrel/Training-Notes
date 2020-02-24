@@ -76,10 +76,9 @@ Item * createItem(char key[], int value, int * success) {
 HashTable * createHashTable(int size) {
     if (size < 1) return NULL;
     HashTable * hashTable = malloc(sizeof(HashTable));
+    if (hashTable == NULL) return NULL;
     hashTable->items = malloc(sizeof(Item) * size);
-    if (hashTable == NULL || hashTable->items == NULL) {
-        return NULL;
-    }
+    if (hashTable->items == NULL) return NULL;
     hashTable->size = size;
     for (int i = 0; i < size; i++) {
         hashTable->items[i] = NULL;

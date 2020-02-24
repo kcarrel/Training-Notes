@@ -74,6 +74,7 @@ Item * createItem(char key[], int value, int * success) {
 // creates a new HashTable struct
 // returns new HashTable struct
 HashTable * createHashTable(int size) {
+    if (size < 1) return NULL;
     HashTable * hashTable = malloc(sizeof(HashTable));
     hashTable->items = malloc(sizeof(Item) * size);
     if (hashTable == NULL || hashTable->items == NULL) {

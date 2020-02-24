@@ -203,10 +203,10 @@ int testInsertCapacity() {
         success = insert(testHash, keys[i], values[i]);
         if (success != SUCCESS) {
             printf("ERROR! HashTable is at capacity! No more values can be added. \n");
-            return ERROR;
+            return SUCCESS;
         }
     }
-    return SUCCESS;
+    return ERROR;
 
 }
 

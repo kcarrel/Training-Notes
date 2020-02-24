@@ -29,11 +29,6 @@ bool isCollision(HashTable * table, int index) {
     return false;
 }
 
-void traverse(HashTable * hashTable) {
-    for (int i = 0; i < hashTable->size; i++) {
-        printf("Key: %s Value: %d \n", hashTable->items[i]->key, hashTable->items[i]->value);
-    }
-}
 // equals checks the testHash and expectedHash for parity
 // if the two HashTables match returns true
 // if a mismatch occurs returns false

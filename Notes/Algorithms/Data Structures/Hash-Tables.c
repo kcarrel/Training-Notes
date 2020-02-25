@@ -103,12 +103,37 @@ int insertion(HashTable * hashTable, int index, char key[], int value) {
     return SUCCESS;
 }
 
+// Explicitly declare deleteItem and searchHashTable for insert and searchAndReplace to use
+int deleteItem(HashTable * hashTable, char key[], int value);
+int searchHashTable(HashTable * hashTable, char key[], int value);
+
+// searchAndReplace
+// returns SUCCESS if the key/value pair currently in the hashTable is replaced with the provided key/value pair
+// returns ERROR if replacement is not made
+int searchAndReplace(HashTable * hashTable, char key[], int value) {
+    int hashIndex = hashing(hashTable,key);
+    for (int i = 0; i < hashTable->size; i++) {
+        int index = (hashIndex + i) % hashTable->size;
+        if (hashTable->items[index] != NULL && strcmp(hashTable->items[index]->key, key) == 0) {
+            deleteItem(hashTable, hashTable->items[hashIndex]->key, hashTable->items[hashIndex]->value);
+            return insertion(hashTable, index, key, value);
+        }
+    }
+    return ERROR;
+}
 // insert 
 // adds the new Item struct to the hashTable using a helper function called insertion
 // if the expected value is in the hashTable at the expected key then returns a success code
 int insert(HashTable * hashTable, char key[], int value) {
     int hashIndex = hashing(hashTable, key);
+    //Must replace it already exists!
     if (isCollision(hashTable, hashIndex)) {
+        if (strcmp(hashTable->items[hashIndex]->key, key) == 0) {  
+            deleteItem(hashTable, hashTable->items[hashIndex]->key, hashTable->items[hashIndex]->value);
+            return insertion(hashTable, hashIndex, key, value);
+        } else if (searchHashTable(hashTable, key, value) == SUCCESS) {
+            return searchAndReplace(hashTable, key, value);
+        }
         //check second half of hashTable
         for (int i = 0; i < hashTable->size; i++) {
             int index = (hashIndex + i) % hashTable->size;
@@ -213,6 +238,28 @@ int testInsertCapacity() {
 
 }
 
+int testDuplicateInsert (char keyOne[], int valueOne, char keyTwo[], int valueTwo) {
+    HashTable * testHash = createHashTable(10);
+    int index1 = hashing(testHash, keyOne);
+    int index2 = hashing(testHash, keyTwo);
+    int success1 = insert(testHash, keyOne, valueOne);
+    int success2 = insert(testHash, keyTwo, valueTwo);
+    if (success1 != SUCCESS || success2 != SUCCESS) {
+        printf("Key value pairs were not inserted in the hashTable. \n");
+        return ERROR;
+    }
+    if (testHash->items[index1] == NULL || testHash->items[index2] == NULL) {
+        printf("The key value pairs were not inserted at the expected indexes. \n");
+        return ERROR;
+    }
+    if (testHash->items[index1]->value == valueTwo) {
+        printf("The second key value pair replaced the first duplicate value in the hashTable which is the expected behavior. \n");
+        return SUCCESS;
+    } else {
+        printf("The second key value pair did not replace the first duplicate value in the hashTable which is unexpected behavior. \n");
+        return ERROR;
+    }
+}
 // buildInsertTests
 // creates a test for the case of collisions
 // createas a test for the case of hashTable capcity being reached
@@ -223,11 +270,15 @@ void buildInsertTests() {
 
    // Brute Forced a Collision (Same Key = Same hashingIndex)
    // Expect that the second KeyOne will have an index = hashing(KeyOne) + 1 % hashTable->size
-    testInsertCollision(testHash, "KeyOne", 10, "KeyOne", 20);
+    testInsertCollision(testHash, "KeyFive", 10, "KeyNine", 20);
     
     printf("Build Insert Capacity Test: \n");
     //Test how Insert handles being sent # of values that exceeds hashTable capabilities
     testInsertCapacity();
+
+    printf("Build Insert Duplicate Key Test: \n");
+    //Test how Insert handles being sent a duplicate key
+    testDuplicateInsert("KeyOne", 10, "KeyOne", 20);
 }
 
 // searchHashTable
@@ -346,10 +397,11 @@ void buildDeleteTests() {
 }
 
 int equalsEmpty(){
+    printf("Build Equals Empty Test: \n");
     HashTable * testHash = createTestHashTable();
     HashTable * expectedHash = createTestHashTable();
     if (equals(testHash, expectedHash)) {
-        printf("The two empty hashTables are equivalent which is the equivalent outcome.!\n");
+        printf("The two empty hashTables are equivalent which is the expected outcome! \n");
         return SUCCESS;
     } else {
         printf("The two empty hashTables are not equivalent which is not the expected outcome.  \n");

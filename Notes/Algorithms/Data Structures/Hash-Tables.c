@@ -103,14 +103,14 @@ int insertion(HashTable * hashTable, int index, char key[], int value) {
     return SUCCESS;
 }
 
-// Explicitly declare deleteItem and searchHashTable for insert and searchAndReplace to use
+// Explicitly declare deleteItem and searchHashTable for insert and replace to use
 int deleteItem(HashTable * hashTable, char key[], int value);
 int searchHashTable(HashTable * hashTable, char key[], int value);
 
-// searchAndReplace
+// replace
 // returns SUCCESS if the key/value pair currently in the hashTable is replaced with the provided key/value pair
 // returns ERROR if replacement is not made
-int searchAndReplace(HashTable * hashTable, char key[], int value) {
+int replace(HashTable * hashTable, char key[], int value) {
     int hashIndex = hashing(hashTable,key);
     for (int i = 0; i < hashTable->size; i++) {
         int index = (hashIndex + i) % hashTable->size;
@@ -132,7 +132,7 @@ int insert(HashTable * hashTable, char key[], int value) {
             deleteItem(hashTable, hashTable->items[hashIndex]->key, hashTable->items[hashIndex]->value);
             return insertion(hashTable, hashIndex, key, value);
         } else if (searchHashTable(hashTable, key, value) == SUCCESS) {
-            return searchAndReplace(hashTable, key, value);
+            return replace(hashTable, key, value);
         }
         //check second half of hashTable
         for (int i = 0; i < hashTable->size; i++) {

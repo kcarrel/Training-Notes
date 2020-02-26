@@ -137,12 +137,9 @@ int insert(HashTable * hashTable, char key[], int value) {
         //check second half of hashTable
         for (int i = 0; i < hashTable->size; i++) {
             int index = (hashIndex + i) % hashTable->size;
-            if (isCollision(hashTable, index)) {
-                index++; 
-                index % hashTable->size;  
-            } else {
+            if (isCollision(hashTable, index) == false) {
                 return insertion(hashTable, index, key, value);
-            }
+            } 
         }
         //check the first half of the hashTable before the initially hashedIndex
         for (int i = 0; i < hashIndex; i++) {

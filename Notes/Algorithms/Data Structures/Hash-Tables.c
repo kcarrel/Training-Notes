@@ -393,7 +393,7 @@ void buildDeleteTests() {
     testDelete("KeyZero", 100, ERROR);
 }
 
-int equalsEmpty(){
+int testEqualsEmpty(){
     printf("Build Equals Empty Test: \n");
     HashTable * testHash = createTestHashTable();
     HashTable * expectedHash = createTestHashTable();
@@ -407,10 +407,10 @@ int equalsEmpty(){
 }
  
  
- //main calls buildSearchTests, buildDeleteTests, buildInsertTests and equalsEmpty in succession to begin the process of testing the search, delete and insert functions
+ //main calls buildSearchTests, buildDeleteTests, buildInsertTests and testEqualsEmpty in succession to begin the process of testing the search, delete and insert functions
 void main() {    
    buildSearchTests();
    buildDeleteTests();
    buildInsertTests();
-   equalsEmpty();
+   testEqualsEmpty();
 }

@@ -5,16 +5,14 @@ char globBuf[65536];
 int primes[] = {2,3,5,7};
 
 static int square(int x) {
-    int result;
-    result = x * x;
+    int result  = x * x;
     return result;
 }
 
 static void doCalc(int val) {
     printf("The square of %d is %d \n", val, square(val));
     if (val < 1000) {
-        int t;
-        t = val * val * val;
+        int t = val * val * val;
         printf("The cube of %d is %d \n", val, t);
     }
 }

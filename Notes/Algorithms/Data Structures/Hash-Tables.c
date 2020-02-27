@@ -141,12 +141,6 @@ int insert(HashTable * hashTable, char key[], int value) {
                 return insertion(hashTable, index, key, value);
             } 
         }
-        //check the first half of the hashTable before the initially hashedIndex
-        for (int i = 0; i < hashIndex; i++) {
-            if (isCollision(hashTable, i) == false) {
-                return insertion(hashTable, i, key, value);
-            }
-        }
         return ERROR;
     }
     return insertion(hashTable, hashIndex, key, value);

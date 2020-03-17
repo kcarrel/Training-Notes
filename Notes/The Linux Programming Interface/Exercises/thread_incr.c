@@ -40,6 +40,6 @@ main(int argc, char *argv[])
     if (s != 0)
         errExitEN(s, "pthread_join");
 
-    printf("glob = %d\n", glob);
+    printf("glob = %d s = %d \n", glob, s);
     exit(EXIT_SUCCESS);
 }
